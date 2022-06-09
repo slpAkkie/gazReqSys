@@ -1,4 +1,4 @@
-@include('GReqSys::tpl.header')
+@include('GReqSys::components.header')
 
 <div class="wrapper d-flex">
     <aside class="sidebar d-flex flex-column shadow position-fixed p-3">
@@ -14,11 +14,11 @@
             <a class="sidebar-nav__link exit-btn text-decoration-none" href="#">Выйти</a>
         </nav>
     </aside>
-    <div class="content p-3 w-100">
+    <div class="content-wrapper p-3 w-100">
         @yield('body')
     </div>
 </div>
 
 @yield('scripts')
 
-@include('GReqSys::tpl.footer')
+@include('GReqSys::components.footer')

@@ -13,3 +13,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [WebController::class, 'index']);
+Route::get('/login', [WebController::class, 'loginPage']);

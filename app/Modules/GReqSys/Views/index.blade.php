@@ -1,4 +1,4 @@
-@extends('GReqSys::tpl.main')
+@extends('GReqSys::templates.main')
 
 @section('body')
 @endsection
