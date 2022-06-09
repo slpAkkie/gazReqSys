@@ -24,4 +24,14 @@ class WebController extends \App\Http\Controllers\Controller
     {
         return view('GReqSys::login');
     }
+
+    /**
+     * Вывод статус кодов
+     *
+     * @return View
+     */
+    public function statusPage()
+    {
+        return view('GReqSys::status');
+    }
 }
