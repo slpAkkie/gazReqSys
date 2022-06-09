@@ -15,6 +15,3 @@
         <script src="{{ asset('js/app.js') }}"></script>
     </head>
     <body>
-        {{-- HTML HERE --}}
-    </body>
-</html>
