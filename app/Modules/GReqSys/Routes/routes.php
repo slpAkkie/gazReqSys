@@ -1,6 +1,6 @@
 <?php
 
-use \Modules\GReqSys\Controllers\WebController;
+use Modules\GReqSys\Controllers\WebController;
 use Illuminate\Support\Facades\Route;
 
 /*
