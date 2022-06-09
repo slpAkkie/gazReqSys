@@ -16,6 +16,6 @@ abstract class Model extends EloquentModel {
      *
      * @var string
      */
-    protected $connection = 'greqsys';
+    protected $connection = 'reqsys';
 
 }
