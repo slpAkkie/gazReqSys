@@ -258,7 +258,7 @@
 									"top": 533,
 									"width": 225,
 									"height": 13,
-									"text": "cources"
+									"text": "courses"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -356,7 +356,7 @@
 									"top": 341,
 									"width": 209,
 									"height": 13,
-									"text": "user_cources"
+									"text": "user_courses"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -845,7 +845,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGBSCOipBgr6zc="
 					},
-					"name": "cources",
+					"name": "courses",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -916,7 +916,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGBSCOipBgr6zc="
 					},
-					"name": "user_cources",
+					"name": "user_courses",
 					"columns": [
 						{
 							"_type": "ERDColumn",
@@ -946,7 +946,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGBSC1P3BlNCHU="
 							},
-							"name": "cource_id",
+							"name": "course_id",
 							"type": "INTEGER",
 							"length": "7",
 							"foreignKey": true
