@@ -1,8 +1,15 @@
+//
 .title {
     font-weight: 400;
     color: #495467;
 }
 
+* {
+    border-color: #dce3eb!important;
+}
+
+//VARS
+$color-primary: #495467;
 
 // CONTENT
 .wrapper {

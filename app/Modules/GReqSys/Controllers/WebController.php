@@ -13,4 +13,15 @@ class WebController extends \App\Http\Controllers\Controller
     {
         return view('GReqSys::index');
     }
+
+
+    /**
+     * Вход в панель
+     *
+     * @return View
+     */
+    public function loginPage()
+    {
+        return view('GReqSys::login');
+    }
 }
