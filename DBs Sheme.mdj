@@ -2143,7 +2143,7 @@
 							"top": 32,
 							"width": 273,
 							"height": 90,
-							"text": "deactivated указывает на то, что сотрудник уволен и его учетная запись деактивирована"
+							"text": "emp_number строкой, потому что могут быть ведущие нули\n\ndeactivated указывает на то, что сотрудник уволен и его учетная запись деактивирована"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -2249,7 +2249,7 @@
 								"$ref": "AAAAAAGBSCY3thg7dYo="
 							},
 							"name": "emp_number",
-							"type": "INTEGER",
+							"type": "VARCHAR",
 							"length": "6"
 						},
 						{
