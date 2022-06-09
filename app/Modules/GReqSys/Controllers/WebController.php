@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\GReqSys\Controllers;
+namespace Modules\GReqSys\Controllers;
 
 class WebController extends \App\Http\Controllers\Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Gaz\Models;
+namespace Modules\Gaz\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 

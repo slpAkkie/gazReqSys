@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\GReqSys\Models;
+namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
