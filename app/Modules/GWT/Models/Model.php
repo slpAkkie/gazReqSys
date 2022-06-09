@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\GWT\Models;
+namespace Modules\GWT\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
