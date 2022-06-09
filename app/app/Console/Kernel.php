@@ -4,9 +4,19 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Modules\Gaz\Commands\GazDatabaseInit;
 
 class Kernel extends ConsoleKernel
 {
+    /**
+     * Пользовательские команды для Artisan
+     *
+     * @var array
+     */
+    protected $commands = [
+        GazDatabaseInit::class,
+    ];
+
     /**
      * Define the application's command schedule.
      *
