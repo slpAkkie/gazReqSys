@@ -10,6 +10,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/content-wrapper.css') }}">
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}"></script>

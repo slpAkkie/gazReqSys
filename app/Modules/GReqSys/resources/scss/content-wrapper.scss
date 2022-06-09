@@ -1,0 +1,43 @@
+.title {
+    font-weight: 400;
+    color: #495467;
+}
+
+// CONTENT
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: #495467;
+    height: 100vh;
+
+    &-title {
+        font-weight: 400;
+        color: #dce3eb;
+    }
+
+    &-nav {
+
+        &__link {
+
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #c1cddb;
+
+            &:hover {
+                color: #dce3eb;
+                font-weight: 300;
+            }
+        }
+    }
+}
+
+
+.content {
+    margin-left: 250px;
+}

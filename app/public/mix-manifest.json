@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/js/GReqSys/GReqSys.js": "/js/GReqSys/GReqSys.js",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/css/content-wrapper.css": "/css/content-wrapper.css"
 }
