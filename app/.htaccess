@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# Handle HTTPS redirect
+RewriteCond %{ENV:HTTPS} !on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Hadle each request with public
+RewriteRule ^(.*)$ public/$1 [L]
