@@ -3,6 +3,7 @@
 namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Modules\Gaz\Models\Department;
 use Modules\GReqSys\Models\Model;
 
 class Req extends Model
@@ -38,8 +39,23 @@ class Req extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    /**
+     * Поулчить сотрудника, создавшего эту заявку
+     *
+     * @return BelongsTo
+     */
     public function stuff()
     {
-        // TODO: Получить сотрудников из БД Gaz
+        return $this->author->stuff();
+    }
+
+    /**
+     * Получить организацию в которой создана заявка
+     *
+     * @return BelongsTo
+     */
+    public function department()
+    {
+        return $this->setConnection('gaz')->belongsTo(Department::class, 'gaz_department_id', 'id');
     }
 }
