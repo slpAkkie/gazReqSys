@@ -1,0 +1,57 @@
+@import '../../../../resources/scss/utils/colors';
+@import 'utils/colors';
+
+@import 'components/req-table';
+@import 'components/stuff-table';
+@import 'components/login-form';
+
+
+
+
+
+/** ==================================================
+ * Site wrapper */
+
+.site-wrapper {
+    width: 100%;
+    height: 100vh;
+    //
+    overflow: auto;
+}
+
+
+
+/** ==================================================
+ * Sidebar */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    //
+    display: flex;
+    flex-direction: column;
+    //
+    height: 100%;
+    //
+    background: $color-primary;
+
+    &__title {
+        font-weight: 400;
+        color: #dce3eb;
+    }
+}
+
+.sb-nav {
+    &__link {
+        font-size: 1.1rem;
+        font-weight: 300;
+        color: #cbd3de;
+
+        &:hover {
+            color: #dce3eb;
+            font-weight: 300;
+        }
+    }
+}

@@ -2,15 +2,19 @@
 
 namespace Modules\GReqSys\Controllers;
 
+use Illuminate\Contracts\View\View;
+
 class WebController extends \App\Http\Controllers\Controller
 {
+
     /**
-     * Вывод главной страницы
+     * Страница входа в панель
      *
      * @return View
      */
-    public function index()
+    public function login()
     {
-        return view('GReqSys::index');
+        return view('GReqSys::login');
     }
+
 }
