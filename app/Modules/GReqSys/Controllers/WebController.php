@@ -2,6 +2,8 @@
 
 namespace Modules\GReqSys\Controllers;
 
+use Illuminate\Contracts\View\View;
+
 class WebController extends \App\Http\Controllers\Controller
 {
     /**
@@ -16,22 +18,12 @@ class WebController extends \App\Http\Controllers\Controller
 
 
     /**
-     * Вход в панель
+     * Страница входа в панель
      *
      * @return View
      */
-    public function loginPage()
+    public function showLogin()
     {
         return view('GReqSys::login');
-    }
-
-    /**
-     * Вывод статус кодов
-     *
-     * @return View
-     */
-    public function statusPage()
-    {
-        return view('GReqSys::status');
     }
 }

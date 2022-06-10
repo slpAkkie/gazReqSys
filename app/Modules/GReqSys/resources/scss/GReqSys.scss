@@ -1,0 +1,48 @@
+@import 'utils/colors';
+
+
+
+
+
+/** ==================================================
+ * Site wrapper */
+
+.site-wrapper {
+    width: 100vw;
+    height: 100vh;
+    //
+    overflow: hidden;
+}
+
+
+
+/** ==================================================
+ * Sidebar */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    //
+    height: 100%;
+    //
+    background: $color-primary;
+
+    &__title {
+        font-weight: 400;
+        color: #dce3eb;
+    }
+}
+
+.sb-nav {
+
+    &__link {
+        font-size: 1.1rem;
+        font-weight: 300;
+        color: #cbd3de;
+
+        &:hover {
+            color: #dce3eb;
+            font-weight: 300;
+        }
+    }
+}

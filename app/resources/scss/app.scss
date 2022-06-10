@@ -1,3 +1,13 @@
+/** ==================================================
+ * Third-party */
+
 @import 'node_modules/bootstrap/scss/bootstrap';
 @import '~bootstrap-icons/font/bootstrap-icons';
 
+
+
+/** ==================================================
+ * Custom */
+
+@import 'general';
+@import 'http-error';

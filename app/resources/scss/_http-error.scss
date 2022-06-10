@@ -1,0 +1,17 @@
+.http-error {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    &__code {
+        font-size: 4rem;
+    }
+
+    &__title {
+        font-size: 2rem;
+    }
+
+    &__message {
+        flex-grow: 1;
+    }
+}
