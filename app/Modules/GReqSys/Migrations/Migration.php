@@ -12,6 +12,6 @@ abstract class Migration extends MigrationsMigration
      *
      * @var string
      */
-    protected $connection = 'greqsys';
+    protected $connection = 'reqsys';
 
 }

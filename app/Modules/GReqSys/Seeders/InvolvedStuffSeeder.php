@@ -3,9 +3,9 @@
 namespace Modules\GReqSys\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\GReqSys\Models\Req;
+use Modules\GReqSys\Models\InvolvedStuff;
 
-class ReqSeeder extends Seeder
+class InvolvedStuffSeeder extends Seeder
 {
     /**
      * Строки для вставки
@@ -24,6 +24,6 @@ class ReqSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new Req($r))->save();
+            (new InvolvedStuff($r))->save();
     }
 }

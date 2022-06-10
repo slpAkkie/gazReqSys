@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Gaz\Seeders;
+namespace Modules\GReqSys\Seeders;
 
 use Illuminate\Database\Seeder;
 
@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            CitySeeder::class,
-            DepartmentSeeder::class,
-            PostSeeder::class,
-            StuffSeeder::class,
-            StuffHistorySeeder::class,
+            UserSeeder::class,
+            ReqTypeSeeder::class,
+            ReqSeeder::class,
+            ReqSeeder::class,
+            InvolvedStuffSeeder::class,
         ]);
     }
 }

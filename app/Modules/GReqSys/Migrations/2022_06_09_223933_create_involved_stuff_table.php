@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Modules\Gaz\Models\Stuff;
+use Modules\GReqSys\Models\Req;
 
 return new class extends Migration
 {
@@ -15,10 +16,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('involved_stuff', function (Blueprint $table) {
             $table->id();
-            $table->string('login', 32)->unique();
-            $table->string('password_hash', 255);
+            $table->foreignIdFor(Req::class)->references('id')->on('reqs')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Stuff::class, 'gaz_stuff_id')->references('id')->on(Config::get('database.connections.gaz.database') . '.stuff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('involved_stuff');
     }
 };
