@@ -3,16 +3,35 @@
 namespace Modules\GWT\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\GWT\Models\User;
 
 class UserSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Строки для вставки
+     *
+     * @var array
+     */
+    protected $rows = [
+        [
+            'last_name'         => 'Шаманин',
+            'first_name'        => 'Александр',
+            'second_name'       => 'Сергеевич',
+            'login'             => 'root',
+            'email'             => 'slpgservice@gmail.com',
+            'insurance_number'  => '000-000-000 00',
+            'password'          => 'root',
+        ],
+    ];
+
+    /**
+     * Заполнение таблицы
      *
      * @return void
      */
     public function run()
     {
-        //
+        foreach ($this->rows as $r)
+            (new User($r))->save();
     }
 }

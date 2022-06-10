@@ -17,6 +17,6 @@ abstract class Model extends EloquentModel
      *
      * @var string
      */
-    protected $connection = 'gwt';
+    protected $connection = 'wt';
 
 }

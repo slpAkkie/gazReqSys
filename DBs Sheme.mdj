@@ -314,20 +314,50 @@
 											"top": 586,
 											"width": 215,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGBTQIBkjUsdPo=",
+											"_parent": {
+												"$ref": "AAAAAAGBSCx1EhkuUzw="
+											},
+											"model": {
+												"$ref": "AAAAAAGBTQIBhzUpFAw="
+											},
+											"font": "Arial;13;0",
+											"left": 101,
+											"top": 601,
+											"width": 215,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGBTQIXRzUzJJo=",
+											"_parent": {
+												"$ref": "AAAAAAGBSCx1EhkuUzw="
+											},
+											"model": {
+												"$ref": "AAAAAAGBTQIXPzUwtX0="
+											},
+											"font": "Arial;13;0",
+											"left": 101,
+											"top": 616,
+											"width": 215,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 96,
 									"top": 551,
 									"width": 225,
-									"height": 53
+									"height": 83
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 96,
 							"top": 528,
 							"width": 225,
-							"height": 76,
+							"height": 106,
 							"nameLabel": {
 								"$ref": "AAAAAAGBSCx1Ehktuhc="
 							},
@@ -896,7 +926,8 @@
 							},
 							"name": "title",
 							"type": "VARCHAR",
-							"length": "128"
+							"length": "128",
+							"unique": true
 						},
 						{
 							"_type": "ERDColumn",
@@ -906,6 +937,27 @@
 							},
 							"name": "description",
 							"type": "TEXT",
+							"length": 0,
+							"nullable": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGBTQIBhzUpFAw=",
+							"_parent": {
+								"$ref": "AAAAAAGBSCx1EhkqUJ4="
+							},
+							"name": "created_at",
+							"type": "TIMESTAMP",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGBTQIXPzUwtX0=",
+							"_parent": {
+								"$ref": "AAAAAAGBSCx1EhkqUJ4="
+							},
+							"name": "updated_at",
+							"type": "TIMESTAMP",
 							"length": 0
 						}
 					]

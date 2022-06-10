@@ -6,6 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Modules\Gaz\Commands\GazDatabaseInit;
 use Modules\GReqSys\Commands\GReqSysDatabaseInit;
+use Modules\GWT\Commands\GWTDatabaseInit;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         GazDatabaseInit::class,
         GReqSysDatabaseInit::class,
+        GWTDatabaseInit::class,
     ];
 
     /**
