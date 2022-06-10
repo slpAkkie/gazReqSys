@@ -66,6 +66,16 @@ class Stuff extends Model
     ];
 
     /**
+     * Поулчить ФИО сотрудника
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->last_name.' '.$this->first_name.' '.$this->second_name;
+    }
+
+    /**
      * Проверить уволен ли сотрудник
      *
      * @return boolean

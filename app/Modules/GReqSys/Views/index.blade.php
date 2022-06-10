@@ -13,16 +13,13 @@
         </div>
 
         <div class="req-body">
-            <x-GReqSys::index.req-row :data="[
-                'id' => '1',
-                'created_at' => '12.08.2002',
-                'department' => 'Горьковский автомобильный завод',
-                'city' => 'Нижегородская область',
-                'author' => 'Шаманин Александр Сергеевич',
-                'type' => 'ИС WebTutor: создать аккаунт для сотрудника'
-            ]" />
+            @foreach ($reqs as $r)
+                <x-GReqSys::index.req-row :req="$r" />
+            @endforeach
         </div>
     </section>
 
-    {{-- TODO: Сделать пагинацию по 10 или 25 штук (Может больше) --}}
+    <section class="mt-5">
+        {{ $reqs->links() }}
+    </section>
 @endsection
