@@ -51,16 +51,6 @@ class Req extends Model
     }
 
     /**
-     * Поулчить ФИО сотрудника, создавшего эту заявку
-     *
-     * @return BelongsTo
-     */
-    public function getStuffFullName()
-    {
-        return $this->stuff->last_name.' '.$this->stuff->first_name.' '.$this->stuff->second_name;
-    }
-
-    /**
      * Получить организацию в которой создана заявка
      *
      * @return BelongsTo

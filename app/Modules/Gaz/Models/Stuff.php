@@ -33,6 +33,15 @@ class Stuff extends Model
         'insurance_number',
     ];
 
+    /**
+     * Поулчить ФИО сотрудника
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->last_name.' '.$this->first_name.' '.$this->second_name;
+    }
 
     public function is_fired()
     {

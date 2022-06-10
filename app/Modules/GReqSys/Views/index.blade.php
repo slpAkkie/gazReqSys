@@ -13,18 +13,13 @@
         </div>
 
         <div class="req-body">
-            @foreach ($reqs as $req)
-                <x-GReqSys::index.req-row :data="[
-                    'id' => $req->id,
-                    'created_at' => $req->created_at,
-                    'department' => $req->department->title,
-                    'city' => $req->department->city->title,
-                    'author' => $req->getStuffFullName(),
-                    'type' => $req->type->title
-                ]" />
+            @foreach ($reqs as $r)
+                <x-GReqSys::index.req-row :req="$r" />
             @endforeach
         </div>
     </section>
 
-    {{-- TODO: Сделать пагинацию по 10 или 25 штук (Может больше) --}}
+    <section class="mt-5">
+        {{ $reqs->links() }}
+    </section>
 @endsection

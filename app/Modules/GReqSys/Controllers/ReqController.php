@@ -3,6 +3,7 @@
 namespace Modules\GReqSys\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\View\View;
 use Modules\GReqSys\Models\Req;
 
 class ReqController extends Controller
@@ -14,17 +15,18 @@ class ReqController extends Controller
      */
     public function index()
     {
-        $reqs = Req::paginate(25);
-
-        return view('GReqSys::index',[
-            'reqs' => $reqs
+        return view('GReqSys::index', [
+            'reqs' => Req::cursorPaginate(25),
         ]);
     }
 
+    /**
+     * Страница для создания новой заявки
+     *
+     * @return View
+     */
     public function create()
     {
-        // TODO: Создание новой заявки
-
         return view('GReqSys::Req.create');
     }
 }
