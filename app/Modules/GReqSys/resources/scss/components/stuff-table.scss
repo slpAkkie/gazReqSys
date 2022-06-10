@@ -1,0 +1,15 @@
+.stuff-table {
+    margin: 1rem 0;
+
+    &__head {
+        font-weight: bold;
+        padding: .5rem 0;
+        margin-bottom: 1rem;
+        background-color: $color-primary;
+        color: $color-white;
+    }
+
+    &__row {
+        margin-bottom: .5rem;
+    }
+}

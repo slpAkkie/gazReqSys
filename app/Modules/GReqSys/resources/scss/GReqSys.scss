@@ -1,4 +1,9 @@
+@import '../../../../resources/scss/utils/colors';
 @import 'utils/colors';
+
+@import 'components/req-table';
+@import 'components/stuff-table';
+@import 'components/login-form';
 
 
 
@@ -8,10 +13,10 @@
  * Site wrapper */
 
 .site-wrapper {
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     //
-    overflow: hidden;
+    overflow: auto;
 }
 
 
@@ -20,6 +25,11 @@
  * Sidebar */
 
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    //
     display: flex;
     flex-direction: column;
     //
@@ -34,7 +44,6 @@
 }
 
 .sb-nav {
-
     &__link {
         font-size: 1.1rem;
         font-weight: 300;
