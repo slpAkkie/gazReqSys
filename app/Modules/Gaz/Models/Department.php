@@ -31,4 +31,9 @@ class Department extends Model
     {
         // TODO: Получить сотрудников этой организации через таблицу stuff_history
     }
+
+    public function reqs()
+    {
+        // TODO: Получить все заявки организации
+    }
 }
