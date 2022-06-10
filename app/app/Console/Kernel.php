@@ -2,11 +2,28 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DatabaseInit;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Modules\Gaz\Commands\GazDatabaseInit;
+use Modules\GReqSys\Commands\GReqSysDatabaseInit;
+use Modules\GWT\Commands\GWTDatabaseInit;
 
 class Kernel extends ConsoleKernel
 {
+    /**
+     * Пользовательские команды для Artisan
+     *
+     * @var array
+     */
+    protected $commands = [
+        GazDatabaseInit::class,
+        GReqSysDatabaseInit::class,
+        GWTDatabaseInit::class,
+
+        DatabaseInit::class,
+    ];
+
     /**
      * Define the application's command schedule.
      *

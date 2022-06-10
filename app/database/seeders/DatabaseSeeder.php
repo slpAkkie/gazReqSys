@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Modules\Gaz\Seeders\DatabaseSeeder as GazSeedersDatabaseSeeder;
+use Modules\GReqSys\Seeders\DatabaseSeeder as GReqSysDatabaseSeeder;
+use Modules\GWT\Seeders\DatabaseSeeder as GWTSeedersDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,6 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $this->call([
+            GazSeedersDatabaseSeeder::class,
+            GReqSysDatabaseSeeder::class,
+            GWTSeedersDatabaseSeeder::class,
+        ]);
     }
 }
