@@ -4,6 +4,7 @@ namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Gaz\Models\Department;
+use Modules\Gaz\Models\Stuff;
 use Modules\GReqSys\Models\Model;
 
 class Req extends Model
@@ -47,6 +48,16 @@ class Req extends Model
     public function stuff()
     {
         return $this->author->stuff();
+    }
+
+    /**
+     * Поулчить ФИО сотрудника, создавшего эту заявку
+     *
+     * @return BelongsTo
+     */
+    public function getStuffFullName()
+    {
+        return $this->stuff->last_name.' '.$this->stuff->first_name.' '.$this->stuff->second_name;
     }
 
     /**

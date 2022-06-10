@@ -13,14 +13,16 @@
         </div>
 
         <div class="req-body">
-            <x-GReqSys::index.req-row :data="[
-                'id' => '1',
-                'created_at' => '12.08.2002',
-                'department' => 'Горьковский автомобильный завод',
-                'city' => 'Нижегородская область',
-                'author' => 'Шаманин Александр Сергеевич',
-                'type' => 'ИС WebTutor: создать аккаунт для сотрудника'
-            ]" />
+            @foreach ($reqs as $req)
+                <x-GReqSys::index.req-row :data="[
+                    'id' => $req->id,
+                    'created_at' => $req->created_at,
+                    'department' => $req->department->title,
+                    'city' => $req->department->city->title,
+                    'author' => $req->getStuffFullName(),
+                    'type' => $req->type->title
+                ]" />
+            @endforeach
         </div>
     </section>
 
