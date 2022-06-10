@@ -49,6 +49,7 @@ class GReqSysDatabaseInit extends Command
             return $seedInt;
         }
 
+        $this->info('Загрузка данных в БД GReqSys завершена');
 
         return 0;
     }

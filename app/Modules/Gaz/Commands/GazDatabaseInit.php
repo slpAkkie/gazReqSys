@@ -49,6 +49,7 @@ class GazDatabaseInit extends Command
             return $seedInt;
         }
 
+        $this->info('Загрузка данных в БД Gaz завершена');
 
         return 0;
     }

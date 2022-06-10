@@ -49,6 +49,7 @@ class GWTDatabaseInit extends Command
             return $seedInt;
         }
 
+        $this->info('Загрузка данных в БД GWT завершена');
 
         return 0;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\DatabaseInit;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Modules\Gaz\Commands\GazDatabaseInit;
@@ -19,6 +20,8 @@ class Kernel extends ConsoleKernel
         GazDatabaseInit::class,
         GReqSysDatabaseInit::class,
         GWTDatabaseInit::class,
+
+        DatabaseInit::class,
     ];
 
     /**
