@@ -2,9 +2,11 @@
 
 namespace Modules\GReqSys\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
+use Modules\Gaz\Models\Stuff;
 
 class User extends AuthUser
 {
@@ -59,6 +61,12 @@ class User extends AuthUser
         return Hash::make($passwd);
     }
 
+    /**
+     * Проверить строку на совпадение с паролем
+     *
+     * @param string $passwd
+     * @return bool
+     */
     public function checkPassword(string $passwd)
     {
         return Hash::check($passwd, $this->password_hash);
@@ -74,9 +82,14 @@ class User extends AuthUser
         return $this->hasMany(Req::class, 'user_id', 'id');
     }
 
+    /**
+     * Получить сотрудника по пользователю
+     *
+     * @return BelongsTo
+     */
     public function stuff()
     {
-        // TODO: Получение данных о сотруднике в БД Gaz
+        return $this->setConnection('gaz')->belongsTo(Stuff::class, 'gaz_stuff_id', 'id');
     }
 
 }

@@ -19,7 +19,7 @@ class InvolvedStuff extends Model
 
     public function stuff()
     {
-        // TODO: Получить сотрудника из БД Gaz
+        return $this->setConnection('gaz')->belongsTo(Stuff::class, 'gaz_stuff_id', 'id');
     }
 
     /**
