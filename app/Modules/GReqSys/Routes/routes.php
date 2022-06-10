@@ -20,7 +20,7 @@ Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-    // Route::middleware('auth')->group(function () {
+    Route::middleware('auth')->group(function () {
 
         Route::get('/', [ReqController::class, 'index'])->name('index');
 
@@ -30,6 +30,6 @@ Route::middleware('web')->group(function () {
             Route::post('/', [ReqController::class, 'store'])->name('store');
         });
 
-    // });
+    });
 
 });

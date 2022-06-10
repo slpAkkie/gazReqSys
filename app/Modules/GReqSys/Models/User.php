@@ -59,6 +59,11 @@ class User extends AuthUser
         return Hash::make($passwd);
     }
 
+    public function checkPassword(string $passwd)
+    {
+        return Hash::check($passwd, $this->password_hash);
+    }
+
     /**
      * Получить все заявки, созданные этим пользователем
      *
