@@ -2,15 +2,32 @@
 
 namespace Modules\GReqSys\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
 use Modules\Gaz\Models\Stuff;
 
+/**
+ * @property integer|string|null $id
+ * @property string $login
+ * @property string $password_hash
+ * @property integer|string|null $gaz_stuff_id
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property Collection<Req> $reqs
+ * @property Stuff $stuff
+ *
+ * @method string hashPassword()
+ * @method bool checkPassword()
+ *
+ * @mixin Builder
+ */
 class User extends AuthUser
 {
-
     /**
      * Соединение к базе данных для моделей модуля GReqSys
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
@@ -91,5 +108,4 @@ class User extends AuthUser
     {
         return $this->setConnection('gaz')->belongsTo(Stuff::class, 'gaz_stuff_id', 'id');
     }
-
 }

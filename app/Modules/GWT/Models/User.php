@@ -3,12 +3,32 @@
 namespace Modules\GWT\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @property integer|string|null $id
+ * @property string $first_name
+ * @property string $last_name
+ * @property string $second_name
+ * @property string $login
+ * @property string $password_hash
+ * @property string $email
+ * @property string $insurance_number
+ * @property bool $disabled
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property Collection<Course> $courses
+ *
+ * @method string hashPassword()
+ * @method bool checkPassword()
+ *
+ * @mixin Builder
+ */
 class User extends AuthUser
 {
-
     /**
      * Соединение к базе данных для моделей модуля GWT
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
@@ -64,6 +84,17 @@ class User extends AuthUser
     }
 
     /**
+     * Проверить строку на совпадение с паролем
+     *
+     * @param string $passwd
+     * @return bool
+     */
+    public function checkPassword(string $passwd)
+    {
+        return Hash::check($passwd, $this->password_hash);
+    }
+
+    /**
      * Получить все назначенные пользователю курсы
      *
      * @return BelongsToMany
@@ -80,7 +111,6 @@ class User extends AuthUser
         )->using(UserCourse::class)->withPivot(
             'created_at',
             'updated_at',
-        );
+        )->as('courses');
     }
-
 }

@@ -3,11 +3,36 @@
 namespace Modules\Gaz\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use Modules\Gaz\Models\Model;
 
-class StuffHistory extends Model
+/**
+ * @property integer|string|null $id
+ * @property integer|string|null $stuff_id
+ * @property integer $hired_at
+ * @property integer|string|null $post_id
+ * @property integer|string|null $department_id
+ * @property integer $fired_at
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property Stuff $stuff
+ * @property Post $post
+ * @property Department $department
+ *
+ * @mixin Builder
+ */
+class StuffHistory extends Pivot
 {
+    /**
+     * Соединение к базе данных для моделей модуля Gaz
+     * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
+     *
+     * @var string
+     */
+    protected $connection = 'gaz';
+
     /**
      * Таблица, используемая моделью.
      * Необходимо указать явно, так как иначе,
@@ -29,6 +54,15 @@ class StuffHistory extends Model
         'department_id',
     ];
 
+    /**
+     * Переопределение метода модели save
+     * для проверки переданного поля hired_at.
+     * В случае, если его нет, то установить
+     * текущую дату
+     *
+     * @param array $options
+     * @return StuffHistory
+     */
     public function save(array $options = [])
     {
         if (!in_array('hired_at', $options)) $options['hired_at'] = Carbon::now();

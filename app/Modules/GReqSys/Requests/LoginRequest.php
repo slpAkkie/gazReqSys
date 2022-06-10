@@ -6,6 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
 {
+    /**
+     * Список описания ошибок
+     *
+     * @return array
+     */
     public function messages()
     {
         return [

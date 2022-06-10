@@ -2,11 +2,27 @@
 
 namespace Modules\GWT\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Query\Builder;
 
+/**
+ * @property integer|string|null $id
+ * @property integer|string|null $user_id
+ * @property integer|string|null $course_id
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property Course $course
+ * @property User $user
+ *
+ * @method string hashPassword()
+ * @method bool checkPassword()
+ *
+ * @mixin Builder
+ */
 class UserCourse extends Pivot
 {
-
     /**
      * Соединение к базе данных для моделей модуля GWT
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
@@ -36,7 +52,7 @@ class UserCourse extends Pivot
     /**
      * Получить курс назначенный пользователю
      *
-     * @return void
+     * @return BelongsTo
      */
     public function course()
     {
@@ -46,11 +62,10 @@ class UserCourse extends Pivot
     /**
      * Получить пользователя назначенного на курс
      *
-     * @return void
+     * @return BelongsTo
      */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 }

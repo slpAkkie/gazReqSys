@@ -2,9 +2,27 @@
 
 namespace Modules\Gaz\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
+use Modules\GReqSys\Models\Req;
 
+/**
+ * @property integer|string|null $id
+ * @property string $title
+ * @property integer|string|null $city_id
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property City $city
+ * @property Collection<Stuff> $stuff
+ * @property Collection<Req> $reqs
+ *
+ * @mixin Builder
+ */
 class Department extends Model
 {
     /**
@@ -27,13 +45,36 @@ class Department extends Model
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
+    /**
+     * Получить сотрудников этой организации
+     *
+     * @return BelongsToMany
+     */
     public function stuff()
     {
-        // TODO: Получить сотрудников этой организации через таблицу stuff_history
+        return $this->belongsToMany(
+            Stuff::class,
+            StuffHistory::class,
+            'department_id',
+            'stuff_id',
+            'id',
+            'id',
+        )->using(StuffHistory::class)->withPivot(
+            'hired_at',
+            'post_id',
+            'fired_at',
+            'created_at',
+            'updated_at',
+        )->as('job_info');
     }
 
+    /**
+     * Получить все заявки внутри организации
+     *
+     * @return HasMany
+     */
     public function reqs()
     {
-        // TODO: Получить все заявки организации
+        return $this->setConnection('reqsys')->hasMany(Req::class, 'gaz_department_id', 'id');
     }
 }

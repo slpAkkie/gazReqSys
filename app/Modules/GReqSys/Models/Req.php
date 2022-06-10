@@ -3,9 +3,25 @@
 namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Department;
+use Modules\Gaz\Models\Stuff;
 use Modules\GReqSys\Models\Model;
 
+/**
+ * @property integer|string|null $id
+ * @property integer|string|null $type_id
+ * @property integer|string|null $gaz_department_id
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property ReqType $type
+ * @property User $author
+ * @property Stuff $stuff
+ * @property Department $department
+ *
+ * @mixin Builder
+ */
 class Req extends Model
 {
     /**

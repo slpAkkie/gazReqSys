@@ -3,8 +3,20 @@
 namespace Modules\GWT\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Query\Builder;
 use Modules\GWT\Models\Model;
 
+/**
+ * @property integer|string|null $id
+ * @property string $title
+ * @property string $description
+ * @property integer $created_at
+ * @property integer $updated_at
+ *
+ * @property Collection<Course> $courses
+ *
+ * @mixin Builder
+ */
 class Course extends Model
 {
     /**
@@ -34,6 +46,6 @@ class Course extends Model
         )->using(UserCourse::class)->withPivot(
             'created_at',
             'updated_at',
-        );
+        )->as('courses');
     }
 }

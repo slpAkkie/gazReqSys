@@ -19,7 +19,6 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        // TODO: Вход в систему
         $foundUser = User::where('login', $request->get('login'))->first();
         if (!$foundUser) return $this->returnFailedLogin();
 
@@ -32,7 +31,6 @@ class AuthController extends Controller
 
     public function logout()
     {
-        // TODO: Выход из системы
         Auth::logout();
 
         return response()->redirectToRoute('login');

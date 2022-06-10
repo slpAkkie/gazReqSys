@@ -3,11 +3,12 @@
 namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-
-
+use Illuminate\Database\Query\Builder;
 
 /**
  * Класс модели для модуля GReqSys
+ *
+ * @mixin Builder
  */
 abstract class Model extends EloquentModel
 {

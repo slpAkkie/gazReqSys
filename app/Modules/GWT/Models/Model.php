@@ -4,10 +4,10 @@ namespace Modules\GWT\Models;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-
-
 /**
  * Класс модели для модуля GWT
+ *
+ * @mixin Builder
  */
 abstract class Model extends EloquentModel
 {
