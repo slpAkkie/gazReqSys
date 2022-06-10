@@ -61,7 +61,7 @@ class Stuff extends Model
         // TODO: Получить записи из БД WT об аккаунте сотрудника
     }
 
-    public function involved_in_reqs()
+    public function involved_in()
     {
         // TODO: Получить записи из БД GReqSys о заявках, в которые сотрудник был вовлечен
     }
