@@ -7,9 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class StuffResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Преобразование модели в API ресурс
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -19,6 +19,9 @@ class StuffResource extends JsonResource
             'last_name' => $this->last_name,
             'first_name' => $this->first_name,
             'second_name' => $this->second_name,
+            'emp_number' => $this->emp_number,
+            'email' => $this->email,
+            'insurance_number' => $this->insurance_number,
         ];
     }
 }

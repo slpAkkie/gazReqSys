@@ -4,12 +4,12 @@ namespace Modules\Gaz\LaravelResources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrganizationResource extends JsonResource
+class DepartmentResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Преобразование модели в API ресурс
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
