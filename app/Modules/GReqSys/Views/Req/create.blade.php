@@ -74,7 +74,7 @@
                     <div class="col-1">Действия</div>
                 </div>
 
-                <stuff-row v-for="s in stuffRows" :key="s.uid" :data="s" @remove="removeStuff(s.uid)" @paste_stuff="pasteStuff" />
+                <stuff-row v-for="s in stuffRows" :key="s.uid" :data="s" :req-type-id="formData.type_id" @remove="removeStuff(s.uid)" @paste_stuff="pasteStuff" />
             </div>
         </form>
     </section>
@@ -100,6 +100,7 @@
             emits: [ 'remove', 'paste_stuff' ],
             props: {
                 data: Object,
+                reqTypeId: String,
             },
             template: `<div class="row mx-0 stuff-table__row gap-2" :class="rowCSS">
                 <input type="text" class="col form-control" placeholder="Фамилия" v-model="data.last_name">
@@ -113,7 +114,7 @@
             computed: {
                 rowCSS() {
                     return {
-                        'stuff-table__row_highlighted': this.data.is_wt,
+                        'stuff-table__row_highlighted': this.reqTypeId == 1 && this.data.is_wt,
                     }
                 },
             },
@@ -168,6 +169,12 @@
                         email: '',
                         insurance_number: '',
                     }
+                },
+            },
+            watch: {
+                'formData.type_id': function () {
+                    this.clearStuffInfo()
+                    this.checkStuffForMessage()
                 },
             },
             methods: {
@@ -289,6 +296,10 @@
                     this.stuffRows = []
                     this.nextStuffUID = 0
                 },
+                checkStuffForMessage() {
+                    if (this.formData.type_id == 1 && this.stuffRows.some(s => s.is_wt))
+                            this.stuffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
+                },
                 async loadStuffData() {
                     this.clearAllStuffMessages()
                     if (!this.formData.department_id) return this.stuffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
@@ -314,7 +325,7 @@
                         this.stuffErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
-                        if (this.stuffRows.some(s => s.is_wt)) this.stuffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
+                        this.checkStuffForMessage()
                     }
                 },
             },
