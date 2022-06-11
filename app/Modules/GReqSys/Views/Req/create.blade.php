@@ -150,6 +150,10 @@
 
                     return false
                 },
+                checkStuffData(stuffData) {
+                    // TODO: Проверить чтобы все поля были заполнены
+                    // 1 - Все заполнено; 0 - Весь объект пустой; -1 - Некоторые поля не заполнены
+                },
                 submitForm() {
                     let postData = {
                         ...this.formData,
@@ -175,6 +179,7 @@
                 },
                 async loadDeptsFor(city_id) {
                     this.clearDepartmentsError()
+                    this.formData.department_id = null
                     this.deptsLoading = true
 
                     try {
@@ -196,23 +201,20 @@
                         this.stuffRows.push(newStuff)
                     }
                 },
-                clearStuffError() {
-                    this.stuffErrorMessage = ''
-                },
-                clearStuffInfo() {
-                    this.stuffInfoMessage = ''
-                },
-                clearDepartmentsError() {
-                    this.departmentsErrorMessage = ''
+                clearStuffError() { this.stuffErrorMessage = '' },
+                clearStuffInfo() { this.stuffInfoMessage = '' },
+                clearDepartmentsError() { this.departmentsErrorMessage = '' },
+                clearAllStuffMessages() {
+                    this.clearStuffError()
+                    this.clearStuffInfo()
                 },
                 clearStuff() {
-                    this.clearStuffError()
+                    this.clearAllStuffMessages()
                     this.stuffRows = []
                     this.nextStuffUID = 0
                 },
                 async loadStuffData() {
-                    this.clearStuffError()
-                    this.clearStuffInfo()
+                    this.clearAllStuffMessages()
                     if (!this.formData.department_id) return this.stuffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
 
                     try {
