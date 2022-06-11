@@ -8,7 +8,7 @@
 
 @section('content')
     <section id="new-req-form">
-        <form @submit.prevent="submitForm" action="{{ route('req.store') }}" method="post">
+        <form @submit.prevent="submitForm" :class="{ disabled: formBlocked }" action="{{ route('req.store') }}" method="post">
             @csrf
             <div class="row">
                 <div class="col-6">
@@ -43,8 +43,8 @@
 
             <div class="row mt-3">
                 <div class="col-6">
-                    <div v-if="formErrorMessage.length" class="text-danger w-100 mb-2 alert alert-danger" role="alert">
-                        <form-error v-for="(e, i) in formErrorMessage" :key="i" :error-data="e" />
+                    <div v-if="formErrorMessages.length" class="text-danger w-100 mb-2 alert alert-danger" role="alert">
+                        <form-error v-for="(e, i) in formErrorMessages" :key="i" :error-data="e" />
                     </div>
                 </div>
             </div>
@@ -143,14 +143,19 @@
                     city_id: null,
                     department_id: null,
                 },
+
+                nextStuffUID: 0,
                 stuffRows: [],
+
                 departments: [],
                 deptsLoading: false,
-                nextStuffUID: 0,
+
                 stuffErrorMessage: '',
                 stuffInfoMessage: '',
-                formErrorMessage: [],
+                formErrorMessages: [],
                 departmentsErrorMessage: '',
+
+                formBlocked: false,
             }),
             computed: {
                 newStuffData() {
@@ -171,18 +176,18 @@
                     this.nextStuffUID++
                 },
                 clearFormErrors() {
-                    this.formErrorMessage = []
+                    this.formErrorMessages = []
                 },
                 checkFormErrors() {
-                    if (!this.formData.type_id) this.formErrorMessage.push({ title: 'Тип заявки не указан' })
-                    if (!this.formData.city_id) this.formErrorMessage.push({ title: 'Область не указана' })
-                    if (!this.formData.department_id) this.formErrorMessage.push({ title: 'Организация не указана' })
+                    if (!this.formData.type_id) this.formErrorMessages.push({ title: 'Тип заявки не указан' })
+                    if (!this.formData.city_id) this.formErrorMessages.push({ title: 'Область не указана' })
+                    if (!this.formData.department_id) this.formErrorMessages.push({ title: 'Организация не указана' })
 
                     let stuffErrorMessages = this.checkStuffData()
 
-                    if (stuffErrorMessages.length) this.formErrorMessage.push({ title: 'Данные о сотрудниках заполнены не верно', errors: stuffErrorMessages })
+                    if (stuffErrorMessages.length) this.formErrorMessages.push({ title: 'Данные о сотрудниках заполнены не верно', errors: stuffErrorMessages })
 
-                    return false
+                    return !!this.formErrorMessages.length
                 },
                 isStuffEmpty(stuffData) {
                     return !(stuffData.last_name || stuffData.first_name || stuffData.second_name || stuffData.emp_number || stuffData.email || stuffData.insurance_number)
@@ -201,7 +206,27 @@
 
                     return stuffErrorMessages
                 },
-                submitForm() {
+                setFormErrorsFromResponse(errors) {
+                    let stuffErrors = []
+
+                    for (let e in errors) {
+                        if (errors.hasOwnProperty(e)) {
+                            if (!e.startsWith('stuff') || e === 'stuff') this.formErrorMessages.push({ title: errors[e].join(',') })
+                            else {
+                                let stuffIndex = e.split('.')[1]
+
+                                if (!stuffErrors[+stuffIndex]) stuffErrors[+stuffIndex] = []
+                                stuffErrors[+stuffIndex].push(errors[e].join(', '))
+                            }
+                        }
+                    }
+
+                    stuffErrors.forEach((sE, i) => this.formErrorMessages.push({
+                        title: `Сотрудник ${i + 1}`,
+                        errors: sE,
+                    }))
+                },
+                async submitForm() {
                     let postData = {
                         ...this.formData,
                         stuff: this.stuffRows,
@@ -212,11 +237,17 @@
                     if (this.checkFormErrors()) return
 
                     try {
-                        // TODO: Отправить запрос на создание заявки
+                        this.formBlocked = true
+                        await axios.post('/web-api/reqsys/req', postData)
+
+                        window.location.href = '{{ route('req.index') }}'
                     } catch (e) {
-                        // TODO: Обработать ошибки валидации
+                        let errors = e?.response?.data?.errors
+                        errors && this.setFormErrorsFromResponse(errors)
+
+                        console.log(e)
                     } finally {
-                        // TODO: Действия после запроса
+                        this.formBlocked = false
                     }
                 },
                 removeStuff(uid) {

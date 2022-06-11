@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Modules\Gaz\Models\City;
 use Modules\GReqSys\Models\Req;
 use Modules\GReqSys\Models\ReqType;
+use Modules\GReqSys\Requests\StoreReqRequest;
 
 class ReqController extends Controller
 {
@@ -33,5 +34,14 @@ class ReqController extends Controller
             'req_types' => ReqType::all(),
             'cities' => City::all(),
         ]);
+    }
+
+    /**
+     * TODO: Написать PHPDoc
+     *
+     * @return void
+     */
+    public function store(StoreReqRequest $request) {
+
     }
 }

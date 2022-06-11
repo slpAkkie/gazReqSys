@@ -32,4 +32,12 @@ Route::middleware('web')->group(function () {
 
     });
 
+    Route::prefix('/web-api/reqsys')->name('api.greqsys.')->group(function () {
+
+        Route::prefix('/req')->name('req.')->group(function () {
+            Route::post('/', [ReqController::class, 'store'])->name('store');
+        });
+
+    });
+
 });

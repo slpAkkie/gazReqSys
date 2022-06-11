@@ -61,6 +61,12 @@
 /** ==================================================
  * Forms */
 
+form.disabled {
+    opacity: .5;
+    //
+    pointer-events: none;
+}
+
 .form-alert__message-block {
     & + & {
         margin-top: .5rem;
