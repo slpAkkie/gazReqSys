@@ -4,7 +4,9 @@ namespace Modules\GReqSys\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
+use Modules\Gaz\Models\City;
 use Modules\GReqSys\Models\Req;
+use Modules\GReqSys\Models\ReqType;
 
 class ReqController extends Controller
 {
@@ -27,6 +29,9 @@ class ReqController extends Controller
      */
     public function create()
     {
-        return view('GReqSys::Req.create');
+        return view('GReqSys::Req.create', [
+            'req_types' => ReqType::all(),
+            'cities' => City::all(),
+        ]);
     }
 }
