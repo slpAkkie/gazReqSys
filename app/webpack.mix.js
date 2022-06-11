@@ -1,4 +1,5 @@
-const mix = require('laravel-mix');
+const mix = require('laravel-mix')
+const webpack = require('webpack')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,8 +12,17 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    plugins: [
+        new webpack.DefinePlugin({
+            __VUE_OPTIONS_API__: true,
+            __VUE_PROD_DEVTOOLS__: 'false',
+        })
+    ],
+})
+
 mix.js('resources/js/app.js', 'public/js')
     .js('Modules/GReqSys/resources/js/GReqSys.js', 'public/js/GReqSys')
     .postCss('resources/css/app.css', 'public/css')
     .sass('resources/scss/app.scss', 'public/css')
-    .sass('Modules/GReqSys/resources/scss/GReqSys.scss', 'public/css');
+    .sass('Modules/GReqSys/resources/scss/GReqSys.scss', 'public/css')
