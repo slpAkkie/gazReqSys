@@ -10,7 +10,7 @@
         <div class="mb-2">
             <label class="form-label d-flex align-items-center [@error('login') is-invalid @enderror]" for="login">
                 <i class="bi bi-person-circle me-2 input-prefix-icon"></i>
-                <input type="text" id="login" name="login" class="form-control w-100 border-c-light prefix-icon" placeholder="Логин">
+                <input type="text" id="login" name="login" class="form-control w-100 border-c-light prefix-icon" placeholder="Логин" value="{{ old('login') }}">
             </label>
             <p class="invalid-feedback">@error('login') {{ $message }} @enderror</p>
         </div>
