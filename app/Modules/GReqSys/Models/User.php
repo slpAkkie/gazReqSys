@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 
 /**
  * @property integer|string|null $id
  * @property string $login
  * @property string $password_hash
- * @property integer|string|null $gaz_stuff_id
+ * @property integer|string|null $gaz_staff_id
  * @property integer $created_at
  * @property integer $updated_at
  *
  * @property Collection<Req> $reqs
- * @property Stuff $stuff
+ * @property Staff $staff
  *
  * @method string hashPassword()
  * @method bool checkPassword()
@@ -43,7 +43,7 @@ class User extends AuthUser
      */
     protected $fillable = [
         'login',
-        'gaz_stuff_id',
+        'gaz_staff_id',
     ];
 
     /**
@@ -104,8 +104,8 @@ class User extends AuthUser
      *
      * @return BelongsTo
      */
-    public function stuff()
+    public function staff()
     {
-        return $this->setConnection('gaz')->belongsTo(Stuff::class, 'gaz_stuff_id', 'id');
+        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id');
     }
 }

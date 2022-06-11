@@ -3,9 +3,9 @@
 namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Gaz\Models\StuffHistory;
+use Modules\Gaz\Models\StaffHistory;
 
-class StuffHistorySeeder extends Seeder
+class StaffHistorySeeder extends Seeder
 {
     /**
      * Строки для вставки
@@ -14,18 +14,18 @@ class StuffHistorySeeder extends Seeder
      */
     protected $rows = [
         [
-            'stuff_id' => 1,
+            'staff_id' => 1,
             'hired_at' => '2022.04.11',
             'post_id' => 1,
             'department_id' => 4,
         ],
         [
-            'stuff_id' => 2,
+            'staff_id' => 2,
             'post_id' => 1,
             'department_id' => 4,
         ],
         [
-            'stuff_id' => 3,
+            'staff_id' => 3,
             'post_id' => 1,
             'department_id' => 4,
         ],
@@ -39,6 +39,6 @@ class StuffHistorySeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new StuffHistory($r))->save();
+            (new StaffHistory($r))->save();
     }
 }

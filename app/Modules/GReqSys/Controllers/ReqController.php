@@ -7,8 +7,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Modules\Gaz\Models\City;
-use Modules\Gaz\Models\Stuff;
-use Modules\GReqSys\Models\InvolvedStuff;
+use Modules\Gaz\Models\Staff;
+use Modules\GReqSys\Models\InvolvedStaff;
 use Modules\GReqSys\Models\Req;
 use Modules\GReqSys\Models\ReqType;
 use Modules\GReqSys\Requests\StoreReqRequest;
@@ -51,18 +51,18 @@ class ReqController extends Controller
             'department_id',
         ])))->save();
 
-        $emp_numbers = Collection::make($request->get('stuff'))->reduce(function ($r, $v) {
+        $emp_numbers = Collection::make($request->get('staff'))->reduce(function ($r, $v) {
             $r[] = $v['emp_number'];
 
             return $r;
         } ,[]);
 
-        $req->involved_stuff_records()->createMany(
-            Stuff::select('stuff.id')->whereIn('emp_number', $emp_numbers)->whereHas('departments', function ($q) use ($request) {
+        $req->involved_staff_records()->createMany(
+            Staff::select('staff.id')->whereIn('emp_number', $emp_numbers)->whereHas('departments', function ($q) use ($request) {
                 $q->where('departments.id', $request->get('department_id'));
             })->get()->reduce(function ($r, $v) {
                 $r[] = [
-                    'gaz_stuff_id' => $v['id'],
+                    'gaz_staff_id' => $v['id'],
                 ];
 
                 return $r;

@@ -3,12 +3,12 @@
 namespace Modules\Gaz\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 
 /**
- * @mixin Stuff
+ * @mixin Staff
  */
-class StuffResource extends JsonResource
+class StaffResource extends JsonResource
 {
     /**
      * Преобразование модели в API ресурс

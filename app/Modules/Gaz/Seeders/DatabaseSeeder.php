@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             DepartmentSeeder::class,
             PostSeeder::class,
-            StuffSeeder::class,
-            StuffHistorySeeder::class,
+            StaffSeeder::class,
+            StaffHistorySeeder::class,
         ]);
     }
 }

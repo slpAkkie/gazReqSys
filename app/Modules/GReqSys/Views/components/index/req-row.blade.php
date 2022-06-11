@@ -4,6 +4,6 @@
     </div>
     <div class="col-3 req-table__cell">{{ $req->department->title }}</div>
     <div class="col-2 req-table__cell">{{ $req->department->city->title }}</div>
-    <div class="col-2 req-table__cell">{{ $req->stuff->getFullName() }}</div>
+    <div class="col-2 req-table__cell">{{ $req->staff->getFullName() }}</div>
     <div class="col-3 req-table__cell">{{ $req->type->title }}</div>
 </div>

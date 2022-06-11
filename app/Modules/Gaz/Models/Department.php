@@ -18,7 +18,7 @@ use Modules\GReqSys\Models\Req;
  * @property integer $updated_at
  *
  * @property City $city
- * @property Collection<Stuff> $stuff
+ * @property Collection<Staff> $staff
  * @property Collection<Req> $reqs
  *
  * @mixin Builder
@@ -50,16 +50,16 @@ class Department extends Model
      *
      * @return BelongsToMany
      */
-    public function stuff()
+    public function staff()
     {
         return $this->belongsToMany(
-            Stuff::class,
-            StuffHistory::class,
+            Staff::class,
+            StaffHistory::class,
             'department_id',
-            'stuff_id',
+            'staff_id',
             'id',
             'id',
-        )->using(StuffHistory::class)->withPivot(
+        )->using(StaffHistory::class)->withPivot(
             'hired_at',
             'post_id',
             'fired_at',

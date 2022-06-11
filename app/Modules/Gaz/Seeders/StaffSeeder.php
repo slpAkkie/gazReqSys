@@ -3,9 +3,9 @@
 namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 
-class StuffSeeder extends Seeder
+class StaffSeeder extends Seeder
 {
     /**
      * Строки для вставки
@@ -47,6 +47,6 @@ class StuffSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new Stuff($r))->save();
+            (new Staff($r))->save();
     }
 }

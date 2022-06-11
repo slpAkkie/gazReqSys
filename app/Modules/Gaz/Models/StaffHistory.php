@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property integer|string|null $id
- * @property integer|string|null $stuff_id
+ * @property integer|string|null $staff_id
  * @property integer $hired_at
  * @property integer|string|null $post_id
  * @property integer|string|null $department_id
@@ -17,13 +17,13 @@ use Illuminate\Support\Carbon;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Stuff $stuff
+ * @property Staff $staff
  * @property Post $post
  * @property Department $department
  *
  * @mixin Builder
  */
-class StuffHistory extends Pivot
+class StaffHistory extends Pivot
 {
     /**
      * Соединение к базе данных для моделей модуля Gaz
@@ -36,11 +36,11 @@ class StuffHistory extends Pivot
     /**
      * Таблица, используемая моделью.
      * Необходимо указать явно, так как иначе,
-     * будет преобразовано во множественное число stuff_histories
+     * будет преобразовано во множественное число staff_histories
      *
      * @var string
      */
-    protected $table = 'stuff_history';
+    protected $table = 'staff_history';
 
     /**
      * Поля, разрешенные для массовго заполнения
@@ -48,7 +48,7 @@ class StuffHistory extends Pivot
      * @var array
      */
     protected $fillable = [
-        'stuff_id',
+        'staff_id',
         'hired_at',
         'post_id',
         'department_id',
@@ -61,7 +61,7 @@ class StuffHistory extends Pivot
      * текущую дату
      *
      * @param array $options
-     * @return StuffHistory
+     * @return StaffHistory
      */
     public function save(array $options = [])
     {
@@ -75,9 +75,9 @@ class StuffHistory extends Pivot
      *
      * @return BelongsTo
      */
-    public function stuff()
+    public function staff()
     {
-        return $this->belongsTo(Stuff::class, 'stuff_id', 'id');
+        return $this->belongsTo(Staff::class, 'staff_id', 'id');
     }
 
     /**

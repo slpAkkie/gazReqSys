@@ -53,18 +53,18 @@
                 <div class="col-6">
                     <h3>Сотрудники</h3>
                     <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
-                        <button class="btn btn-secondary" @click.prevent="addStuffRow">Добавить</button>
-                        <button class="btn btn-danger" @click.prevent="clearStuff">Очистить</button>
-                        <button class="btn btn-info text-light" @click.prevent="loadStuffData">Подстановка</button>
+                        <button class="btn btn-secondary" @click.prevent="addStaffRow">Добавить</button>
+                        <button class="btn btn-danger" @click.prevent="clearStaff">Очистить</button>
+                        <button class="btn btn-info text-light" @click.prevent="loadStaffData">Подстановка</button>
                     </div>
 
-                    <div v-if="!!stuffErrorMessage" class="w-100 mb-2 alert alert-warning" role="alert">@{{ stuffErrorMessage }}</div>
-                    <div v-if="!!stuffInfoMessage" class="w-100 alert alert-info" role="alert">@{{ stuffInfoMessage }}</div>
+                    <div v-if="!!staffErrorMessage" class="w-100 mb-2 alert alert-warning" role="alert">@{{ staffErrorMessage }}</div>
+                    <div v-if="!!staffInfoMessage" class="w-100 alert alert-info" role="alert">@{{ staffInfoMessage }}</div>
                 </div>
             </div>
 
-            <div class="req-form__stuff-list stuff-table">
-                <div class="row mx-0 stuff-table__row stuff-table__head">
+            <div class="req-form__staff-list staff-table">
+                <div class="row mx-0 staff-table__row staff-table__head">
                     <div class="col">Фамилия</div>
                     <div class="col">Имя</div>
                     <div class="col">Отчество</div>
@@ -74,7 +74,7 @@
                     <div class="col-1">Действия</div>
                 </div>
 
-                <stuff-row v-for="s in stuffRows" :key="s.uid" :data="s" :req-type-id="formData.type_id" @remove="removeStuff(s.uid)" @paste_stuff="pasteStuff" />
+                <staff-row v-for="s in staffRows" :key="s.uid" :data="s" :req-type-id="formData.type_id" @remove="removeStaff(s.uid)" @paste_staff="pasteStaff" />
             </div>
         </form>
     </section>
@@ -95,14 +95,14 @@
             </div>`,
         })
 
-        const stuffRow = Vue.defineComponent({
-            name: 'stuffRow',
-            emits: [ 'remove', 'paste_stuff' ],
+        const staffRow = Vue.defineComponent({
+            name: 'staffRow',
+            emits: [ 'remove', 'paste_staff' ],
             props: {
                 data: Object,
                 reqTypeId: String,
             },
-            template: `<div class="row mx-0 stuff-table__row gap-2" :class="rowCSS">
+            template: `<div class="row mx-0 staff-table__row gap-2" :class="rowCSS">
                 <input type="text" class="col form-control" placeholder="Фамилия" v-model="data.last_name">
                 <input type="text" class="col form-control" placeholder="Имя" v-model="data.first_name">
                 <input type="text" class="col form-control" placeholder="Отчество" v-model="data.second_name">
@@ -114,7 +114,7 @@
             computed: {
                 rowCSS() {
                     return {
-                        'stuff-table__row_highlighted': this.reqTypeId == 1 && this.data.is_wt,
+                        'staff-table__row_highlighted': this.reqTypeId == 1 && this.data.is_wt,
                     }
                 },
             },
@@ -127,7 +127,7 @@
                     emp_numbers = emp_numbers.map(e => e.trim())
                     this.data.emp_number = emp_numbers.shift()
 
-                    this.$emit('paste_stuff', emp_numbers)
+                    this.$emit('paste_staff', emp_numbers)
                 },
             },
         })
@@ -136,7 +136,7 @@
             name: 'reqForm',
             components: {
                 formError,
-                stuffRow,
+                staffRow,
             },
             data: () => ({
                 formData: {
@@ -145,23 +145,23 @@
                     department_id: null,
                 },
 
-                nextStuffUID: 0,
-                stuffRows: [],
+                nextStaffUID: 0,
+                staffRows: [],
 
                 departments: [],
                 deptsLoading: false,
 
-                stuffErrorMessage: '',
-                stuffInfoMessage: '',
+                staffErrorMessage: '',
+                staffInfoMessage: '',
                 formErrorMessages: [],
                 departmentsErrorMessage: '',
 
                 formBlocked: false,
             }),
             computed: {
-                newStuffData() {
+                newStaffData() {
                     return {
-                        uid: this.nextStuffUID,
+                        uid: this.nextStaffUID,
                         first_name: '',
                         last_name: '',
                         second_name: '',
@@ -173,14 +173,14 @@
             },
             watch: {
                 'formData.type_id': function () {
-                    this.clearStuffInfo()
-                    this.checkStuffForMessage()
+                    this.clearStaffInfo()
+                    this.checkStaffForMessage()
                 },
             },
             methods: {
-                addStuffRow() {
-                    this.stuffRows.push(this.newStuffData)
-                    this.nextStuffUID++
+                addStaffRow() {
+                    this.staffRows.push(this.newStaffData)
+                    this.nextStaffUID++
                 },
                 clearFormErrors() {
                     this.formErrorMessages = []
@@ -190,45 +190,45 @@
                     if (!this.formData.city_id) this.formErrorMessages.push({ title: 'Область не указана' })
                     if (!this.formData.department_id) this.formErrorMessages.push({ title: 'Организация не указана' })
 
-                    let stuffErrorMessages = this.checkStuffData()
+                    let staffErrorMessages = this.checkStaffData()
 
-                    if (stuffErrorMessages.length) this.formErrorMessages.push({ title: 'Данные о сотрудниках заполнены не верно', errors: stuffErrorMessages })
+                    if (staffErrorMessages.length) this.formErrorMessages.push({ title: 'Данные о сотрудниках заполнены не верно', errors: staffErrorMessages })
 
                     return !!this.formErrorMessages.length
                 },
-                isStuffEmpty(stuffData) {
-                    return !(stuffData.last_name || stuffData.first_name || stuffData.second_name || stuffData.emp_number || stuffData.email || stuffData.insurance_number)
+                isStaffEmpty(staffData) {
+                    return !(staffData.last_name || staffData.first_name || staffData.second_name || staffData.emp_number || staffData.email || staffData.insurance_number)
                 },
-                removeEmptyStuff() {
-                    this.stuffRows = this.stuffRows.filter(sD => !this.isStuffEmpty(sD))
+                removeEmptyStaff() {
+                    this.staffRows = this.staffRows.filter(sD => !this.isStaffEmpty(sD))
                 },
-                checkStuffData() {
-                    let stuffErrorMessages = []
+                checkStaffData() {
+                    let staffErrorMessages = []
 
-                    this.stuffRows.forEach((sD, i) => {
+                    this.staffRows.forEach((sD, i) => {
                         if (sD.last_name && sD.first_name && sD.second_name && sD.emp_number && sD.email && sD.insurance_number) return
 
-                        stuffErrorMessages.push(`Данные о ${i + 1} сотруднике указаны не полностью`)
+                        staffErrorMessages.push(`Данные о ${i + 1} сотруднике указаны не полностью`)
                     });
 
-                    return stuffErrorMessages
+                    return staffErrorMessages
                 },
                 setFormErrorsFromResponse(errors) {
-                    let stuffErrors = []
+                    let staffErrors = []
 
                     for (let e in errors) {
                         if (errors.hasOwnProperty(e)) {
-                            if (!e.startsWith('stuff') || e === 'stuff') this.formErrorMessages.push({ title: errors[e].join(',') })
+                            if (!e.startsWith('staff') || e === 'staff') this.formErrorMessages.push({ title: errors[e].join(',') })
                             else {
-                                let stuffIndex = e.split('.')[1]
+                                let staffIndex = e.split('.')[1]
 
-                                if (!stuffErrors[+stuffIndex]) stuffErrors[+stuffIndex] = []
-                                stuffErrors[+stuffIndex].push(errors[e].join(', '))
+                                if (!staffErrors[+staffIndex]) staffErrors[+staffIndex] = []
+                                staffErrors[+staffIndex].push(errors[e].join(', '))
                             }
                         }
                     }
 
-                    stuffErrors.forEach((sE, i) => this.formErrorMessages.push({
+                    staffErrors.forEach((sE, i) => this.formErrorMessages.push({
                         title: `Сотрудник ${i + 1}`,
                         errors: sE,
                     }))
@@ -236,10 +236,10 @@
                 async submitForm() {
                     let postData = {
                         ...this.formData,
-                        stuff: this.stuffRows,
+                        staff: this.staffRows,
                     }
 
-                    this.removeEmptyStuff()
+                    this.removeEmptyStaff()
                     this.clearFormErrors()
                     if (this.checkFormErrors()) return
 
@@ -257,8 +257,8 @@
                         this.formBlocked = false
                     }
                 },
-                removeStuff(uid) {
-                    this.stuffRows.splice(this.stuffRows.findIndex(el => el.uid === uid), 1)
+                removeStaff(uid) {
+                    this.staffRows.splice(this.staffRows.findIndex(el => el.uid === uid), 1)
                 },
                 async loadDeptsFor(city_id) {
                     this.clearDepartmentsError()
@@ -276,56 +276,56 @@
                         this.deptsLoading = false
                     }
                 },
-                pasteStuff(emp_numbers) {
-                    for (let emp_number; emp_number = emp_numbers.shift(); this.nextStuffUID++) {
-                        let newStuff = this.newStuffData
-                        newStuff.emp_number = emp_number
+                pasteStaff(emp_numbers) {
+                    for (let emp_number; emp_number = emp_numbers.shift(); this.nextStaffUID++) {
+                        let newStaff = this.newStaffData
+                        newStaff.emp_number = emp_number
 
-                        this.stuffRows.push(newStuff)
+                        this.staffRows.push(newStaff)
                     }
                 },
-                clearStuffError() { this.stuffErrorMessage = '' },
-                clearStuffInfo() { this.stuffInfoMessage = '' },
+                clearStaffError() { this.staffErrorMessage = '' },
+                clearStaffInfo() { this.staffInfoMessage = '' },
                 clearDepartmentsError() { this.departmentsErrorMessage = '' },
-                clearAllStuffMessages() {
-                    this.clearStuffError()
-                    this.clearStuffInfo()
+                clearAllStaffMessages() {
+                    this.clearStaffError()
+                    this.clearStaffInfo()
                 },
-                clearStuff() {
-                    this.clearAllStuffMessages()
-                    this.stuffRows = []
-                    this.nextStuffUID = 0
+                clearStaff() {
+                    this.clearAllStaffMessages()
+                    this.staffRows = []
+                    this.nextStaffUID = 0
                 },
-                checkStuffForMessage() {
-                    if (this.formData.type_id == 1 && this.stuffRows.some(s => s.is_wt))
-                            this.stuffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
+                checkStaffForMessage() {
+                    if (this.formData.type_id == 1 && this.staffRows.some(s => s.is_wt))
+                            this.staffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
                 },
-                async loadStuffData() {
-                    this.clearAllStuffMessages()
-                    if (!this.formData.department_id) return this.stuffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
+                async loadStaffData() {
+                    this.clearAllStaffMessages()
+                    if (!this.formData.department_id) return this.staffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
 
                     try {
-                        let emp_numbers_query = this.stuffRows.reduce((r, s) => {
+                        let emp_numbers_query = this.staffRows.reduce((r, s) => {
                             r.push(s.emp_number)
 
                             return r
                         }, []).filter(en => !!en).join(',')
 
-                        let response = (await axios.get(`/web-api/gaz/stuff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
+                        let response = (await axios.get(`/web-api/gaz/staff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
 
-                        if (this.stuffRows.length !== response.length)
-                            this.stuffErrorMessage = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
+                        if (this.staffRows.length !== response.length)
+                            this.staffErrorMessage = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
 
                         response.forEach(sData => {
-                            this.stuffRows[
-                                this.stuffRows.findIndex(s => s.emp_number === sData.emp_number)
+                            this.staffRows[
+                                this.staffRows.findIndex(s => s.emp_number === sData.emp_number)
                             ] = sData
                         })
                     } catch (e) {
-                        this.stuffErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
+                        this.staffErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
-                        this.checkStuffForMessage()
+                        this.checkStaffForMessage()
                     }
                 },
             },

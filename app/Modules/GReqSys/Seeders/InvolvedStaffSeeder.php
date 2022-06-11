@@ -3,9 +3,9 @@
 namespace Modules\GReqSys\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\GReqSys\Models\InvolvedStuff;
+use Modules\GReqSys\Models\InvolvedStaff;
 
-class InvolvedStuffSeeder extends Seeder
+class InvolvedStaffSeeder extends Seeder
 {
     /**
      * Строки для вставки
@@ -24,6 +24,6 @@ class InvolvedStuffSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new InvolvedStuff($r))->save();
+            (new InvolvedStaff($r))->save();
     }
 }

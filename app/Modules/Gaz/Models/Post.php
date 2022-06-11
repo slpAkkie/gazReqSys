@@ -12,7 +12,7 @@ use Modules\Gaz\Models\Model;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Collection<Stuff> $stuff
+ * @property Collection<Staff> $staff
  *
  * @mixin Builder
  */
@@ -32,16 +32,16 @@ class Post extends Model
      *
      * @return BelongsToMany
      */
-    public function stuff()
+    public function staff()
     {
         return $this->belongsToMany(
-            Stuff::class,
-            StuffHistory::class,
+            Staff::class,
+            StaffHistory::class,
             'post_id',
-            'stuff_id',
+            'staff_id',
             'id',
             'id',
-        )->using(StuffHistory::class)->withPivot(
+        )->using(StaffHistory::class)->withPivot(
             'hired_at',
             'department_id',
             'fired_at',

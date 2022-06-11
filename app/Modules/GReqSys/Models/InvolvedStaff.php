@@ -4,31 +4,31 @@ namespace Modules\GReqSys\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Query\Builder;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 use Modules\GReqSys\Models\Model;
 
 /**
  * @property integer|string|null $id
  * @property integer|string|null $req_id
- * @property integer|string|null $gaz_stuff_id
+ * @property integer|string|null $gaz_staff_id
  * @property integer $created_at
  * @property integer $updated_at
  *
  * @property Req $req
- * @property Stuff $stuff
+ * @property Staff $staff
  *
  * @mixin Builder
  */
-class InvolvedStuff extends Model
+class InvolvedStaff extends Model
 {
     /**
      * Таблица, используемая моделью.
      * Необходимо указать явно, так как иначе,
-     * будет преобразовано во множественное число involved_stuffs
+     * будет преобразовано во множественное число involved_staffs
      *
      * @var string
      */
-    protected $table = 'involved_stuff';
+    protected $table = 'involved_staff';
 
     /**
      * Поля, разрешенные для массовго заполнения
@@ -37,7 +37,7 @@ class InvolvedStuff extends Model
      */
     protected $fillable = [
         'req_id',
-        'gaz_stuff_id',
+        'gaz_staff_id',
     ];
 
     /**
@@ -45,9 +45,9 @@ class InvolvedStuff extends Model
      *
      * @return BelongsTo
      */
-    public function stuff()
+    public function staff()
     {
-        return $this->setConnection('gaz')->belongsTo(Stuff::class, 'gaz_stuff_id', 'id');
+        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id');
     }
 
     /**

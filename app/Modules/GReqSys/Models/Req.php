@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
 use Modules\Gaz\Models\Department;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 use Modules\GReqSys\Models\Model;
 
 /**
@@ -20,8 +20,8 @@ use Modules\GReqSys\Models\Model;
  *
  * @property ReqType $type
  * @property User $author
- * @property Stuff $stuff
- * @property Collection<Stuff> $involved_stuff
+ * @property Staff $staff
+ * @property Collection<Staff> $involved_staff
  * @property Department $department
  *
  * @mixin Builder
@@ -76,9 +76,9 @@ class Req extends Model
      *
      * @return BelongsTo
      */
-    public function stuff()
+    public function staff()
     {
-        return $this->author->stuff();
+        return $this->author->staff();
     }
 
     /**
@@ -86,9 +86,9 @@ class Req extends Model
      *
      * @return HasMany
      */
-    public function involved_stuff()
+    public function involved_staff()
     {
-        return $this->setConnection('gaz')->hasMany(Stuff::class, 'req_id', 'id');
+        return $this->setConnection('gaz')->hasMany(Staff::class, 'req_id', 'id');
     }
 
     /**
@@ -96,9 +96,9 @@ class Req extends Model
      *
      * @return HasMany
      */
-    public function involved_stuff_records()
+    public function involved_staff_records()
     {
-        return $this->hasMany(InvolvedStuff::class, 'req_id', 'id');
+        return $this->hasMany(InvolvedStaff::class, 'req_id', 'id');
     }
 
     /**

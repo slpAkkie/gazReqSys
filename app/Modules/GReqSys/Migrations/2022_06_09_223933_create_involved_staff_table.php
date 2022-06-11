@@ -4,7 +4,7 @@ use Modules\GReqSys\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
-use Modules\Gaz\Models\Stuff;
+use Modules\Gaz\Models\Staff;
 use Modules\GReqSys\Models\Req;
 
 return new class extends Migration
@@ -16,10 +16,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('involved_stuff', function (Blueprint $table) {
+        Schema::create('involved_staff', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Req::class)->references('id')->on('reqs')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignIdFor(Stuff::class, 'gaz_stuff_id')->references('id')->on(Config::get('database.connections.gaz.database') . '.stuff')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(Staff::class, 'gaz_staff_id')->references('id')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('involved_stuff');
+        Schema::dropIfExists('involved_staff');
     }
 };

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
-use Modules\GReqSys\Models\InvolvedStuff;
+use Modules\GReqSys\Models\InvolvedStaff;
 use Modules\GReqSys\Models\Req;
 use Modules\GWT\Models\User as WTUser;
 
@@ -31,27 +31,27 @@ use Modules\GWT\Models\User as WTUser;
  *
  * @property Collection<Department> $departments
  * @property Collection<Post> $posts
- * @property Collection<StuffHistory> $history
+ * @property Collection<StaffHistory> $history
  * @property Collection<Req> $involved_in
  * @property WTUser $wt_user
  *
  * @method bool isFired()
- * @method StuffHistory getLastHired()
+ * @method StaffHistory getLastHired()
  * @method Department getCurrentDepartment()
  * @method Post getCurrentPost()
  *
  * @mixin Builder
  */
-class Stuff extends Model
+class Staff extends Model
 {
     /**
      * Таблица, используемая моделью.
      * Необходимо указать явно, так как иначе,
-     * будет преобразовано во множественное число stuffs
+     * будет преобразовано во множественное число staffs
      *
      * @var string
      */
-    protected $table = 'stuff';
+    protected $table = 'staff';
 
     /**
      * Поля, разрешенные для массовго заполнения
@@ -92,7 +92,7 @@ class Stuff extends Model
     /**
      * Получить последнюю запись о найме
      *
-     * @return StuffHistory|null
+     * @return StaffHistory|null
      */
     public function getLastHired()
     {
@@ -118,12 +118,12 @@ class Stuff extends Model
     {
         return $this->belongsToMany(
             Department::class,
-            StuffHistory::class,
-            'stuff_id',
+            StaffHistory::class,
+            'staff_id',
             'department_id',
             'id',
             'id'
-        )->using(StuffHistory::class)->withPivot([
+        )->using(StaffHistory::class)->withPivot([
             'hired_at',
             'post_id',
             'fired_at',
@@ -151,12 +151,12 @@ class Stuff extends Model
     {
         return $this->belongsToMany(
             Post::class,
-            StuffHistory::class,
-            'stuff_id',
+            StaffHistory::class,
+            'staff_id',
             'post_id',
             'id',
             'id'
-        )->using(StuffHistory::class)->withPivot([
+        )->using(StaffHistory::class)->withPivot([
             'hired_at',
             'department_id',
             'fired_at',
@@ -185,8 +185,8 @@ class Stuff extends Model
     {
         return $this->setConnection('reqsys')->hasManyThrough(
             Req::class,
-            InvolvedStuff::class,
-            'gaz_stuff_id',
+            InvolvedStaff::class,
+            'gaz_staff_id',
             'id',
             'id',
             'req_id',
@@ -200,6 +200,6 @@ class Stuff extends Model
      */
     public function history()
     {
-        return $this->hasMany(StuffHistory::class, 'stuff_id', 'id');
+        return $this->hasMany(StaffHistory::class, 'staff_id', 'id');
     }
 }

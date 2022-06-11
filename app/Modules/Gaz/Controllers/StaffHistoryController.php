@@ -4,7 +4,7 @@ namespace Modules\Gaz\Controllers;
 
 use Illuminate\Http\Request;
 
-class StuffHistoryController extends \App\Http\Controllers\Controller
+class StaffHistoryController extends \App\Http\Controllers\Controller
 {
     //
 }

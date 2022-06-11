@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [ 'login' => 'root', 'gaz_stuff_id' => 1, 'password' => 'root' ],
+        [ 'login' => 'root', 'gaz_staff_id' => 1, 'password' => 'root' ],
     ];
 
     /**
