@@ -183,7 +183,6 @@ class Stuff extends Model
      */
     public function involved_in()
     {
-        // TODO: Получить записи из БД GReqSys о заявках, в которые сотрудник был вовлечен
         return $this->setConnection('reqsys')->hasManyThrough(
             Req::class,
             InvolvedStuff::class,
