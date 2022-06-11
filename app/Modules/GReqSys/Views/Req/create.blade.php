@@ -41,13 +41,26 @@
                 </div>
             </div>
 
-            <h3 class="mt-4 mb-3">Сотрудники</h3>
-            <div class="d-flex gap-2 align-items-center flex-wrap">
-                <button class="btn btn-secondary" @click.prevent="addStuffRow">Добавить</button>
-                <button class="btn btn-danger" @click.prevent="clearStuff">Очистить</button>
-                <button class="btn btn-info text-light" @click.prevent="loadStuffData">Подстановка</button>
-                <p class="text-danger w-100 m-0">@{{ stuffErrorMessage }}</p>
-                <p class="text-info w-100 m-0">@{{ stuffInfoMessage }}</p>
+            <div class="row mt-3">
+                <div class="col-6">
+                    <div v-if="formErrorMessage.length" class="text-danger w-100 mb-2 alert alert-danger" role="alert">
+                        <form-error v-for="(e, i) in formErrorMessage" :key="i" :error-data="e" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4 mb-3">
+                <div class="col-6">
+                    <h3>Сотрудники</h3>
+                    <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
+                        <button class="btn btn-secondary" @click.prevent="addStuffRow">Добавить</button>
+                        <button class="btn btn-danger" @click.prevent="clearStuff">Очистить</button>
+                        <button class="btn btn-info text-light" @click.prevent="loadStuffData">Подстановка</button>
+                    </div>
+
+                    <div v-if="!!stuffErrorMessage" class="w-100 mb-2 alert alert-warning" role="alert">@{{ stuffErrorMessage }}</div>
+                    <div v-if="!!stuffInfoMessage" class="w-100 alert alert-info" role="alert">@{{ stuffInfoMessage }}</div>
+                </div>
             </div>
 
             <div class="req-form__stuff-list stuff-table">
@@ -69,6 +82,19 @@
 
 @section('footer-js')
     <script>
+        const formError = Vue.defineComponent({
+            name: 'formError',
+            props: {
+                errorData: Object,
+            },
+            template: `<div class="form-alert__message-block">
+                <h5 class="m-0">@{{ errorData.title }}</h5>
+                <ul v-if="errorData.errors?.length">
+                    <li v-for="e in errorData.errors">@{{ e }}</li>
+                </ul>
+            </div>`,
+        })
+
         const stuffRow = Vue.defineComponent({
             name: 'stuffRow',
             emits: [ 'remove', 'paste_stuff' ],
@@ -108,6 +134,7 @@
         const reqForm = Vue.createApp({
             name: 'reqForm',
             components: {
+                formError,
                 stuffRow,
             },
             data: () => ({
@@ -122,6 +149,7 @@
                 nextStuffUID: 0,
                 stuffErrorMessage: '',
                 stuffInfoMessage: '',
+                formErrorMessage: [],
                 departmentsErrorMessage: '',
             }),
             computed: {
@@ -143,16 +171,35 @@
                     this.nextStuffUID++
                 },
                 clearFormErrors() {
-                    // TODO: Очистить все сообщения об ошибках о заполнении формы
+                    this.formErrorMessage = []
                 },
                 checkFormErrors() {
-                    // TODO: Проверить поля формы на корректность введеных данных
+                    if (!this.formData.type_id) this.formErrorMessage.push({ title: 'Тип заявки не указан' })
+                    if (!this.formData.city_id) this.formErrorMessage.push({ title: 'Область не указана' })
+                    if (!this.formData.department_id) this.formErrorMessage.push({ title: 'Организация не указана' })
+
+                    let stuffErrorMessages = this.checkStuffData()
+
+                    if (stuffErrorMessages.length) this.formErrorMessage.push({ title: 'Данные о сотрудниках заполнены не верно', errors: stuffErrorMessages })
 
                     return false
                 },
-                checkStuffData(stuffData) {
-                    // TODO: Проверить чтобы все поля были заполнены
-                    // 1 - Все заполнено; 0 - Весь объект пустой; -1 - Некоторые поля не заполнены
+                isStuffEmpty(stuffData) {
+                    return !(stuffData.last_name || stuffData.first_name || stuffData.second_name || stuffData.emp_number || stuffData.email || stuffData.insurance_number)
+                },
+                removeEmptyStuff() {
+                    this.stuffRows = this.stuffRows.filter(sD => !this.isStuffEmpty(sD))
+                },
+                checkStuffData() {
+                    let stuffErrorMessages = []
+
+                    this.stuffRows.forEach((sD, i) => {
+                        if (sD.last_name && sD.first_name && sD.second_name && sD.emp_number && sD.email && sD.insurance_number) return
+
+                        stuffErrorMessages.push(`Данные о ${i + 1} сотруднике указаны не полностью`)
+                    });
+
+                    return stuffErrorMessages
                 },
                 submitForm() {
                     let postData = {
@@ -160,11 +207,9 @@
                         stuff: this.stuffRows,
                     }
 
-                    if (this.checkFormErrors()) {
-                        // TODO: Отоброзить сообщения об ошибках формы
-
-                        return
-                    }
+                    this.removeEmptyStuff()
+                    this.clearFormErrors()
+                    if (this.checkFormErrors()) return
 
                     try {
                         // TODO: Отправить запрос на создание заявки
@@ -222,7 +267,7 @@
                             r.push(s.emp_number)
 
                             return r
-                        }, []).join(',')
+                        }, []).filter(en => !!en).join(',')
 
                         let response = (await axios.get(`/web-api/gaz/stuff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
 
