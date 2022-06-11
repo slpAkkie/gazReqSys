@@ -16,10 +16,12 @@ class StuffController extends \App\Http\Controllers\Controller
      */
     public function show(Request $request) {
         $department_id = $request->get('department_id');
+        $emp_numbers = $request->get('emp_numbers');
 
         if (!$department_id) return abort(404, 'Для поиска нужно указать организацию');
+        if (!$emp_numbers) return abort(404, 'Табельные номера не переданы');
 
-        $foundStuff = Stuff::whereIn('emp_number', explode(',', $request->get('emp_numbers')))->whereHas('departments', function($q) use ($department_id) {
+        $foundStuff = Stuff::whereIn('emp_number', explode(',', $emp_numbers))->whereHas('departments', function($q) use ($department_id) {
             $q->where('departments.id', $department_id)->whereNull('stuff_history.fired_at');
         })->get();
 

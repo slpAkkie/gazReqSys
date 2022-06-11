@@ -33,7 +33,7 @@
                         <select name="department_id" id="department" class="form-select" v-model="formData.department_id" :disabled="deptsLoading">
                             <option v-for="d in departments" :key="d.id" :value="d.id">@{{ d.title }}</option>
                         </select>
-                        <p>@{{ departmentsErrorMessage }}</p>
+                        <p class="text-danger mt-1">@{{ departmentsErrorMessage }}</p>
                     </div>
                     <div v-if="formData.city_id && formData.department_id">
                         <button type="submit" class="btn btn-success">Создать</button>
@@ -182,7 +182,7 @@
 
                         this.departments = response
                     } catch (e) {
-                        this.departmentsErrorMessage = 'Произошла ошибка во время запроса к серверу'
+                        this.departmentsErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
                         this.deptsLoading = false
@@ -233,15 +233,12 @@
                             ] = sData
                         })
                     } catch (e) {
-                        this.stuffErrorMessage = 'Во время загрузки данных произошла ошибка'
+                        this.stuffErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
                         if (this.stuffRows.some(s => s.is_wt)) this.stuffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
                     }
                 },
-            },
-            mounted() {
-                this.addStuffRow()
             },
         }).mount('#new-req-form')
     </script>
