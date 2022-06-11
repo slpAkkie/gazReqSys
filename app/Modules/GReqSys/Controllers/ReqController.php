@@ -4,6 +4,7 @@ namespace Modules\GReqSys\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Modules\Gaz\Models\City;
 use Modules\Gaz\Models\Stuff;
@@ -40,9 +41,9 @@ class ReqController extends Controller
     }
 
     /**
-     * TODO: Написать PHPDoc
+     * Создать заявку и сохранить вовлеченных пользователей
      *
-     * @return void
+     * @return JsonResponse
      */
     public function store(StoreReqRequest $request) {
         ($req = new Req($request->only([
