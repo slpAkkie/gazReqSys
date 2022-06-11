@@ -10,6 +10,10 @@
     }
 
     &__row {
-        margin-bottom: .5rem;
+        padding: .75rem;
+
+        &_highlighted {
+            background-color: $color-info-translucent;
+        }
     }
 }

@@ -3,7 +3,7 @@
 namespace Modules\Gaz\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Gaz\LaravelResources\DepartmentResource;
+use Modules\Gaz\Resources\DepartmentResource;
 use Modules\Gaz\Models\Department;
 
 class DepartmentController extends \App\Http\Controllers\Controller

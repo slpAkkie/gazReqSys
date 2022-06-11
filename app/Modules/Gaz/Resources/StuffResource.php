@@ -1,9 +1,13 @@
 <?php
 
-namespace Modules\Gaz\LaravelResources;
+namespace Modules\Gaz\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Gaz\Models\Stuff;
 
+/**
+ * @mixin Stuff
+ */
 class StuffResource extends JsonResource
 {
     /**
@@ -22,6 +26,9 @@ class StuffResource extends JsonResource
             'emp_number' => $this->emp_number,
             'email' => $this->email,
             'insurance_number' => $this->insurance_number,
+            $this->mergeWhen($this->showWTInfo, [
+                'is_wt' => $this->wt_user()->exists(),
+            ]),
         ];
     }
 }

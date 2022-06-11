@@ -33,6 +33,7 @@
                         <select name="department_id" id="department" class="form-select" v-model="formData.department_id" :disabled="deptsLoading">
                             <option v-for="d in departments" :key="d.id" :value="d.id">@{{ d.title }}</option>
                         </select>
+                        <p>@{{ departmentsErrorMessage }}</p>
                     </div>
                     <div v-if="formData.city_id && formData.department_id">
                         <button type="submit" class="btn btn-success">Создать</button>
@@ -41,13 +42,16 @@
             </div>
 
             <h3 class="mt-4 mb-3">Сотрудники</h3>
-            <button class="btn btn-secondary me-2" @click.prevent="addStuffRow">Добавить</button>
-            <button class="btn btn-danger me-2" @click.prevent="clearStuff">Очистить</button>
-            <button class="btn btn-info text-light me-2" @click.prevent="loadStuffData">Подстановка</button>
-            <span class="text-danger">@{{ stuffErrorMessage }}</span>
+            <div class="d-flex gap-2 align-items-center flex-wrap">
+                <button class="btn btn-secondary" @click.prevent="addStuffRow">Добавить</button>
+                <button class="btn btn-danger" @click.prevent="clearStuff">Очистить</button>
+                <button class="btn btn-info text-light" @click.prevent="loadStuffData">Подстановка</button>
+                <p class="text-danger w-100 m-0">@{{ stuffErrorMessage }}</p>
+                <p class="text-info w-100 m-0">@{{ stuffInfoMessage }}</p>
+            </div>
 
             <div class="req-form__stuff-list stuff-table">
-                <div class="row mx-0 stuff-table__head">
+                <div class="row mx-0 stuff-table__row stuff-table__head">
                     <div class="col">Фамилия</div>
                     <div class="col">Имя</div>
                     <div class="col">Отчество</div>
@@ -71,15 +75,22 @@
             props: {
                 data: Object,
             },
-            template: `<div class="row mx-0 stuff-table__row gap-2">
-                <input type="text" class="col form-control" placeholder="Фамилия" v-model="data.first_name">
-                <input type="text" class="col form-control" placeholder="Имя" v-model="data.last_name">
+            template: `<div class="row mx-0 stuff-table__row gap-2" :class="rowCSS">
+                <input type="text" class="col form-control" placeholder="Фамилия" v-model="data.last_name">
+                <input type="text" class="col form-control" placeholder="Имя" v-model="data.first_name">
                 <input type="text" class="col form-control" placeholder="Отчество" v-model="data.second_name">
                 <input type="text" class="col form-control" placeholder="Табельный номер" v-model="data.emp_number" @paste.prevent="pasteEmpNumbers">
                 <input type="email" class="col form-control" placeholder="Email" v-model="data.email">
                 <input type="text" class="col form-control" placeholder="СНИЛС" v-model="data.insurance_number">
                 <input type="button" class="col-1 btn btn-danger" value="Убрать" @click.prevent="remove">
             </div>`,
+            computed: {
+                rowCSS() {
+                    return {
+                        'stuff-table__row_highlighted': this.data.is_wt,
+                    }
+                },
+            },
             methods: {
                 remove() {
                     this.$emit('remove')
@@ -110,6 +121,8 @@
                 deptsLoading: false,
                 nextStuffUID: 0,
                 stuffErrorMessage: '',
+                stuffInfoMessage: '',
+                departmentsErrorMessage: '',
             }),
             computed: {
                 newStuffData() {
@@ -129,18 +142,39 @@
                     this.stuffRows.push(this.newStuffData)
                     this.nextStuffUID++
                 },
+                clearFormErrors() {
+                    // TODO: Очистить все сообщения об ошибках о заполнении формы
+                },
+                checkFormErrors() {
+                    // TODO: Проверить поля формы на корректность введеных данных
+
+                    return false
+                },
                 submitForm() {
                     let postData = {
                         ...this.formData,
                         stuff: this.stuffRows,
                     }
 
-                    // TODO: Send request and handle validation errors
+                    if (this.checkFormErrors()) {
+                        // TODO: Отоброзить сообщения об ошибках формы
+
+                        return
+                    }
+
+                    try {
+                        // TODO: Отправить запрос на создание заявки
+                    } catch (e) {
+                        // TODO: Обработать ошибки валидации
+                    } finally {
+                        // TODO: Действия после запроса
+                    }
                 },
                 removeStuff(uid) {
                     this.stuffRows.splice(this.stuffRows.findIndex(el => el.uid === uid), 1)
                 },
                 async loadDeptsFor(city_id) {
+                    this.clearDepartmentsError()
                     this.deptsLoading = true
 
                     try {
@@ -148,7 +182,7 @@
 
                         this.departments = response
                     } catch (e) {
-                        console.log('Произошла ошибка во время запроса к серверу')
+                        this.departmentsErrorMessage = 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
                         this.deptsLoading = false
@@ -165,6 +199,12 @@
                 clearStuffError() {
                     this.stuffErrorMessage = ''
                 },
+                clearStuffInfo() {
+                    this.stuffInfoMessage = ''
+                },
+                clearDepartmentsError() {
+                    this.departmentsErrorMessage = ''
+                },
                 clearStuff() {
                     this.clearStuffError()
                     this.stuffRows = []
@@ -172,14 +212,31 @@
                 },
                 async loadStuffData() {
                     this.clearStuffError()
+                    this.clearStuffInfo()
                     if (!this.formData.department_id) return this.stuffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
 
                     try {
-                        // TODO: Запрос к gaz web-api
+                        let emp_numbers_query = this.stuffRows.reduce((r, s) => {
+                            r.push(s.emp_number)
+
+                            return r
+                        }, []).join(',')
+
+                        let response = (await axios.get(`/web-api/gaz/stuff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
+
+                        if (this.stuffRows.length !== response.length)
+                            this.stuffErrorMessage = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
+
+                        response.forEach(sData => {
+                            this.stuffRows[
+                                this.stuffRows.findIndex(s => s.emp_number === sData.emp_number)
+                            ] = sData
+                        })
                     } catch (e) {
-                        // TODO: Сообщение об ошибке
+                        this.stuffErrorMessage = 'Во время загрузки данных произошла ошибка'
+                        console.log(e)
                     } finally {
-                        // TODO: Действия после запроса
+                        if (this.stuffRows.some(s => s.is_wt)) this.stuffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
                     }
                 },
             },

@@ -27,6 +27,8 @@ use Modules\GWT\Models\User as WTUser;
  * @property integer $created_at
  * @property integer $updated_at
  *
+ * @property bool $showWTInfo
+ *
  * @property Collection<Department> $departments
  * @property Collection<Post> $posts
  * @property Collection<StuffHistory> $history
@@ -64,6 +66,8 @@ class Stuff extends Model
         'email',
         'insurance_number',
     ];
+
+    public $showWTInfo = false;
 
     /**
      * Поулчить ФИО сотрудника

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Gaz\LaravelResources;
+namespace Modules\Gaz\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 

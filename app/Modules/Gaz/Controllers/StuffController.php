@@ -3,7 +3,7 @@
 namespace Modules\Gaz\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Gaz\LaravelResources\StuffResource;
+use Modules\Gaz\Resources\StuffResource;
 use Modules\Gaz\Models\Stuff;
 
 class StuffController extends \App\Http\Controllers\Controller
@@ -19,9 +19,13 @@ class StuffController extends \App\Http\Controllers\Controller
 
         if (!$department_id) return abort(404, 'Для поиска нужно указать организацию');
 
-        $foundStuff = Stuff::whereIn('emp_number', explode(',', $request->get('emp_number')))->whereHas('departments', function($q) use ($department_id) {
+        $foundStuff = Stuff::whereIn('emp_number', explode(',', $request->get('emp_numbers')))->whereHas('departments', function($q) use ($department_id) {
             $q->where('departments.id', $department_id)->whereNull('stuff_history.fired_at');
         })->get();
+
+        if ($request->has('is_wt')) $foundStuff->map(function ($s) {
+            $s->showWTInfo = true;
+        });
 
         if ($foundStuff) return StuffResource::collection($foundStuff);
 
