@@ -10,6 +10,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Modules\Gaz\Models\City;
 use Modules\Gaz\Models\Staff;
+use Modules\GReqSys\Models\InvolvedStaff;
 use Modules\GReqSys\Models\Req;
 use Modules\GReqSys\Models\ReqType;
 use Modules\GReqSys\Requests\StoreReqRequest;
@@ -26,6 +27,19 @@ class ReqController extends Controller
     {
         return view('GReqSys::index', [
             'reqs' => Req::cursorPaginate(25),
+        ]);
+    }
+
+    /**
+     * Страница заявки
+     *
+     * @return View
+     */
+    public function req(Request $request)
+    {
+        return view('GReqSys::Req.show', [
+            'req' => Req::find($request->id),
+            'involved_staff' => InvolvedStaff::where('req_id', $request->id)->get()
         ]);
     }
 
