@@ -30,6 +30,19 @@ class ReqController extends Controller
     }
 
     /**
+     * Страница заявки
+     *
+     * @return View
+     */
+    public function show(Req $req)
+    {
+        return view('GReqSys::Req.show', [
+            'req' => $req,
+            'involved_staff' => $req->getInvolvedStaff(),
+        ]);
+    }
+
+    /**
      * Страница для создания новой заявки
      *
      * @return View

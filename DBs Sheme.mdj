@@ -1064,7 +1064,7 @@
 									"top": 173,
 									"width": 273,
 									"height": 13,
-									"text": "stuff"
+									"text": "staff"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -1267,7 +1267,7 @@
 									"top": 373,
 									"width": 225,
 									"height": 13,
-									"text": "stuff_history"
+									"text": "staff_history"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -2221,7 +2221,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGBSCWtOBgzrbg="
 					},
-					"name": "stuff",
+					"name": "staff",
 					"ownedElements": [
 						{
 							"_type": "ERDRelationship",
@@ -2364,7 +2364,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGBSCWtOBgzrbg="
 					},
-					"name": "stuff_history",
+					"name": "staff_history",
 					"columns": [
 						{
 							"_type": "ERDColumn",
@@ -2383,7 +2383,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGBSCidpBhx1OM="
 							},
-							"name": "stuff_id",
+							"name": "staff_id",
 							"type": "INTEGER",
 							"length": "7",
 							"foreignKey": true
@@ -3338,7 +3338,7 @@
 									"top": 149,
 									"width": 209,
 									"height": 13,
-									"text": "involved_stuff"
+									"text": "involved_staff"
 								},
 								{
 									"_type": "ERDColumnCompartmentView",
@@ -3537,7 +3537,7 @@
 							"top": 72,
 							"width": 209,
 							"height": 41,
-							"text": "Внешний ключ к таблице stuff в БД Gaz"
+							"text": "Внешний ключ к таблице staff в БД Gaz"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -3633,7 +3633,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGBSEznegwgIBA="
 							},
-							"name": "gaz_stuff_id",
+							"name": "gaz_staff_id",
 							"type": "INTEGER",
 							"length": 0,
 							"foreignKey": true
@@ -3852,7 +3852,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGBSEyWtQwZ5tY="
 					},
-					"name": "involved_stuff",
+					"name": "involved_staff",
 					"columns": [
 						{
 							"_type": "ERDColumn",
@@ -3882,7 +3882,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGBSK3VaeMr1mE="
 							},
-							"name": "gaz_stuff_id",
+							"name": "gaz_staff_id",
 							"type": "INTEGER",
 							"length": "7",
 							"foreignKey": true
