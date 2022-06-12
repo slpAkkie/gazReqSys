@@ -47,23 +47,19 @@ class User extends AuthUser
     ];
 
     /**
-     * Перехватываем создание модели,
-     * чтобы при наличии поля password (пароль)
-     * хэшировать его и записать в модель
+     * Создать нового пользователя
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = [])
+    static public function new(array $attributes)
     {
-        if (key_exists('password', $attributes)) {
-            $this->password_hash = $attributes['password_hash'] = $this->hashPassword($attributes['password']);
+        $password = $attributes['password'];
+        unset($attributes['password']);
 
-            // Если не удалить поле password будет ошибка,
-            // что нет такого столбца в таблице
-            unset($attributes['password']);
-        }
+        $model = new self($attributes);
+        $model->password_hash = $model->hashPassword($password);
 
-        parent::__construct($attributes);
+        return $model;
     }
 
     /**

@@ -20,7 +20,6 @@ class UserSeeder extends Seeder
             'login'             => 'root',
             'email'             => 'slpgservice@gmail.com',
             'insurance_number'  => '000-000-000 00',
-            'password'          => 'root',
         ],
     ];
 
@@ -32,6 +31,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new User($r))->save();
+            (User::new($r))->save();
     }
 }

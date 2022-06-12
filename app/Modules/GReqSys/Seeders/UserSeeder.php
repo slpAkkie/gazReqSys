@@ -24,6 +24,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new User($r))->save();
+            (User::new($r))->save();
     }
 }
