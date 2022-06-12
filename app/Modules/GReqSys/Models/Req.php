@@ -52,7 +52,7 @@ class Req extends Model
     }
 
     /**
-     * Получить типа заявки
+     * Получить тип заявки
      *
      * @return BelongsTo
      */

@@ -8,7 +8,7 @@
 
 @section('content')
     <section id="new-req-form">
-        <form @submit.prevent="submitForm" :class="{ disabled: formBlocked }" action="{{ route('req.store') }}" method="post">
+        <form @submit.prevent="submitForm" :class="{ disabled: formBlocked }" action="{{ route('api.greqsys.req.store') }}" method="post">
             @csrf
             <div class="row">
                 <div class="col-6">
