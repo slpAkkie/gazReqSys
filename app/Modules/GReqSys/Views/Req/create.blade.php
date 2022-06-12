@@ -365,7 +365,7 @@
                 async loadStaffData() {
                     this.removeDublicatedStaff()
                     this.removeEmptyStaff()
-                    this.clearAllStaffMessages()
+                    this.clearAllStaffMessages() // TODO: FIX
                     if (!this.formData.department_id) return this.staffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
 
                     try {

@@ -39,7 +39,7 @@ class BackController extends \App\Http\Controllers\Controller
             $r[] = $v['insurance_number'];
 
             return $r;
-        }, []))->get();
+        }, []))->get(); // TODO: REVIEW
 
         foreach ($staffCollection as $staff) {
             // Проверяем есть ли у этого сотрудника аккаунт

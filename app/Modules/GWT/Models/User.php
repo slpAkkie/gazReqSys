@@ -146,7 +146,7 @@ class User extends AuthUser
             // Проверяем данные для генерации
             // Увечиваем количество симолов, вытаскиваемых из имени и отчества
             // Если все символы использованы устанавливаем индиктор $appendSlug
-            if ($loginSecondPartLength == strlen($full_name_arr[1]))
+            if ($loginSecondPartLength === strlen($full_name_arr[1]))
                 if ($loginThirdPartLength === strlen($full_name_arr[2])) $appendSlug = true;
                 else $loginThirdPartLength++;
             else $loginSecondPartLength++;

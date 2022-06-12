@@ -29,6 +29,7 @@ class StaffController extends \App\Http\Controllers\Controller
             $s->showWTInfo = true;
         });
 
+        // TODO: REVIEW
         if ($foundStaff) return StaffResource::collection($foundStaff);
 
         return abort(404, 'Сотрудник не найден');

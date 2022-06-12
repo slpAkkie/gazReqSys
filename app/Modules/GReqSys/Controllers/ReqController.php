@@ -84,7 +84,7 @@ class ReqController extends Controller
             // табельные номера которых были переданы
             // (В соответствии с указанной организацией)
             Staff::select('staff.id')->whereIn('emp_number', $emp_numbers)->whereHas('departments', function ($q) use ($request) {
-                $q->where('departments.id', $request->get('department_id'));
+                $q->where('departments.id', $request->get('department_id')); // TODO: REVIEW
             })->get()
             // Преобразуем данные о id в вид
             // принимаемый функцией createMany
