@@ -14,8 +14,6 @@ use Modules\GReqSys\Models\Req;
 use Modules\GWT\Models\User as WTUser;
 
 /**
- * TODO: Валидировать ввденный снилс регулярным выражением (Формат снилса: 000-000-000 00)
- *
  * @property integer|string|null $id
  * @property string $first_name
  * @property string $last_name
