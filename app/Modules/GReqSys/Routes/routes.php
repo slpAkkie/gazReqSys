@@ -30,7 +30,6 @@ Route::middleware('web')->group(function () {
             Route::get('/', [ReqController::class, 'index'])->name('index');
             Route::get('/{req}', [ReqController::class, 'show'])->name('show');
             Route::get('/create', [ReqController::class, 'create'])->name('create');
-            Route::post('/', [ReqController::class, 'store'])->name('store');
         });
 
     });
