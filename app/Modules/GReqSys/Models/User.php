@@ -64,7 +64,6 @@ class User extends AuthUser
 
     /**
      * Функция хэширования пароля
-     * TODO: Для большей безопасности можно добавить соль в пароль
      *
      * @param string $passwd
      * @return string
