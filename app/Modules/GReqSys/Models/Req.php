@@ -20,7 +20,7 @@ use Modules\GReqSys\Models\Model;
  *
  * @property ReqType $type
  * @property User $author
- * @property Staff $staff
+ * @property Staff $author_staff
  * @property Collection<Staff> $involved_staff
  * @property Department $department
  *
@@ -76,7 +76,7 @@ class Req extends Model
      *
      * @return BelongsTo
      */
-    public function staff()
+    public function author_staff()
     {
         return $this->author->staff();
     }
