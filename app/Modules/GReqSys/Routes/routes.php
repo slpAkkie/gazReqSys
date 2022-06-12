@@ -16,8 +16,10 @@ use Modules\GReqSys\Controllers\ReqController;
 
 Route::middleware('web')->group(function () {
 
-    Route::get('/login', [WebController::class, 'login'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::middleware('guest')->group(function () {
+        Route::get('/login', [WebController::class, 'login'])->name('login');
+        Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    });
     Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::middleware('auth')->group(function () {
