@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\Config;
 use Modules\Gaz\Models\Model;
 use Modules\GReqSys\Models\InvolvedStaff;
 use Modules\GReqSys\Models\Req;
@@ -174,21 +175,21 @@ class Staff extends Model
         return $this->setConnection('wt')->hasOne(WTUser::class, 'insurance_number', 'insurance_number');
     }
 
+    private function involved_in_records()
+    {
+        return $this->setConnection('reqsys')->belongsTo(InvolvedStaff::class, 'gaz_staff_id', 'id');
+    }
+
     /**
      * Получить заявки, в которые сотрудник был вовлечен
      *
      * @return HasManyThrough
      */
-    public function involved_in()
+    public function getReqsInvolvedIn()
     {
-        return $this->setConnection('reqsys')->hasManyThrough(
-            Req::class,
-            InvolvedStaff::class,
-            'gaz_staff_id',
-            'id',
-            'id',
-            'req_id',
-        );
+        $ids = $this->involved_in_records->pluck('req_id');
+
+        return Req::whereIn('id', $ids)->get();
     }
 
     /**

@@ -76,19 +76,9 @@ class Req extends Model
      *
      * @return BelongsTo
      */
-    public function staff()
+    public function author_staff()
     {
         return $this->author->staff();
-    }
-
-    /**
-     * Сотрудники, вовлеченные в эту заявку
-     *
-     * @return HasMany
-     */
-    public function involved_staff()
-    {
-        return $this->setConnection('gaz')->hasMany(Staff::class, 'req_id', 'id');
     }
 
     /**
@@ -99,6 +89,18 @@ class Req extends Model
     public function involved_staff_records()
     {
         return $this->hasMany(InvolvedStaff::class, 'req_id', 'id');
+    }
+
+    /**
+     * Сотрудники, вовлеченные в эту заявку
+     *
+     * @return HasMany
+     */
+    public function getInvolvedStaff()
+    {
+        $ids = $this->involved_staff_records->pluck('gaz_staff_id');
+
+        return Staff::whereIn('id', $ids)->get();
     }
 
     /**
