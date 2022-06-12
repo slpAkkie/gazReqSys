@@ -104,6 +104,16 @@
                 data: Object,
                 reqTypeId: String,
             },
+            data: () => ({
+                maxLength: {
+                    last_name: 16,
+                    first_name: 16,
+                    second_name: 16,
+                    emp_number: 6,
+                    email: 64,
+                    insurance_number: 14,
+                },
+            }),
             template: `<div class="row mx-0 staff-table__row gap-2" :class="rowCSS">
                 <input type="text" class="col form-control" placeholder="Фамилия" v-model="data.last_name">
                 <input type="text" class="col form-control" placeholder="Имя" v-model="data.first_name">
@@ -118,6 +128,27 @@
                     return {
                         'staff-table__row_highlighted': this.reqTypeId == 1 && this.data.is_wt,
                     }
+                },
+            },
+            watch: {
+                'data.last_name': function (newVal, oldVal) { (newVal.length > this.maxLength.last_name) && (this.data.last_name = oldVal) },
+                'data.first_name': function (newVal, oldVal) { (newVal.length > this.maxLength.first_name) && (this.data.first_name = oldVal) },
+                'data.second_name': function (newVal, oldVal) { (newVal.length > this.maxLength.second_name) && (this.data.second_name = oldVal) },
+                'data.emp_number': function (newVal, oldVal) { (newVal.length > this.maxLength.emp_number) && (this.data.emp_number = oldVal) },
+                'data.email': function (newVal, oldVal) { (newVal.length > this.maxLength.email) && (this.data.email = oldVal) },
+                'data.insurance_number': function (newVal, oldVal) {
+                    (newVal.length > this.maxLength.insurance_number) && (this.data.insurance_number = oldVal)
+
+                    let trimedVal = newVal.trim().replaceAll(/[-\s]/g, '')
+                    let val = trimedVal.slice(0, 3)
+                    if (trimedVal.slice(3, 6))
+                        val += `-${trimedVal.slice(3, 6)}`
+                    if (trimedVal.slice(6, 9))
+                        val += `-${trimedVal.slice(6, 9)}`
+                    if (trimedVal.slice(9, 11))
+                        val += ` ${trimedVal.slice(9, 11)}`
+
+                    this.data.insurance_number = val
                 },
             },
             methods: {
@@ -149,6 +180,14 @@
 
                 nextStaffUID: 0,
                 staffRows: [],
+                staffRegExp: {
+                    last_name: /^[A-Za-zА-Яа-я]+$/,
+                    first_name: /^[A-Za-zА-Яа-я]+$/,
+                    second_name: /^[A-Za-zА-Яа-я]+$/,
+                    emp_number: /^\d{6}$/,
+                    email: /^[^@]+@[^@]+\.[^@]{2,3}$/,
+                    insurance_number: /^\d{3}-\d{3}-\d{3}\s\d{2}$/,
+                },
 
                 departments: [],
                 deptsLoading: false,
@@ -197,7 +236,7 @@
 
                     let staffErrorMessages = this.checkStaffData()
 
-                    if (staffErrorMessages.length) this.formErrorMessages.push({ title: 'Данные о сотрудниках заполнены не верно', errors: staffErrorMessages })
+                    if (staffErrorMessages.length) this.formErrorMessages.push(...staffErrorMessages)
 
                     return !!this.formErrorMessages.length
                 },
@@ -214,9 +253,20 @@
                     let staffErrorMessages = []
 
                     this.staffRows.forEach((sD, i) => {
-                        if (sD.last_name && sD.first_name && sD.second_name && sD.emp_number && sD.email && sD.insurance_number) return
+                        let staffErrors = []
+                        if (sD.last_name && sD.first_name && sD.second_name && sD.emp_number && sD.email && sD.insurance_number) {
+                            if (!sD.last_name.match(this.staffRegExp.last_name)) staffErrors.push('Фамилия может содержать только буквы')
+                            if (!sD.first_name.match(this.staffRegExp.first_name)) staffErrors.push('Имя может содержать только буквы')
+                            if (!sD.second_name.match(this.staffRegExp.second_name)) staffErrors.push('Отчество может содержать только буквы')
+                            if (!sD.emp_number.match(this.staffRegExp.emp_number)) staffErrors.push('Табельный номер может состоять только из 6 цифр')
+                            if (!sD.email.match(this.staffRegExp.email)) staffErrors.push('Email должен быть валидным адресом электронной почты')
+                            if (!sD.insurance_number.match(this.staffRegExp.insurance_number)) staffErrors.push('СНИЛС должен быть в формате 000-000-000 00')
+                        } else staffErrors.push(`Данные о сотруднике указаны не полностью`)
 
-                        staffErrorMessages.push(`Данные о ${i + 1} сотруднике указаны не полностью`)
+                        if (staffErrors.length) staffErrorMessages.push({
+                            title: `Данные о ${i + 1} сотруднике заполнены неверно`,
+                            errors: staffErrors,
+                        })
                     });
 
                     return staffErrorMessages
