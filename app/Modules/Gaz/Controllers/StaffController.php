@@ -14,7 +14,7 @@ class StaffController extends \App\Http\Controllers\Controller
      * @param  \Illuminate\Http\Request $request
      * @return StaffResource
      */
-    public function show(Request $request) {
+    public function index(Request $request) {
         $department_id = $request->get('department_id');
         $emp_numbers = $request->get('emp_numbers');
 

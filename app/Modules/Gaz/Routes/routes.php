@@ -16,6 +16,6 @@ use Modules\Gaz\Controllers\StaffController;
 Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('/web-api/gaz')->name('api.gaz.')->group(function () {
         Route::get('/departments', [DepartmentController::class, 'index'])->name('department.index');
-        Route::get('/staff', [StaffController::class, 'show'])->name('staff.show');
+        Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
     });
 });
