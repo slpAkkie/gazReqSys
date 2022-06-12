@@ -202,6 +202,9 @@
                 removeEmptyStaff() {
                     this.staffRows = this.staffRows.filter(sD => !this.isStaffEmpty(sD))
                 },
+                removeDublicatedStuff() {
+                    this.staffRows = this.staffRows.filter((sD, i) => this.staffRows.findIndex(sDD => sDD.emp_number === sD.emp_number) === i)
+                },
                 checkStaffData() {
                     let staffErrorMessages = []
 
@@ -277,6 +280,8 @@
                     }
                 },
                 pasteStaff(emp_numbers) {
+                    this.removeEmptyStaff()
+
                     for (let emp_number; emp_number = emp_numbers.shift(); this.nextStaffUID++) {
                         let newStaff = this.newStaffData
                         newStaff.emp_number = emp_number
@@ -301,6 +306,8 @@
                             this.staffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT'
                 },
                 async loadStaffData() {
+                    this.removeDublicatedStuff()
+                    this.removeEmptyStaff()
                     this.clearAllStaffMessages()
                     if (!this.formData.department_id) return this.staffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
 
