@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use stdClass;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -44,7 +46,38 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            // TODO: Handle model not found exception
+            //
         });
+    }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Throwable
+     */
+    public function render($request, Throwable $e)
+    {
+        return match (true) {
+            $e instanceof ModelNotFoundException => $this->handleModelNotFoundException($e),
+            default => parent::render($request, $e),
+        };
+    }
+
+    /**
+     * Обработчик ошибки, в случае,
+     * если целевая модель не найден
+     *
+     * @param  \ModelNotFoundException   $e
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    private function handleModelNotFoundException(ModelNotFoundException  $e)
+    {
+        return response()->view('errors.404', [
+            'exception' => new ModelNotFound($e->getIds()),
+        ]);
     }
 }

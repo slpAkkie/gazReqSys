@@ -3,19 +3,23 @@
 @section('title', 'Система заявок ГАЗ - Просмотр заявок')
 
 @section('content')
-    <section class="req-table">
-        <div class="row mx-0 req-table__head">
-            <div class="col-2">Номер заявки</div>
-            <div class="col-3">Организация</div>
-            <div class="col-2">Город</div>
-            <div class="col-2">Автор заявки</div>
-            <div class="col-3">Тип заявки</div>
+    <section class="table req-table">
+        <div class="table__head">
+            <div class="col-2 table__head-cell">Номер заявки</div>
+            <div class="col-3 table__head-cell">Организация</div>
+            <div class="col-2 table__head-cell">Город</div>
+            <div class="col-2 table__head-cell">Автор заявки</div>
+            <div class="col-3 table__head-cell">Тип заявки</div>
         </div>
 
-        <div class="req-body">
-            @foreach ($reqs as $r)
-                <x-GReqSys::index.req-row :req="$r" />
-            @endforeach
+        <div class="table__body">
+            @if($reqs->count())
+                @foreach ($reqs as $r)
+                    <x-GReqSys::index.req-row :req="$r" />
+                @endforeach
+            @else
+                Заявок еще нет
+            @endif
         </div>
     </section>
 

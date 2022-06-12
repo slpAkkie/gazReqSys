@@ -6,7 +6,7 @@
             @include('GReqSys::templates.components.sidebar')
 
             <div class="content-wrapper offset-2 col p-4">
-                <h2 class="mb-4">@yield('title')</h2>
+                <h3 class="mb-4">@yield('title')</h3>
 
                 @yield('content')
             </div>

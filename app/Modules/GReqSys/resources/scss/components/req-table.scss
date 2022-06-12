@@ -1,26 +1,5 @@
-.req-table {
-    &__head {
-        font-weight: bold;
-        padding: .5rem 0;
-        margin-bottom: 1rem;
-        background-color: $color-primary;
-        color: $color-white;
-    }
-
-    &__row {
-        margin-bottom: .5rem;
-    }
-
-    &__cell {
-        display: grid;
-        place-items: center start;
-        //
-        border: 1px solid $color-border;
-
-        &_number-and-date {
-            grid-template-rows: 1fr;
-            grid-template-columns: auto auto 1fr;
-            gap: .5em;
-        }
-    }
+.req-table__cell_number-and-date {
+    grid-template-rows: 1fr;
+    grid-template-columns: auto auto 1fr;
+    gap: .5em;
 }

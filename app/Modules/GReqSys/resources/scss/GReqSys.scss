@@ -1,11 +1,33 @@
 @import '../../../../resources/scss/utils/colors';
-@import 'utils/colors';
+
+@import 'components/table';
 
 @import 'components/req-table';
-@import 'components/staff-table';
 @import 'components/login-form';
 
+@import 'bs-override/button';
 
+
+
+
+
+/** ==================================================
+ * Main */
+
+body {
+    color: $color-dark;
+}
+
+*:focus {
+    box-shadow: none !important;
+    border-color: $color-border !important;
+}
+
+::selection {
+    color: $color-white;
+    //
+    background-color: $color-dark;
+}
 
 
 
@@ -38,20 +60,17 @@
     background: $color-primary;
 
     &__title {
-        font-weight: 400;
-        color: #dce3eb;
+        color: $color-dark;
     }
 }
 
 .sb-nav {
     &__link {
         font-size: 1.1rem;
-        font-weight: 300;
-        color: #cbd3de;
+        color: lighten($color: $color-dark, $amount: 10%);
 
         &:hover {
-            color: #dce3eb;
-            font-weight: 300;
+            color: darken($color: $color-dark, $amount: 50%);
         }
     }
 }

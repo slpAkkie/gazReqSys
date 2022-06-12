@@ -1,0 +1,84 @@
+.btn {
+    font-weight: 500;
+    color: $color-dark;
+    //
+    box-shadow: $color-btn-light;
+    background: linear-gradient($color-btn-light, $color-btn-dark);
+    border: .125rem solid darken($color: $color-btn-dark, $amount: 5%) !important;
+
+    &:hover {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-light, $amount: 2%), darken($color: $color-btn-dark, $amount: 2%));
+        border-color: $color-btn-dark;
+    }
+
+    &:focus {
+        color: $color-dark;
+    }
+
+    &:active {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-light, $amount: 2%), darken($color: $color-btn-dark, $amount: 2%));
+        border-color: $color-btn-dark;
+    }
+
+    &:disabled {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-light, $amount: 2%), darken($color: $color-btn-dark, $amount: 2%));
+        border-color: darken($color: $color-btn-dark, $amount: 2%);
+    }
+}
+
+.btn.btn-primary {
+    background: linear-gradient($color-btn-primary-light, $color-btn-primary-dark);
+    border: .125rem solid $color-btn-primary-dark !important;
+
+    &:hover {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-primary-light, $amount: 2%), darken($color: $color-btn-primary-dark, $amount: 2%));
+    }
+
+    &:focus {
+        color: $color-dark;
+        box-shadow: 0 0 0 0.25rem transparentize($color: $color-btn-primary-light, $amount: .25);
+    }
+
+    &:active {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-primary-light, $amount: 2%), darken($color: $color-btn-primary-dark, $amount: 2%));
+    }
+
+    &:disabled {
+        color: $color-dark;
+        background: linear-gradient(darken($color: $color-btn-primary-light, $amount: 2%), darken($color: $color-btn-primary-dark, $amount: 2%));
+        border-color: darken($color: $color-btn-primary-dark, $amount: 2%);
+    }
+}
+
+.btn.btn-danger {
+    color: $color-light;
+    //
+    background: linear-gradient($color-btn-danger-light, $color-btn-danger-dark);
+    border: .125rem solid $color-btn-danger-dark !important;
+
+    &:hover {
+        color: $color-light;
+        background: linear-gradient(darken($color: $color-btn-danger-light, $amount: 2%), darken($color: $color-btn-danger-dark, $amount: 2%));
+    }
+
+    &:focus {
+        color: $color-light;
+        box-shadow: 0 0 0 0.25rem transparentize($color: $color-btn-danger-light, $amount: .25);
+    }
+
+    &:active {
+        color: $color-light;
+        background: linear-gradient(darken($color: $color-btn-danger-light, $amount: 2%), darken($color: $color-btn-danger-dark, $amount: 2%));
+    }
+
+    &:disabled {
+        color: $color-light;
+        background: linear-gradient(darken($color: $color-btn-danger-light, $amount: 2%), darken($color: $color-btn-danger-dark, $amount: 2%));
+        border-color: darken($color: $color-btn-danger-dark, $amount: 2%);
+    }
+}

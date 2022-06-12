@@ -4,45 +4,50 @@
 
 @section('content')
     <section>
-        <a href="{{ route('req.index') }}" class="btn btn-primary">Все заявки</a>
+        <a href="{{ route('req.index') }}" class="btn">Все заявки</a>
     </section>
 
-    <section class="req-info">
-        <div class="row">
-            <ul class="col-6 d-flex flex-column my-4 list-unstyled">
-                <li><b>Тип заявки</b>: {{ $req->type->title }}</li>
-                <li><b>Город</b>: {{ $req->department->city->title }}</li>
-                <li><b>Организация</b>: {{ $req->department->title }}<li>
-                <li><b>Автор заявки</b>: {{ $req->author_staff->getFullName() }}</li>
-            </ul>
+    <section class="row my-4">
+        <div class="col-6">
+            <div class="mb-2 row gap-2">
+                <label for="type" class="form-label col-4">Тип заявки</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->type->title }}">
+            </div>
+            <div class="mb-2 row gap-2">
+                <label for="city" class="form-label col-4">Область</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->department->city->title }}">
+            </div>
+            <div class="mb-2 row gap-2">
+                <label for="department" class="form-label col-4">Организация</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->department->title }}">
+            </div>
+            <div class="mb-2 row gap-2">
+                <label for="department" class="form-label col-4">Автор заявки</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->author_staff->getFullName() }}">
+            </div>
         </div>
     </section>
 
-    <section class="req-staff-table">
+    <section>
         <h4>Вовлеченные сотрудники:</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Фамилия: </th>
-                    <th>Имя</th>
-                    <th>Отчество</th>
-                    <th>Табельный номер</th>
-                    <th>Email</th>
-                    <th>СНИЛС</th>
-                </tr>
-            </thead>
-            <tbody>
+
+        <div class="table">
+            <div class="table__head">
+                <div class="col table__head-cell">ФИО</div>
+                <div class="col table__head-cell">Табельный номер</div>
+                <div class="col table__head-cell">Email</div>
+                <div class="col table__head-cell">СНИЛС</div>
+            </div>
+            <div class="table__body">
                 @foreach ($involved_staff as $s)
-                    <tr>
-                        <td>{{ $s->last_name }}</td>
-                        <td>{{ $s->first_name }}</td>
-                        <td>{{ $s->second_name }}</td>
-                        <td>{{ $s->emp_number }}</td>
-                        <td>{{ $s->email }}</td>
-                        <td>{{ $s->insurance_number }}</td>
-                    </tr>
+                    <div class="table__row">
+                        <div class="col table__cell">{{ $s->getFullName() }}</div>
+                        <div class="col table__cell">{{ $s->emp_number }}</div>
+                        <div class="col table__cell">{{ $s->email }}</div>
+                        <div class="col table__cell">{{ $s->insurance_number }}</div>
+                    </div>
                 @endforeach
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
 @endsection

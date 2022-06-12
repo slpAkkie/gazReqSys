@@ -1,1 +1,30 @@
-$color-border: #dce3eb;
+$color-white: #fefefe;
+$color-dark: #4d4d4d;
+$color-light: #f2f2f2;
+
+
+
+$color-primary: #fbed9e;
+$color-primary-dark: darken($color: $color-primary, $amount: 20%);
+
+$color-succes: #1c8b4f;
+
+$color-info: #0dcaf0;
+$color-info-translucent: transparentize($color: $color-info, $amount: .75);
+
+
+
+$color-border: #ced4da;
+
+
+
+$color-btn-light: #ffffff;
+$color-btn-dark: #efefef;
+
+$color-btn-primary-light: #ffe735;
+$color-btn-primary-dark: #efd200;
+
+$color-btn-danger-light: #f03a22;
+$color-btn-danger-dark: #ce2f1a;
+
+$color-alert-info-light: red;
