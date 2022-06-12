@@ -4,14 +4,14 @@
 
 @section('content')
 
-
+<a style="color: black;" href="{{ route('req.index') }}">Вернуться к списку заявок</a>
 <div class="show-wrapper">
     <h1 class="text-center">Заявка №{{ $req->id }}</h1>
 
     <ul style="list-style-type: none" class="d-flex flex-column p-0">
         <li><b>Организация</b>: {{ $req->department->title }}<li>
         <li><b>Город</b>: {{ $req->department->city->title }}</li>
-        <li><b>Автор заявки</b>: {{ $req->author_staff->getFullName() }}</li>
+        {{-- <li><b>Автор заявки</b>: {{ $req->author_staff->getFullName() }}</li> --}}
         <li><b>Тип заявки</b>: {{ $req->type->title }}</li>
     </ul>
 
