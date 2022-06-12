@@ -8,12 +8,14 @@
     </section>
 
     <section class="req-info">
-        <ul class="d-flex flex-column p-0 my-4 list-unstyled">
-            <li><b>Тип заявки</b>: {{ $req->type->title }}</li>
-            <li><b>Город</b>: {{ $req->department->city->title }}</li>
-            <li><b>Организация</b>: {{ $req->department->title }}<li>
-            <li><b>Автор заявки</b>: {{ $req->author_staff->getFullName() }}</li>
-        </ul>
+        <div class="row">
+            <ul class="col-6 d-flex flex-column my-4 list-unstyled">
+                <li><b>Тип заявки</b>: {{ $req->type->title }}</li>
+                <li><b>Город</b>: {{ $req->department->city->title }}</li>
+                <li><b>Организация</b>: {{ $req->department->title }}<li>
+                <li><b>Автор заявки</b>: {{ $req->author_staff->getFullName() }}</li>
+            </ul>
+        </div>
     </section>
 
     <section class="req-staff-table">
