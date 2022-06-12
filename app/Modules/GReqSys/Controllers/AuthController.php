@@ -13,7 +13,7 @@ class AuthController extends Controller
     {
         return redirect()->back()->withErrors([
             'login' => [ 'Логин или пароль указан не верно' ],
-        ]);
+        ])->withInput();
     }
 
     public function login(LoginRequest $request)

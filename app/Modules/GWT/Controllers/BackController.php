@@ -53,7 +53,7 @@ class BackController extends \App\Http\Controllers\Controller
                 $user->save();
             }
             // Для остальных создаем аккаунт
-            else {
+            else if(!$user) {
                 $this->createAccount($staff);
             }
         }

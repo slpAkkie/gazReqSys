@@ -58,8 +58,10 @@
                         <button class="btn btn-info text-light" @click.prevent="loadStaffData">Подстановка</button>
                     </div>
 
-                    <div v-if="!!staffErrorMessage" class="w-100 mb-2 alert alert-warning" role="alert">@{{ staffErrorMessage }}</div>
-                    <div v-if="!!staffInfoMessage" class="w-100 alert alert-info" role="alert">@{{ staffInfoMessage }}</div>
+                    <div class="mb-3">
+                        <div v-if="!!staffErrorMessage" class="w-100 alert alert-warning" role="alert">@{{ staffErrorMessage }}</div>
+                        <div v-if="!!staffInfoMessage" class="w-100 alert alert-info" role="alert">@{{ staffInfoMessage }}</div>
+                    </div>
                 </div>
             </div>
 
@@ -176,6 +178,9 @@
                     this.clearStaffInfo()
                     this.checkStaffForMessage()
                 },
+                'formData.department_id': function () {
+                    this.clearStaff()
+                },
             },
             methods: {
                 addStaffRow() {
@@ -237,12 +242,14 @@
                     }))
                 },
                 async submitForm() {
+                    this.removeDublicatedStaff()
+                    this.removeEmptyStaff()
+
                     let postData = {
                         ...this.formData,
                         staff: this.staffRows,
                     }
 
-                    this.removeEmptyStaff()
                     this.clearFormErrors()
                     if (this.checkFormErrors()) return
 

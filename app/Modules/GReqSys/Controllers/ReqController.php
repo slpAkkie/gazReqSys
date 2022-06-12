@@ -5,7 +5,9 @@ namespace Modules\GReqSys\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Modules\Gaz\Models\City;
 use Modules\Gaz\Models\Staff;
 use Modules\GReqSys\Models\Req;
@@ -41,14 +43,13 @@ class ReqController extends Controller
     }
 
     /**
-     * Создать заявку и сохранить вовлеченных пользователей
-     * TODO: Перенаправлять запрос в модуль WT на создание аккаунтов,
-     * при этом нужно проверять тех, у кого аккаунт уже есть и,
-     * наверное, пропускать их
+     * Создать заявку на создание аккаунта сотруднику в системе WT
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function store(StoreReqRequest $request) {
+    private function storeReqCreateWTAccounts(Request $request)
+    {
         // Создаем заявку
         ($req = new Req($request->only([
             'type_id',
@@ -97,5 +98,25 @@ class ReqController extends Controller
         app(BackController::class)->createAccounts($staff);
 
         return response()->json();
+    }
+
+    /**
+     * Создать заявку и сохранить вовлеченных пользователей
+     *
+     * @throws ValidationException
+     * @return JsonResponse
+     */
+    public function store(StoreReqRequest $request) {
+        /**
+         * Проверяем тип заявки и вызываем соответствующтий метод
+         */
+        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($request);
+
+        /**
+         * Если тип заявки еще не был написан, вызываем ошибку
+         */
+        throw ValidationException::withMessages([
+            'type_id' => [ 'Этот тип заявки еще не сделан' ],
+        ]);
     }
 }
