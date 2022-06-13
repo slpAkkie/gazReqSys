@@ -120,7 +120,9 @@ class ReqController extends Controller
                     'emp_number' => $s['emp_number'],
                     'email' => $s['email'],
                     'insurance_number' => $s['insurance_number'],
-                ]);
+                ])->whereHas('departments', function($q) use ($s) {
+                    $q->where('departments.id', $s['department_id']);
+                });
             });
         });
 

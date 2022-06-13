@@ -31,6 +31,6 @@ class StaffController extends \App\Http\Controllers\Controller
 
         if ($foundStaff->count()) return StaffResource::collection($foundStaff);
 
-        return abort(404, 'Сотрудники с переданными табельными номерами не найдены');
+        return abort(404, 'Сотрудники с переданными табельными номерами не найдены в указанной организации');
     }
 }
