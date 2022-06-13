@@ -25,7 +25,7 @@ class ReqController extends Controller
     public function index()
     {
         return view('GReqSys::index', [
-            'reqs' => Req::cursorPaginate(25),
+            'reqs' => Req::paginate(18),
         ]);
     }
 
@@ -59,9 +59,10 @@ class ReqController extends Controller
      * Создать заявку на создание аккаунта сотруднику в системе WT
      *
      * @param Request $request
+     * @param Collection<Staff> $staffCollection
      * @return JsonResponse
      */
-    private function storeReqCreateWTAccounts(Request $request)
+    private function storeReqCreateWTAccounts(Request $request, Collection $staffCollection)
     {
         // Создаем заявку
         ($req = new Req($request->only([
@@ -69,36 +70,12 @@ class ReqController extends Controller
             'department_id',
         ])))->save();
 
-        // Создаем список сотрудников и отдельно список их табельных номеров
-        $staff = Collection::make();
-        $emp_numbers = Collection::make($request->get('staff'))->reduce(function ($r, $v) use ($staff) {
-            $r[] = $v['emp_number'];
-            $staff->push($v);
-
-            return $r;
-        } ,[]);
-
         // Создаем записи о вовлеченных сотрудниках
         $req->involved_staff_records()->createMany(
-            // Нужно выбрать все id сотрудников,
-            // табельные номера которых были переданы
-            // (В соответствии с указанной организацией)
-            Staff::select('staff.id')->whereIn('emp_number', $emp_numbers)->whereHas('departments', function ($q) use ($request) {
-                $q->where('departments.id', $request->get('department_id')); // TODO: REVIEW
-            })->get()
-            // Преобразуем данные о id в вид
-            // принимаемый функцией createMany
-            ->reduce(function ($r, $v) {
-                $r[] = [
-                    'gaz_staff_id' => $v['id'],
-                ];
-
-                return $r;
-            }, [])
-        )
-        // Сохраняем все созданные модели
-        // записей о вовлеченных сотрудниках в БД
-        ->each(function ($model) {
+            $staffCollection->map(function ($v) {
+                return [ 'gaz_staff_id' => $v['id'] ];
+            })
+        )->each(function ($model) {
             $model->save();
         });
 
@@ -108,7 +85,7 @@ class ReqController extends Controller
          * Хотел передавать управление в другой контроллер,
          * но что-то не пошло, да будет так
          */
-        app(BackController::class)->createAccounts($staff);
+        app(BackController::class)->createAccounts($staffCollection);
 
         return response()->json();
     }
@@ -146,6 +123,8 @@ class ReqController extends Controller
                 return $errors;
             }, []));
         }
+
+        return $staffModelCollection;
     }
 
     /**
@@ -158,12 +137,12 @@ class ReqController extends Controller
         /**
          * Проверка корректности введеных данных сотрудниках
          */
-        $this->validateStaff($request->get('staff'));
+        $staffCollection = $this->validateStaff($request->get('staff'));
 
         /**
          * Проверяем тип заявки и вызываем соответствующтий метод
          */
-        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($request);
+        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($request, $staffCollection);
 
         /**
          * Если тип заявки еще не был написан, вызываем ошибку

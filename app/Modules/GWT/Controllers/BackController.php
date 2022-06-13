@@ -4,6 +4,7 @@ namespace Modules\GWT\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Modules\Gaz\Models\Staff;
 use Modules\GWT\Models\User;
 
 class BackController extends \App\Http\Controllers\Controller
@@ -11,12 +12,12 @@ class BackController extends \App\Http\Controllers\Controller
     /**
      * Создает аккаунт по данным о сотруднике
      *
-     * @param array $staffData
+     * @param Staff $staffData
      * @return void
      */
-    private function createAccount(array $staffData)
+    private function createAccount(Staff $staff)
     {
-        $user = User::new($staffData);
+        $user = User::new($staff);
 
         $user->save();
     }
@@ -24,7 +25,7 @@ class BackController extends \App\Http\Controllers\Controller
     /**
      * Обрабатвыает создание аккаунтов для сотрудников
      *
-     * @param Collection<array> $staffCollection
+     * @param Collection<Staff> $staffCollection
      * @return JsonResponse
      */
     public function createAccounts(Collection $staffCollection)
@@ -35,27 +36,18 @@ class BackController extends \App\Http\Controllers\Controller
          *
          * @var Collection<User>
          */
-        $users = User::whereIn('insurance_number', $staffCollection->reduce(function ($r, $v) {
-            $r[] = $v['insurance_number'];
-
-            return $r;
-        }, []))->get(); // TODO: REVIEW
+        $registered = User::whereIn('insurance_number', $staffCollection->pluck('insurance_number'))->get();
 
         foreach ($staffCollection as $staff) {
             // Проверяем есть ли у этого сотрудника аккаунт
-            $user = $users->first(function ($u) use ($staff) {
-                return $u->insurance_number === $staff['insurance_number'];
+            $user = $registered->first(function ($r) use ($staff) {
+                return $r->insurance_number === $staff->insurance_number;
             });
 
             // У тех, кто уже имеет аккаунт, если он отключен - активируем
-            if ($user && $user->disabled) {
-                $user->disabled = false;
-                $user->save();
-            }
+            if ($user && $user->disabled) $user->enable();
             // Для остальных создаем аккаунт
-            else if(!$user) {
-                $this->createAccount($staff);
-            }
+            else if(!$user) $this->createAccount($staff);
         }
 
         return response()->json();

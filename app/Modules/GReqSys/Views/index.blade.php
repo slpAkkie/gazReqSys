@@ -25,7 +25,5 @@
         </div>
     </section>
 
-    <section class="mt-5">
-        {{ $reqs->links() }}
-    </section>
+    {{ $reqs->withQueryString()->links() }}
 @endsection

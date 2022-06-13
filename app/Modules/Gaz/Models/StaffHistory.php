@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
+use Modules\Gaz\Models\Scopes\StaffHistoryScope;
 
 /**
  * @property integer|string|null $id
@@ -53,6 +54,17 @@ class StaffHistory extends Pivot
         'post_id',
         'department_id',
     ];
+
+    /**
+     * Хук запуска модели
+     * Устанавливаем здесь глобальный Scope
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new StaffHistoryScope);
+    }
 
     /**
      * Переопределение метода модели save

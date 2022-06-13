@@ -2,14 +2,14 @@
 
 namespace Modules\Gaz\Models;
 
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Facades\Config;
 use Modules\Gaz\Models\Model;
+use Modules\Gaz\Models\Scopes\StaffScope;
 use Modules\GReqSys\Models\InvolvedStaff;
 use Modules\GReqSys\Models\Req;
 use Modules\GWT\Models\User as WTUser;
@@ -22,7 +22,6 @@ use Modules\GWT\Models\User as WTUser;
  * @property string $emp_number
  * @property string $email
  * @property string $insurance_number
- * @property bool $diativated
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -32,7 +31,7 @@ use Modules\GWT\Models\User as WTUser;
  * @property Collection<Post> $posts
  * @property Collection<StaffHistory> $history
  * @property Collection<Req> $involved_in
- * @property WTUser $wt_user
+ * @property WTUser $wt_account
  *
  * @method bool isFired()
  * @method StaffHistory getLastHired()
@@ -66,7 +65,44 @@ class Staff extends Model
         'insurance_number',
     ];
 
+    /**
+     * Индикатор отображения
+     * информации об аккаунте WT для сотрудника
+     *
+     * @var boolean
+     */
     public $showWTInfo = false;
+
+    /**
+     * Хук запуска модели
+     * Устанавливаем здесь глобальный Scope
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new StaffScope);
+    }
+
+    /**
+     * Запрос для поиска деактивированных сотрудников
+     *
+     * @return EloquentBuilder
+     */
+    static public function fired()
+    {
+        return self::withoutGlobalScope(StaffScope::class)->whereDoesntHave('job_meta');
+    }
+
+    /**
+     * Запрос для поиска в том числе и деактивированных сотрудников
+     *
+     * @return EloquentBuilder
+     */
+    static public function withFired()
+    {
+        return self::withoutGlobalScope(StaffScope::class);
+    }
 
     /**
      * Поулчить ФИО сотрудника
@@ -85,7 +121,7 @@ class Staff extends Model
      */
     public function isFired()
     {
-        return !!$this->history()->whereNull('fired_at')->first();
+        return !$this->job_meta()->count();
     }
 
     /**
@@ -95,7 +131,7 @@ class Staff extends Model
      */
     public function getLastHired()
     {
-        return $this->history()->orderBy('hired_at', 'DESC')->first();
+        return $this->job_meta()->orderBy('hired_at', 'DESC')->first();
     }
 
     /**
@@ -105,7 +141,7 @@ class Staff extends Model
      */
     public function getCurrentDepartment()
     {
-        return $this->departments()->wherePivotNotNull('fired_at')->first();
+        return $this->departments()->first();
     }
 
     /**
@@ -128,7 +164,7 @@ class Staff extends Model
             'fired_at',
             'created_at',
             'updated_at',
-        ])->as('job_info');
+        ])->as('job_meta');
     }
 
     /**
@@ -138,7 +174,7 @@ class Staff extends Model
      */
     public function getCurrentPost()
     {
-        return $this->posts()->wherePivotNotNull('fired_at')->first();
+        return $this->posts()->first();
     }
 
     /**
@@ -170,7 +206,7 @@ class Staff extends Model
      *
      * @return HasOne
      */
-    public function wt_user()
+    public function wt_account()
     {
         return $this->setConnection('wt')->hasOne(WTUser::class, 'insurance_number', 'insurance_number');
     }
@@ -195,10 +231,10 @@ class Staff extends Model
     /**
      * Получить историю приема и увольнения с работы сотрудника
      *
-     * @return HasMany
+     * @return HasOne
      */
-    public function history()
+    public function job_meta()
     {
-        return $this->hasMany(StaffHistory::class, 'staff_id', 'id');
+        return $this->hasOne(StaffHistory::class, 'staff_id', 'id');
     }
 }

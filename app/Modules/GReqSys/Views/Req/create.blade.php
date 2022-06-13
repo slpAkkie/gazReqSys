@@ -337,7 +337,7 @@
                     this.nextStaffUID = 0
                 },
                 async loadStaff() {
-                    this.clearAllErrors()
+                    this.clearAllAlerts()
 
                     this.removeEmptyStaff()
                     this.removeDublicatedStaff()

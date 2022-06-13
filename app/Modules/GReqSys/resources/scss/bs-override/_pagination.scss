@@ -1,0 +1,19 @@
+.page-link.active,
+.active > .page-link {
+    background: linear-gradient($color-btn-primary-light, $color-btn-primary-dark);
+    border-color: $color-btn-primary-light;
+    //
+    z-index: 3;
+    cursor: default;
+}
+
+.page-link {
+    color: $color-dark !important;
+}
+
+.page-item.disabled {
+    & > .page-link {
+        background-color: $color-border;
+        opacity: .5;
+    }
+}

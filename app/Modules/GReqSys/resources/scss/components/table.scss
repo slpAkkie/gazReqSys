@@ -1,7 +1,7 @@
 .table {
     border: 1px solid darken($color: $color-border, $amount: 10%);
 
-    &_blocked > &__row {
+    &_blocked > &__body {
         opacity: .25;
         //
         pointer-events: none;
@@ -57,7 +57,7 @@
             }
         }
 
-        &:nth-child(even) {
+        &:nth-child(even):not(&_highlighted) {
             &,
             & > input:not([type=button]):not(:focus),
             & > button {
