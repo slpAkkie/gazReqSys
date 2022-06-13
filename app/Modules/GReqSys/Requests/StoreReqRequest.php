@@ -29,13 +29,10 @@ class StoreReqRequest extends FormRequest
             'staff.*.second_name.required'      => 'Поле Отчество должно быть заполнено',
             'staff.*.emp_number.required'       => 'Поле Табельный номер должно быть заполнено',
             'staff.*.emp_number.regex'          => 'Табельный номер должен состоять из 6 цифр',
-            'staff.*.emp_number.exists'         => 'Сотрудника с таким Табельным номером не существует',
             'staff.*.email.required'            => 'Поле Email должно быть заполнено',
-            'staff.*.email.exists'              => 'Сотрудника с таким Email не существует',
             'staff.*.email.email'               => 'Поле Email должно быть валидным адресом электронной почты',
             'staff.*.insurance_number.required' => 'Поле СНИЛС должно быть заполнено',
             'staff.*.insurance_number.regex'    => 'СНИЛС должен соответствовать формату 000-000-000 00',
-            'staff.*.insurance_number.exists'   => 'Сотрудника с таким СНИЛС не существует',
         ];
     }
 
@@ -55,9 +52,9 @@ class StoreReqRequest extends FormRequest
             'staff.*.first_name'        => 'required',
             'staff.*.last_name'         => 'required',
             'staff.*.second_name'       => 'required',
-            'staff.*.emp_number'        => 'bail|required|regex:/^\d{6}$/|exists:Modules\Gaz\Models\Staff,emp_number',
-            'staff.*.email'             => 'bail|required|email|exists:Modules\Gaz\Models\Staff,email',
-            'staff.*.insurance_number'  => 'bail|required|regex:/^\d{3}-\d{3}-\d{3}\s\d{2}$/|exists:Modules\Gaz\Models\Staff,insurance_number',
+            'staff.*.emp_number'        => 'bail|required|regex:/^\d{6}$/',
+            'staff.*.email'             => 'bail|required|email',
+            'staff.*.insurance_number'  => 'bail|required|regex:/^\d{3}-\d{3}-\d{3}\s\d{2}$/',
         ];
     }
 }

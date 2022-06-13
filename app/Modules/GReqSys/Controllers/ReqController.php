@@ -113,6 +113,41 @@ class ReqController extends Controller
         return response()->json();
     }
 
+    private function validateStaff(array $staff) {
+        $query = Staff::select();
+
+        $staffDataColection = Collection::make($staff)->each(function ($s) use ($query) {
+            $query->orWhere(function ($query) use ($s) {
+                $query->where([
+                    'first_name' => $s['first_name'],
+                    'last_name' => $s['last_name'],
+                    'second_name' => $s['second_name'],
+                    'emp_number' => $s['emp_number'],
+                    'email' => $s['email'],
+                    'insurance_number' => $s['insurance_number'],
+                ]);
+            });
+        });
+
+        $staffModelCollection = $query->get();
+        $wrongStaffIndexes = Collection::make();
+
+        if ($staffDataColection->count() !== $staffModelCollection->count()) {
+            $emp_numbers = $staffModelCollection->pluck('emp_number');
+
+            $staffDataColection->each(function ($v, $k) use ($wrongStaffIndexes, $emp_numbers) {
+                if (!$emp_numbers->some(function ($emp_number) use ($v) { return $v['emp_number'] === $emp_number; }))
+                    $wrongStaffIndexes->push($k);
+            });
+
+            throw ValidationException::withMessages((array) $wrongStaffIndexes->reduce(function ($errors, $i) {
+                $errors['staff.'.$i] = [ 'Сотрудника с такими данными не существует' ];
+
+                return $errors;
+            }, []));
+        }
+    }
+
     /**
      * Создать заявку и сохранить вовлеченных пользователей
      *
@@ -120,6 +155,11 @@ class ReqController extends Controller
      * @return JsonResponse
      */
     public function store(StoreReqRequest $request) {
+        /**
+         * Проверка корректности введеных данных сотрудниках
+         */
+        $this->validateStaff($request->get('staff'));
+
         /**
          * Проверяем тип заявки и вызываем соответствующтий метод
          */

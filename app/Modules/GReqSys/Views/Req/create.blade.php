@@ -14,7 +14,7 @@
                 <div class="col-6">
                     <div class="mb-2 row gap-2">
                         <label for="type" class="form-label col-4">Тип заявки</label>
-                        <select name="type_id" id="type" class="form-select col" v-model="formData.type_id">
+                        <select name="type_id" id="type" class="form-select col" v-model.number="formData.type_id">
                             @foreach ($req_types as $t)
                                 <option value="{{ $t->id }}">{{ $t->title }}</option>
                             @endforeach
@@ -22,7 +22,7 @@
                     </div>
                     <div class="mb-2 row gap-2">
                         <label for="city" class="form-label col-4">Область</label>
-                        <select name="city_id" id="city" class="form-select col" v-model="formData.city_id">
+                        <select name="city_id" id="city" class="form-select col" v-model.number="formData.city_id">
                             @foreach ($cities as $c)
                                 <option value="{{ $c->id }}">{{ $c->title }}</option>
                             @endforeach
@@ -67,6 +67,7 @@
 
                 <div class="req-form__staff-list table" :class="{ table_blocked: staffTableBlocked }">
                     <div class="table__head">
+                        <div class="table__head-cell table__cell_index">№</div>
                         <div class="col table__head-cell">Фамилия</div>
                         <div class="col table__head-cell">Имя</div>
                         <div class="col table__head-cell">Отчество</div>
@@ -76,7 +77,9 @@
                         <div class="col-1 table__head-cell">Действия</div>
                     </div>
 
-                    <staff-row v-for="(s, i) in formData.staff" :key="s.uid" :data="s" :staff-index="i" :req-type-id="formData.type_id" @remove="removeStaff(s.uid)" @paste_staff="pasteStaff" />
+                    <div class="table__body">
+                        <staff-row v-for="(s, i) in formData.staff" :key="s.uid" :data="s" :staff-index="i" :req-type-id="formData.type_id" @remove="removeStaff(s.uid)" @paste_staff="pasteStaff" />
+                    </div>
                 </div>
             </div>
         </form>
@@ -112,7 +115,7 @@
             props: {
                 staffIndex: Number,
                 data: Object,
-                reqTypeId: String,
+                reqTypeId: Number,
             },
             data: () => ({
                 maxLength: {
@@ -125,6 +128,7 @@
                 },
             }),
             template: `<div class="table__row input-group" :class="rowCSS">
+                <div class="table__cell table__cell_index">@{{ staffIndex + 1 }}</div>
                 <input type="text" class="col table__cell form-control" placeholder="Фамилия" v-model="data.last_name">
                 <input type="text" class="col table__cell form-control" placeholder="Имя" v-model="data.first_name">
                 <input type="text" class="col table__cell form-control" placeholder="Отчество" v-model="data.second_name">
@@ -289,8 +293,16 @@
                 removeDublicatedStaff() {
                     this.formData.staff = this.formData.staff.filter((sD, i) => sD.emp_number ? this.formData.staff.findIndex(sDD => sDD.emp_number === sD.emp_number) === i : true)
                 },
+                checkStaffEmpNumbers() {
+                    this.formData.staff.forEach((sD, i) => {
+                        if (!sD.emp_number.match(this.staffRegExp.emp_number))
+                            this.alerts.staff.error.push('Табельный номер может состоять только из 6 цифр')
+                    });
+
+                    return !!this.alerts.staff.error
+                },
                 checkErrorsForStaff() {
-                    let errors = []
+                    let errorAlert = this.alerts.form.error
 
                     this.formData.staff.forEach((sD, i) => {
                         let staffErrors = []
@@ -303,13 +315,13 @@
                             if (!sD.insurance_number.match(this.staffRegExp.insurance_number)) staffErrors.push('СНИЛС должен быть в формате 000-000-000 00')
                         } else staffErrors.push(`Данные о сотруднике указаны не полностью`)
 
-                        if (staffErrors.length) errors.push({
+                        if (staffErrors.length) errorAlert.push({
                             title: `Данные о ${i + 1} сотруднике заполнены неверно`,
                             errors: staffErrors,
                         })
                     });
 
-                    return errors
+                    return !!errorAlert.length
                 },
                 clearStaffInfoAlert() { this.alerts.staff.info = '' },
                 clearStaffWarnAlert() { this.alerts.staff.warn = '' },
@@ -334,6 +346,8 @@
                     let emp_numbers_query = this.formData.staff.map(i => i.emp_number).filter(i => !!i).join(',')
                     if (!this.formData.staff.length || !emp_numbers_query) return this.alerts.staff.warn = 'Для подстановки необходимо указать Табельные номера сотрудников'
 
+                    if (this.checkStaffEmpNumbers().length) return
+
                     try {
                         this.staffTableBlocked = true
 
@@ -342,12 +356,11 @@
                         if (this.formData.staff.length !== response.length)
                             this.alerts.staff.warn = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
 
-                        response.forEach(sData => {
-                            let i = this.formData.staff.findIndex(s => s.emp_number === sData.emp_number)
-                            this.formData.staff[i] = {
-                                ...this.formData.staff[i],
-                                ...sData,
-                            }
+                            this.formData.staff.forEach((sData, staffIndex) => {
+                            let i = response.findIndex(item => item.emp_number === sData.emp_number)
+
+                            if (i !== -1) this.formData.staff[staffIndex] = { ...sData, ...response[i] }
+                            else this.formData.staff[staffIndex] = { emp_number: sData.emp_number }
                         })
                     } catch (e) {
                         this.alerts.staff.error = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
@@ -357,10 +370,13 @@
                         this.staffTableBlocked = false
                     }
                 },
+                clearFormInfoAlerts() { this.alerts.form.info = [] },
+                clearFormWarnAlerts() { this.alerts.form.warn = [] },
+                clearFormErrorAlert() { this.alerts.form.error = [] },
                 clearFormAlerts() {
-                    this.alerts.form.info = []
-                    this.alerts.form.warn = []
-                    this.alerts.form.error = []
+                    this.clearFormInfoAlerts()
+                    this.clearFormWarnAlerts()
+                    this.clearFormErrorAlert()
                 },
                 checkFormErrors() {
                     let errors = this.alerts.form.error
@@ -370,9 +386,7 @@
                     if (!this.formData.city_id) errors.push({ title: 'Область не указана' })
                     if (!this.formData.department_id) errors.push({ title: 'Организация не указана' })
 
-                    let staffErrorAlerts = this.checkErrorsForStaff()
-
-                    if (staffErrorAlerts.length) errors.push(...staffErrorAlerts)
+                    if (this.checkErrorsForStaff().length) return true
 
                     return !!errors.length
                 },
@@ -382,6 +396,7 @@
 
                     this.clearAllErrors()
                     if (this.checkFormErrors()) return
+                    this.clearAllAlerts()
 
                     try {
                         this.formSubmiting = true
@@ -419,11 +434,11 @@
                 },
                 clearDepartmentsInfoAlerts() { this.alerts.departments.info = '' },
                 clearDepartmentsWarnAlerts() { this.alerts.departments.warn = '' },
-                clearDepartmentsErrorAlerts() { this.alerts.departments.error = '' },
+                clearDepartmentsErrorAlert() { this.alerts.departments.error = '' },
                 clearDepartmentsAlerts() {
                     this.clearDepartmentsInfoAlerts()
                     this.clearDepartmentsWarnAlerts()
-                    this.clearDepartmentsErrorAlerts()
+                    this.clearDepartmentsErrorAlert()
                 },
                 async loadDepartments(city_id) {
                     this.clearDepartmentsAlerts()
@@ -442,6 +457,11 @@
                     }
                 },
                 clearAllErrors() {
+                    this.clearDepartmentsErrorAlert()
+                    this.clearStaffErrorAlert()
+                    this.clearFormErrorAlert()
+                },
+                clearAllAlerts() {
                     this.clearDepartmentsAlerts()
                     this.clearStaffAlerts()
                     this.clearFormAlerts()

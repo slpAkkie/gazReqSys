@@ -57,13 +57,16 @@
             }
         }
 
-        &:nth-child(even),
-        &_disabled {
-            background-color: lighten($color: $color-light, $amount: 2%);
+        &:nth-child(even) {
+            &,
+            & > input:not([type=button]):not(:focus),
+            & > button {
+                background-color: lighten($color: $color-light, $amount: 2%);
+            }
         }
 
-        &:hover:not(&_disabled) {
-            background-color: $color-primary;
+        &:hover:not(.input-group) {
+            background-color: $color-primary !important;
         }
 
         & + & {
@@ -86,5 +89,12 @@
         & + & {
             border-left: 1px solid $color-border;
         }
+    }
+
+    &__cell_index {
+        min-width: 3.125rem;
+    }
+    &__cell_index:not(&__head-cell) {
+        font-weight: 500;
     }
 }
