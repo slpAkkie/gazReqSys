@@ -129,7 +129,7 @@ class ReqController extends Controller
          * Если тип заявки еще не был написан, вызываем ошибку
          */
         throw ValidationException::withMessages([
-            'type_id' => [ 'Этот тип заявки еще не сделан' ],
+            'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
         ]);
     }
 }
