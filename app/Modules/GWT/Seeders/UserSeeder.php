@@ -13,14 +13,7 @@ class UserSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [
-            'last_name'         => 'Шаманин',
-            'first_name'        => 'Александр',
-            'second_name'       => 'Сергеевич',
-            'login'             => 'root',
-            'email'             => 'slpgservice@gmail.com',
-            'insurance_number'  => '000-000-000 00',
-        ],
+        //
     ];
 
     /**
@@ -30,7 +23,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
-            (User::new($r))->save();
+        //
     }
 }

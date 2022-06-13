@@ -13,7 +13,7 @@ class UserCourseSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [ 'user_id' => 1, 'course_id' => 1 ],
+        //
     ];
 
     /**
@@ -23,7 +23,6 @@ class UserCourseSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
-            (new UserCourse($r))->save();
+        //
     }
 }

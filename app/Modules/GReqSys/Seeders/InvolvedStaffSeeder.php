@@ -23,7 +23,6 @@ class InvolvedStaffSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
-            (new InvolvedStaff($r))->save();
+        //
     }
 }
