@@ -22,16 +22,15 @@ class StaffController extends \App\Http\Controllers\Controller
         if (!$emp_numbers) return abort(404, 'Табельные номера не переданы');
 
         $foundStaff = Staff::whereIn('emp_number', explode(',', $emp_numbers))->whereHas('departments', function($q) use ($department_id) {
-            $q->where('departments.id', $department_id)->whereNull('staff_history.fired_at');
+            $q->where('departments.id', $department_id);
         })->get();
 
-        if ($request->has('is_wt')) $foundStaff->map(function ($s) {
+        if ($request->has('is_wt')) $foundStaff->each(function ($s) {
             $s->showWTInfo = true;
         });
 
-        // TODO: REVIEW
-        if ($foundStaff) return StaffResource::collection($foundStaff);
+        if ($foundStaff->count()) return StaffResource::collection($foundStaff);
 
-        return abort(404, 'Сотрудник не найден');
+        return abort(404, 'Сотрудники с переданными табельными номерами не найдены');
     }
 }

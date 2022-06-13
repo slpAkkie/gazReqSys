@@ -1,7 +1,7 @@
 .table {
     border: 1px solid darken($color: $color-border, $amount: 10%);
 
-    &_blocked > &__row {
+    &_blocked > &__body {
         opacity: .25;
         //
         pointer-events: none;
@@ -57,12 +57,16 @@
             }
         }
 
-        &:nth-child(even) {
-            background-color: lighten($color: $color-light, $amount: 2%);
+        &:nth-child(even):not(&_highlighted) {
+            &,
+            & > input:not([type=button]):not(:focus),
+            & > button {
+                background-color: lighten($color: $color-light, $amount: 2%);
+            }
         }
 
-        &:hover {
-            background-color: $color-primary;
+        &:hover:not(&_disabled):not(.input-group) {
+            background-color: $color-primary !important;
         }
 
         & + & {
@@ -85,5 +89,12 @@
         & + & {
             border-left: 1px solid $color-border;
         }
+    }
+
+    &__cell_index {
+        min-width: 3.125rem;
+    }
+    &__cell_index:not(&__head-cell) {
+        font-weight: 500;
     }
 }

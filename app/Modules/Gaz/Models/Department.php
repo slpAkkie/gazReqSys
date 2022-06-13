@@ -65,7 +65,7 @@ class Department extends Model
             'fired_at',
             'created_at',
             'updated_at',
-        )->as('job_info');
+        )->as('job_meta');
     }
 
     /**

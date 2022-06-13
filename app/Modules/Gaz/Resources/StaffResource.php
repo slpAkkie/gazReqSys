@@ -27,7 +27,7 @@ class StaffResource extends JsonResource
             'email' => $this->email,
             'insurance_number' => $this->insurance_number,
             $this->mergeWhen($this->showWTInfo, [
-                'is_wt' => $this->wt_user()->exists(),
+                'is_wt' => $this->wt_account()->exists(),
             ]),
         ];
     }

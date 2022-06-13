@@ -7,14 +7,14 @@
 @endsection
 
 @section('content')
-    <section id="new-req-form">
-        <form @submit.prevent="submitForm" :class="{ disabled: formBlocked }" action="{{ route('api.greqsys.req.store') }}" method="post">
+    <section id="req-form">
+        <form @submit.prevent="submitForm" :class="{ disabled: formSubmiting }" action="{{ route('api.greqsys.req.store') }}" method="post">
             @csrf
             <div class="row">
                 <div class="col-6">
                     <div class="mb-2 row gap-2">
                         <label for="type" class="form-label col-4">Тип заявки</label>
-                        <select name="type_id" id="type" class="form-select col" v-model="formData.type_id">
+                        <select name="type_id" id="type" class="form-select col" v-model.number="formData.type_id">
                             @foreach ($req_types as $t)
                                 <option value="{{ $t->id }}">{{ $t->title }}</option>
                             @endforeach
@@ -22,15 +22,15 @@
                     </div>
                     <div class="mb-2 row gap-2">
                         <label for="city" class="form-label col-4">Область</label>
-                        <select name="city_id" id="city" class="form-select col" v-model="formData.city_id" @change="loadDeptsFor($event.target.value)">
+                        <select name="city_id" id="city" class="form-select col" v-model.number="formData.city_id">
                             @foreach ($cities as $c)
                                 <option value="{{ $c->id }}">{{ $c->title }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div v-if="formData.city_id && formData.type_id" class="mb-2 row gap-2">
-                        <label for="department" class="form-label col-4">Организация @{{ deptsLoading ? '(Загрузка)' : '' }}</label>
-                        <select name="department_id" id="department" class="form-select col" v-model="formData.department_id" :disabled="deptsLoading">
+                        <label for="department" class="form-label col-4">Организация @{{ departmentsLoading ? '(Загрузка)' : '' }}</label>
+                        <select name="department_id" id="department" class="form-select col" v-model="formData.department_id" :disabled="departmentsLoading">
                             <option v-for="d in departments" :key="d.id" :value="d.id">@{{ d.title }}</option>
                         </select>
                     </div>
@@ -40,14 +40,15 @@
                 </div>
 
                 <div class="col-6">
-                    <div v-if="formErrorMessages.length" class="w-100 mb-2 alert alert-danger" role="alert">
-                        <form-error v-for="(e, i) in formErrorMessages" :key="i" :error-data="e" />
+                    <div v-if="alerts.form.error.length" class="w-100 mb-2 alert alert-danger" role="alert">
+                        <form-error v-for="(e, i) in alerts.form.error" :key="i" :error-data="e" />
                     </div>
 
                     <div class="mb-3">
-                        <div v-if="!!departmentsErrorMessage" class="w-100 alert alert-warning h6" role="alert">@{{ departmentsErrorMessage }}</div>
-                        <div v-if="!!staffErrorMessage" class="w-100 alert alert-warning h6" role="alert">@{{ staffErrorMessage }}</div>
-                        <div v-if="!!staffInfoMessage" class="w-100 alert alert-info h6" role="alert">@{{ staffInfoMessage }}</div>
+                        <div v-if="!!alerts.departments.error" class="w-100 alert alert-danger h6" role="alert">@{{ alerts.departments.error }}</div>
+                        <div v-if="!!alerts.staff.error" class="w-100 alert alert-danger h6" role="alert">@{{ alerts.staff.error }}</div>
+                        <div v-if="!!alerts.staff.warn" class="w-100 alert alert-warning h6" role="alert">@{{ alerts.staff.warn }}</div>
+                        <div v-if="!!alerts.staff.info" class="w-100 alert alert-info h6" role="alert">@{{ alerts.staff.info }}</div>
                     </div>
                 </div>
             </div>
@@ -58,7 +59,7 @@
                         <h3>Сотрудники</h3>
                         <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
                             <button class="btn" @click.prevent="addStaff">Добавить</button>
-                            <button class="btn" @click.prevent="loadStaffData">Подстановка</button>
+                            <button class="btn" @click.prevent="loadStaff">Подстановка</button>
                             <button class="btn btn-danger" @click.prevent="clearStaff">Очистить</button>
                         </div>
                     </div>
@@ -66,6 +67,7 @@
 
                 <div class="req-form__staff-list table" :class="{ table_blocked: staffTableBlocked }">
                     <div class="table__head">
+                        <div class="table__head-cell table__cell_index">№</div>
                         <div class="col table__head-cell">Фамилия</div>
                         <div class="col table__head-cell">Имя</div>
                         <div class="col table__head-cell">Отчество</div>
@@ -75,7 +77,9 @@
                         <div class="col-1 table__head-cell">Действия</div>
                     </div>
 
-                    <staff-row v-for="s in staffRows" :key="s.uid" :data="s" :req-type-id="formData.type_id" @remove="removeStaff(s.uid)" @paste_staff="pasteStaff" />
+                    <div class="table__body">
+                        <staff-row v-for="(s, i) in formData.staff" :key="s.uid" :data="s" :staff-index="i" :req-type-id="formData.type_id" @remove="removeStaff(s.uid)" @paste_staff="pasteStaff" />
+                    </div>
                 </div>
             </div>
         </form>
@@ -84,12 +88,15 @@
 
 @section('footer-js')
     <script>
+        /**
+         * Vue элемент - Блок для отрисовки ошибки в форме
+         */
         const formError = Vue.defineComponent({
             name: 'formError',
             props: {
                 errorData: Object,
             },
-            template: `<div class="form-alert__message-block">
+            template: `<div class="alert__message-block">
                 <h6 class="m-0">@{{ errorData.title }}</h6>
                 <ul v-if="errorData.errors?.length" class="m-0">
                     <li v-for="e in errorData.errors">@{{ e }}</li>
@@ -97,12 +104,18 @@
             </div>`,
         })
 
+
+
+        /**
+         * Vue элемент - Строка сотрудника
+         */
         const staffRow = Vue.defineComponent({
             name: 'staffRow',
             emits: [ 'remove', 'paste_staff' ],
             props: {
+                staffIndex: Number,
                 data: Object,
-                reqTypeId: String,
+                reqTypeId: Number,
             },
             data: () => ({
                 maxLength: {
@@ -115,13 +128,14 @@
                 },
             }),
             template: `<div class="table__row input-group" :class="rowCSS">
+                <div class="table__cell table__cell_index">@{{ staffIndex + 1 }}</div>
                 <input type="text" class="col table__cell form-control" placeholder="Фамилия" v-model="data.last_name">
                 <input type="text" class="col table__cell form-control" placeholder="Имя" v-model="data.first_name">
                 <input type="text" class="col table__cell form-control" placeholder="Отчество" v-model="data.second_name">
                 <input type="text" class="col table__cell form-control" placeholder="Табельный номер" v-model="data.emp_number" @paste.prevent="pasteEmpNumbers">
                 <input type="email" class="col table__cell form-control" placeholder="Email" v-model="data.email">
                 <input type="text" class="col table__cell form-control" placeholder="СНИЛС" v-model="data.insurance_number">
-                <input type="button" class="col-1 btn btn-danger" value="Убрать" @click.prevent="remove">
+                <input type="button" class="col-1 btn btn-danger" value="Убрать" @click.prevent="$emit('remove')">
             </div>`,
             computed: {
                 rowCSS() {
@@ -152,34 +166,43 @@
                 },
             },
             methods: {
-                remove() {
-                    this.$emit('remove')
-                },
                 pasteEmpNumbers(e) {
                     let emp_numbers = e.clipboardData.getData('text').split('\n')
                     emp_numbers = emp_numbers.map(e => e.trim())
+
                     this.data.emp_number = emp_numbers.shift()
 
-                    this.$emit('paste_staff', emp_numbers)
+                    this.$emit('paste_staff', {
+                        emp_numbers,
+                        uid: this.data.uid,
+                        index: this.staffIndex,
+                    })
                 },
             },
         })
 
+
+
+        /**
+         * Vue элемент - Форма создания заявки
+         */
         const reqForm = Vue.createApp({
             name: 'reqForm',
             components: {
-                formError,
                 staffRow,
+                formError,
             },
             data: () => ({
                 formData: {
                     type_id: null,
                     city_id: null,
                     department_id: null,
+                    staff: [],
                 },
 
+                // Уникальный идентификатор строки сотрудника
+                // Для указания в ключе перебора Vue.js
                 nextStaffUID: 0,
-                staffRows: [],
                 staffRegExp: {
                     last_name: /^[A-Za-zА-Яа-я]+$/,
                     first_name: /^[A-Za-zА-Яа-я]+$/,
@@ -189,15 +212,30 @@
                     insurance_number: /^\d{3}-\d{3}-\d{3}\s\d{2}$/,
                 },
                 staffTableBlocked: false,
-                staffErrorMessage: '',
-                staffInfoMessage: '',
 
                 departments: [],
-                deptsLoading: false,
-                departmentsErrorMessage: '',
+                departmentsLoading: false,
 
-                formErrorMessages: [],
-                formBlocked: false,
+                formSubmiting: false,
+
+
+                alerts: {
+                    staff: {
+                        info: null,
+                        warn: null,
+                        error: null,
+                    },
+                    departments: {
+                        info: null,
+                        warn: null,
+                        error: null,
+                    },
+                    form: {
+                        info: [],
+                        warn: [],
+                        error: [],
+                    },
+                },
             }),
             computed: {
                 newStaffData() {
@@ -214,8 +252,11 @@
             },
             watch: {
                 'formData.type_id': function () {
-                    this.clearStaffInfo()
-                    this.checkStaffForMessage()
+                    this.clearStaffInfoAlert()
+                    this.checkInfoForStaff()
+                },
+                'formData.city_id': function (newVal) {
+                    this.loadDepartments(newVal)
                 },
                 'formData.department_id': function () {
                     this.clearStaff()
@@ -223,39 +264,47 @@
             },
             methods: {
                 addStaff() {
-                    this.staffRows.push(this.newStaffData)
+                    this.formData.staff.push(this.newStaffData)
                     this.nextStaffUID++
                 },
-                pasteStaff(emp_numbers) {
-                    this.removeEmptyStaff()
-
+                pasteStaff({ emp_numbers, uid, index }) {
                     for (let emp_number; emp_number = emp_numbers.shift(); this.nextStaffUID++) {
                         let newStaff = this.newStaffData
                         newStaff.emp_number = emp_number
 
-                        this.staffRows.push(newStaff)
+                        this.formData.staff.splice(++index, 0, newStaff)
                     }
+
+                    this.removeDublicatedStaff()
                 },
                 removeStaff(uid) {
-                    this.staffRows.splice(this.staffRows.findIndex(el => el.uid === uid), 1)
+                    this.formData.staff.splice(this.formData.staff.findIndex(el => el.uid === uid), 1)
                 },
-                checkStaffForMessage() {
-                    if (this.formData.type_id == 1 && this.staffRows.some(s => s.is_wt))
-                            this.staffInfoMessage = 'Отмеченные сотрудники уже имеют аккаунт WT. Создание аккаунта для них будет пропущено (Если аккаунт был деактивирован, он будет восстановлен)'
-                },
-                removeEmptyStaff() {
-                    this.staffRows = this.staffRows.filter(sD => !this.isStaffEmpty(sD))
-                },
-                removeDublicatedStaff() {
-                    this.staffRows = this.staffRows.filter((sD, i) => sD.emp_number ? this.staffRows.findIndex(sDD => sDD.emp_number === sD.emp_number) === i : true)
+                checkInfoForStaff() {
+                    if (this.formData.type_id == 1 && this.formData.staff.some(s => s.is_wt))
+                            this.alerts.staff.info = 'Отмеченные сотрудники уже имеют аккаунт WT. Создание аккаунта для них будет пропущено (Если аккаунт был деактивирован, он будет восстановлен)'
                 },
                 isStaffEmpty(staffData) {
                     return !(staffData.last_name || staffData.first_name || staffData.second_name || staffData.emp_number || staffData.email || staffData.insurance_number)
                 },
-                checkStaffData() {
-                    let staffErrorMessages = []
+                removeEmptyStaff() {
+                    this.formData.staff = this.formData.staff.filter(sD => !this.isStaffEmpty(sD))
+                },
+                removeDublicatedStaff() {
+                    this.formData.staff = this.formData.staff.filter((sD, i) => sD.emp_number ? this.formData.staff.findIndex(sDD => sDD.emp_number === sD.emp_number) === i : true)
+                },
+                checkStaffEmpNumbers() {
+                    this.formData.staff.forEach((sD, i) => {
+                        if (!sD.emp_number.match(this.staffRegExp.emp_number))
+                            this.alerts.staff.error.push('Табельный номер может состоять только из 6 цифр')
+                    });
 
-                    this.staffRows.forEach((sD, i) => {
+                    return !!this.alerts.staff.error
+                },
+                checkErrorsForStaff() {
+                    let errorAlert = this.alerts.form.error
+
+                    this.formData.staff.forEach((sD, i) => {
                         let staffErrors = []
                         if (sD.last_name && sD.first_name && sD.second_name && sD.emp_number && sD.email && sD.insurance_number) {
                             if (!sD.last_name.match(this.staffRegExp.last_name)) staffErrors.push('Фамилия может содержать только буквы')
@@ -266,92 +315,92 @@
                             if (!sD.insurance_number.match(this.staffRegExp.insurance_number)) staffErrors.push('СНИЛС должен быть в формате 000-000-000 00')
                         } else staffErrors.push(`Данные о сотруднике указаны не полностью`)
 
-                        if (staffErrors.length) staffErrorMessages.push({
+                        if (staffErrors.length) errorAlert.push({
                             title: `Данные о ${i + 1} сотруднике заполнены неверно`,
                             errors: staffErrors,
                         })
                     });
 
-                    return staffErrorMessages
+                    return !!errorAlert.length
                 },
-                clearStaffError() { this.staffErrorMessage = '' },
-                clearStaffInfo() { this.staffInfoMessage = '' },
-                clearAllStaffMessages() {
-                    this.clearStaffError()
-                    this.clearStaffInfo()
+                clearStaffInfoAlert() { this.alerts.staff.info = '' },
+                clearStaffWarnAlert() { this.alerts.staff.warn = '' },
+                clearStaffErrorAlert() { this.alerts.staff.error = '' },
+                clearStaffAlerts() {
+                    this.clearStaffInfoAlert()
+                    this.clearStaffWarnAlert()
+                    this.clearStaffErrorAlert()
                 },
                 clearStaff() {
-                    this.clearAllStaffMessages()
-                    this.staffRows = []
+                    this.clearStaffAlerts()
+                    this.formData.staff = []
                     this.nextStaffUID = 0
                 },
-                async loadStaffData() {
-                    this.clearAllErrors()
+                async loadStaff() {
+                    this.clearAllAlerts()
 
-                    this.removeDublicatedStaff()
                     this.removeEmptyStaff()
-                    if (!this.formData.department_id) return this.staffErrorMessage = 'Перед подстановкой данных необходимо указать организацию'
+                    this.removeDublicatedStaff()
+                    if (!this.formData.department_id) return this.alerts.staff.warn = 'Для подстановки необходимо указать организацию'
 
-                    let emp_numbers_query = this.staffRows.reduce((r, s) => {
-                            r.push(s.emp_number)
+                    let emp_numbers_query = this.formData.staff.map(i => i.emp_number).filter(i => !!i).join(',')
+                    if (!this.formData.staff.length || !emp_numbers_query) return this.alerts.staff.warn = 'Для подстановки необходимо указать Табельные номера сотрудников'
 
-                            return r
-                        }, []).filter(en => !!en).join(',')
-                    if (!this.staffRows.length || emp_numbers_query === '') return this.staffErrorMessage = 'Для подстановки нужно указать Табельные номера сотрудников'
+                    if (this.checkStaffEmpNumbers().length) return
 
-                    this.staffTableBlocked = true
                     try {
+                        this.staffTableBlocked = true
 
                         let response = (await axios.get(`/web-api/gaz/staff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
 
-                        if (this.staffRows.length !== response.length)
-                            this.staffErrorMessage = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
+                        if (this.formData.staff.length !== response.length)
+                            this.alerts.staff.warn = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
 
-                        response.forEach(sData => {
-                            let staffIndex = this.staffRows.findIndex(s => s.emp_number === sData.emp_number)
-                            this.staffRows[staffIndex] = {
-                                ...this.staffRows[staffIndex],
-                                ...sData,
-                            }
+                            this.formData.staff.forEach((sData, staffIndex) => {
+                            let i = response.findIndex(item => item.emp_number === sData.emp_number)
+
+                            if (i !== -1) this.formData.staff[staffIndex] = { ...sData, ...response[i] }
+                            else this.formData.staff[staffIndex] = { emp_number: sData.emp_number }
                         })
                     } catch (e) {
-                        this.staffErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
+                        this.alerts.staff.error = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
-                        this.checkStaffForMessage()
-                    this.staffTableBlocked = false
+                        this.checkInfoForStaff()
+                        this.staffTableBlocked = false
                     }
                 },
-                clearFormErrors() {
-                    this.formErrorMessages = []
+                clearFormInfoAlerts() { this.alerts.form.info = [] },
+                clearFormWarnAlerts() { this.alerts.form.warn = [] },
+                clearFormErrorAlert() { this.alerts.form.error = [] },
+                clearFormAlerts() {
+                    this.clearFormInfoAlerts()
+                    this.clearFormWarnAlerts()
+                    this.clearFormErrorAlert()
                 },
                 checkFormErrors() {
-                    if (!this.staffRows.length) this.formErrorMessages.push({ title: 'Список сотрудников должен содержать хотя бы одну запись' })
-                    if (!this.formData.type_id) this.formErrorMessages.push({ title: 'Тип заявки не указан' })
-                    if (!this.formData.city_id) this.formErrorMessages.push({ title: 'Область не указана' })
-                    if (!this.formData.department_id) this.formErrorMessages.push({ title: 'Организация не указана' })
+                    let errors = this.alerts.form.error
 
-                    let staffErrorMessages = this.checkStaffData()
+                    if (!this.formData.staff.length) errors.push({ title: 'Список сотрудников должен содержать хотя бы одну запись' })
+                    if (!this.formData.type_id) errors.push({ title: 'Тип заявки не указан' })
+                    if (!this.formData.city_id) errors.push({ title: 'Область не указана' })
+                    if (!this.formData.department_id) errors.push({ title: 'Организация не указана' })
 
-                    if (staffErrorMessages.length) this.formErrorMessages.push(...staffErrorMessages)
+                    if (this.checkErrorsForStaff().length) return true
 
-                    return !!this.formErrorMessages.length
+                    return !!errors.length
                 },
                 async submitForm() {
-                    this.removeDublicatedStaff()
                     this.removeEmptyStaff()
-
-                    let postData = {
-                        ...this.formData,
-                        staff: this.staffRows,
-                    }
+                    this.removeDublicatedStaff()
 
                     this.clearAllErrors()
                     if (this.checkFormErrors()) return
+                    this.clearAllAlerts()
 
                     try {
-                        this.formBlocked = true
-                        await axios.post('/web-api/reqsys/req', postData)
+                        this.formSubmiting = true
+                        await axios.post('/web-api/reqsys/req', this.formData)
 
                         window.location.href = '{{ route('req.index') }}'
                     } catch (e) {
@@ -360,7 +409,7 @@
 
                         console.log(e)
                     } finally {
-                        this.formBlocked = false
+                        this.formSubmiting = false
                     }
                 },
                 setFormErrorsFromResponse(errors) {
@@ -368,7 +417,7 @@
 
                     for (let e in errors) {
                         if (errors.hasOwnProperty(e)) {
-                            if (!e.startsWith('staff') || e === 'staff') this.formErrorMessages.push({ title: errors[e].join(',') })
+                            if (!e.startsWith('staff') || e === 'staff') this.alerts.form.error.push({ title: errors[e].join(',') })
                             else {
                                 let staffIndex = e.split('.')[1]
 
@@ -378,34 +427,46 @@
                         }
                     }
 
-                    staffErrors.forEach((sE, i) => this.formErrorMessages.push({
+                    staffErrors.forEach((sE, i) => this.alerts.form.error.push({
                         title: `Сотрудник ${i + 1}`,
                         errors: sE,
                     }))
                 },
-                clearDepartmentsError() { this.departmentsErrorMessage = '' },
-                async loadDeptsFor(city_id) {
-                    this.clearDepartmentsError()
+                clearDepartmentsInfoAlerts() { this.alerts.departments.info = '' },
+                clearDepartmentsWarnAlerts() { this.alerts.departments.warn = '' },
+                clearDepartmentsErrorAlert() { this.alerts.departments.error = '' },
+                clearDepartmentsAlerts() {
+                    this.clearDepartmentsInfoAlerts()
+                    this.clearDepartmentsWarnAlerts()
+                    this.clearDepartmentsErrorAlert()
+                },
+                async loadDepartments(city_id) {
+                    this.clearDepartmentsAlerts()
                     this.formData.department_id = null
-                    this.deptsLoading = true
+                    this.departmentsLoading = true
 
                     try {
                         let response = (await axios.get(`/web-api/gaz/departments?city_id=${city_id}`)).data.data
 
                         this.departments = response
                     } catch (e) {
-                        this.departmentsErrorMessage = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
+                        this.alerts.departments.error = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
-                        this.deptsLoading = false
+                        this.departmentsLoading = false
                     }
                 },
                 clearAllErrors() {
-                    this.clearAllStaffMessages()
-                    this.clearDepartmentsError()
-                    this.clearFormErrors()
+                    this.clearDepartmentsErrorAlert()
+                    this.clearStaffErrorAlert()
+                    this.clearFormErrorAlert()
+                },
+                clearAllAlerts() {
+                    this.clearDepartmentsAlerts()
+                    this.clearStaffAlerts()
+                    this.clearFormAlerts()
                 },
             },
-        }).mount('#new-req-form')
+        }).mount('#req-form')
     </script>
 @endsection

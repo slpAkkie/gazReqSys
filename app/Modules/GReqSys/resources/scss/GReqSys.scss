@@ -6,6 +6,7 @@
 @import 'components/login-form';
 
 @import 'bs-override/button';
+@import 'bs-override/pagination';
 
 
 
@@ -86,7 +87,7 @@ form.disabled {
     pointer-events: none;
 }
 
-.form-alert__message-block {
+.alert__message-block {
     & + & {
         margin-top: .5rem;
     }

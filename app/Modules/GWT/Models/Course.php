@@ -34,7 +34,7 @@ class Course extends Model
      *
      * @return BelongsToMany
      */
-    public function courses()
+    public function users()
     {
         return $this->belongsToMany(
             User::class,
@@ -46,6 +46,6 @@ class Course extends Model
         )->using(UserCourse::class)->withPivot(
             'created_at',
             'updated_at',
-        )->as('courses');
+        )->as('metadata');
     }
 }

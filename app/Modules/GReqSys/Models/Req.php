@@ -21,8 +21,10 @@ use Modules\GReqSys\Models\Model;
  * @property ReqType $type
  * @property User $author
  * @property Staff $author_staff
- * @property Collection<Staff> $involved_staff
+ * @property Collection<InvolvedStaff> $involved_staff_records
  * @property Department $department
+ *
+ * @method Collection<Staff> getInvolvedStaff()
  *
  * @mixin Builder
  */
@@ -98,9 +100,10 @@ class Req extends Model
      */
     public function getInvolvedStaff()
     {
-        $ids = $this->involved_staff_records->pluck('gaz_staff_id');
-
-        return Staff::whereIn('id', $ids)->get();
+        return Staff::whereIn(
+            'id',
+            $this->involved_staff_records->pluck('gaz_staff_id')
+        )->get();
     }
 
     /**

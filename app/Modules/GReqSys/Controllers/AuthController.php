@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         if (!$foundUser->checkPassword($request->get('password'))) return $this->returnFailedLogin();
 
-        Auth::login($foundUser);
+        Auth::login($foundUser, !!$request->get('remember_me'));
 
         return response()->redirectToRoute('index');
     }

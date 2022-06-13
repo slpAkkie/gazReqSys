@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('emp_number', 6);
             $table->string('email', 64)->unique();
             $table->string('insurance_number', 14)->unique();
-            $table->boolean('deactivated')->default(false);
             $table->timestamps();
         });
     }

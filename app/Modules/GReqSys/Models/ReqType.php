@@ -34,6 +34,6 @@ class ReqType extends Model
      */
     public function reqs()
     {
-        return $this->hasMany(Req::class, 'req_type_id', 'id');
+        return $this->hasMany(Req::class, 'type_id', 'id');
     }
 }

@@ -18,12 +18,12 @@
                     <x-GReqSys::index.req-row :req="$r" />
                 @endforeach
             @else
-                Заявок еще нет
+                <div class="table__row table__row_disabled">
+                    <div class="col table__cell">Заявок еще нет</div>
+                </div>
             @endif
         </div>
     </section>
 
-    <section class="mt-5">
-        {{ $reqs->links() }}
-    </section>
+    {{ $reqs->withQueryString()->links() }}
 @endsection

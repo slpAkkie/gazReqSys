@@ -7,6 +7,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Modules\Gaz\Models\Staff;
 
 /**
  * @property integer|string|null $id
@@ -57,13 +58,13 @@ class User extends AuthUser
     /**
      * Создание новой записи
      *
-     * @param array $attributes
+     * @param Staff $attributes
      *
      * @return User
      */
-    static public function new(array $attributes)
+    static public function new(Staff $attributes)
     {
-        $model = new self($attributes);
+        $model = new self($attributes->toArray());
 
         $model->password_hash = $model->hashPassword($model->unhashed_password = Str::random(8));
         $model->generateLogin();
@@ -178,6 +179,32 @@ class User extends AuthUser
     }
 
     /**
+     * Отключить учетную запись пользователя
+     *
+     * @return $this
+     */
+    public function disable()
+    {
+        $this->disabled = true;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return $this
+     */
+    public function enable()
+    {
+        $this->disabled = false;
+        $this->save();
+
+        return $this;
+    }
+
+    /**
      * Получить все назначенные пользователю курсы
      *
      * @return BelongsToMany
@@ -194,6 +221,6 @@ class User extends AuthUser
         )->using(UserCourse::class)->withPivot(
             'created_at',
             'updated_at',
-        )->as('courses');
+        )->as('metadata');
     }
 }
