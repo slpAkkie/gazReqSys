@@ -296,7 +296,7 @@
                 checkStaffEmpNumbers() {
                     this.formData.staff.forEach((sD, i) => {
                         if (!sD.emp_number.match(this.staffRegExp.emp_number))
-                            this.alerts.staff.error.push('Табельный номер может состоять только из 6 цифр')
+                            this.alerts.staff.error = 'Табельный номер может состоять только из 6 цифр'
                     });
 
                     return !!this.alerts.staff.error
@@ -346,12 +346,12 @@
                     let emp_numbers_query = this.formData.staff.map(i => i.emp_number).filter(i => !!i).join(',')
                     if (!this.formData.staff.length || !emp_numbers_query) return this.alerts.staff.warn = 'Для подстановки необходимо указать Табельные номера сотрудников'
 
-                    if (this.checkStaffEmpNumbers().length) return
+                    if (this.checkStaffEmpNumbers()) return
 
                     try {
                         this.staffTableBlocked = true
 
-                        let response = (await axios.get(`/web-api/gaz/staff?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
+                        let response = (await axios.get(`{{ route('api.gaz.staff.index') }}?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
 
                         if (this.formData.staff.length !== response.length)
                             this.alerts.staff.warn = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
@@ -400,9 +400,9 @@
 
                     try {
                         this.formSubmiting = true
-                        await axios.post('/web-api/reqsys/req', this.formData)
+                        let response = (await axios.post('{{ route('api.greqsys.req.store') }}', this.formData)).data
 
-                        window.location.href = '{{ route('req.index') }}'
+                        window.location.href = `{{ route('req.index') }}/${response}`
                     } catch (e) {
                         let errors = e?.response?.data?.errors
                         errors && this.setFormErrorsFromResponse(errors)
@@ -446,7 +446,7 @@
                     this.departmentsLoading = true
 
                     try {
-                        let response = (await axios.get(`/web-api/gaz/departments?city_id=${city_id}`)).data.data
+                        let response = (await axios.get(`{{ route('api.gaz.department.index') }}?city_id=${city_id}`)).data.data
 
                         this.departments = response
                     } catch (e) {

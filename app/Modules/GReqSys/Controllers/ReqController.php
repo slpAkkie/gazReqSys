@@ -56,13 +56,13 @@ class ReqController extends Controller
     }
 
     /**
-     * Создать заявку на создание аккаунта сотруднику в системе WT
+     * Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
      *
      * @param Request $request
-     * @param Collection<Staff> $staffCollection
-     * @return JsonResponse
+     * @param Collection $staffCollection
+     * @return Req
      */
-    private function storeReqCreateWTAccounts(Request $request, Collection $staffCollection)
+    private function storeReqAndInvolvedStaff(Request $request, Collection $staffCollection)
     {
         // Создаем заявку
         ($req = new Req($request->only([
@@ -79,6 +79,18 @@ class ReqController extends Controller
             $model->save();
         });
 
+        return $req;
+    }
+
+    /**
+     * Создать заявку на создание аккаунта сотруднику в системе WT
+     *
+     * @param Collection<Staff> $staffCollection
+     * @param Req $req
+     * @return JsonResponse
+     */
+    private function storeReqCreateWTAccounts(Collection $staffCollection, Req $req)
+    {
         /**
          * Не самый лучший вариант, из-за связности
          * Но по другому у меня не получилось
@@ -87,9 +99,15 @@ class ReqController extends Controller
          */
         app(BackController::class)->createAccounts($staffCollection);
 
-        return response()->json();
+        return response()->json($req->id);
     }
 
+    /**
+     * Проверить корректность данных о сотрудниках, отправленных с клиента
+     *
+     * @param array $staff
+     * @return Collection<Staff>
+     */
     private function validateStaff(array $staff) {
         $query = Staff::select();
 
@@ -140,9 +158,14 @@ class ReqController extends Controller
         $staffCollection = $this->validateStaff($request->get('staff'));
 
         /**
+         * Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
+         */
+        $req = $this->storeReqAndInvolvedStaff($request, $staffCollection);
+
+        /**
          * Проверяем тип заявки и вызываем соответствующтий метод
          */
-        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($request, $staffCollection);
+        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($staffCollection, $req);
 
         /**
          * Если тип заявки еще не был написан, вызываем ошибку
