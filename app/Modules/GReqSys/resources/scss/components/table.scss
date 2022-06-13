@@ -57,11 +57,12 @@
             }
         }
 
-        &:nth-child(even) {
+        &:nth-child(even),
+        &_disabled {
             background-color: lighten($color: $color-light, $amount: 2%);
         }
 
-        &:hover {
+        &:hover:not(&_disabled) {
             background-color: $color-primary;
         }
 

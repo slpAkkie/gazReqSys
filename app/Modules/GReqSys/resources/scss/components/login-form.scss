@@ -1,15 +1,19 @@
-.input-prefix-icon {
-    position: absolute;
-    top: .25rem;
-    left: .125rem;
-    transform: translate(50%, 50%);
-    line-height: 1;
-}
+.form {
+    &-label_prefix-icon {
+        position: relative;
+    }
 
-.form-label {
-    position: relative;
-}
+    &-control {
+        &-icon {
+            position: absolute;
+            top: .25rem;
+            left: .125rem;
+            transform: translate(50%, 50%);
+            line-height: 1;
+        }
 
-input.prefix-icon {
-    padding-left: 2rem;
+        &_prefix-icon {
+            padding-left: 2rem;
+        }
+    }
 }
