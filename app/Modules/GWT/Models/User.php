@@ -53,7 +53,14 @@ class User extends AuthUser
         'insurance_number',
     ];
 
-    private string $unhashed_password;
+    /**
+     * Не хэшированный пароль
+     * Сохраняется при создании пользователя
+     * Чтобы отправить письмо с ним
+     *
+     * @var string
+     */
+    public string $unhashed_password;
 
     /**
      * Создание новой записи

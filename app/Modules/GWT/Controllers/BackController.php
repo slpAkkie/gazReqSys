@@ -5,6 +5,7 @@ namespace Modules\GWT\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Modules\Gaz\Models\Staff;
+use Modules\GWT\Jobs\SendEmail;
 use Modules\GWT\Models\User;
 
 class BackController extends \App\Http\Controllers\Controller
@@ -20,6 +21,9 @@ class BackController extends \App\Http\Controllers\Controller
         $user = User::new($staff);
 
         $user->save();
+
+        // Добавить в очередь отправку письма пользователю
+        dispatch(new SendEmail($user));
     }
 
     /**
@@ -36,11 +40,11 @@ class BackController extends \App\Http\Controllers\Controller
          *
          * @var Collection<User>
          */
-        $registered = User::whereIn('insurance_number', $staffCollection->pluck('insurance_number'))->get();
+        $alreadyRegistered = User::whereIn('insurance_number', $staffCollection->pluck('insurance_number'))->get();
 
         foreach ($staffCollection as $staff) {
             // Проверяем есть ли у этого сотрудника аккаунт
-            $user = $registered->first(function ($r) use ($staff) {
+            $user = $alreadyRegistered->first(function ($r) use ($staff) {
                 return $r->insurance_number === $staff->insurance_number;
             });
 
