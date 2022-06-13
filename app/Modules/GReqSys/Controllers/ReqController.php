@@ -108,11 +108,11 @@ class ReqController extends Controller
      * @param array $staff
      * @return Collection<Staff>
      */
-    private function validateStaff(array $staff) {
+    private function validateStaff(array $staff, $department_id) {
         $query = Staff::select();
 
-        $staffDataColection = Collection::make($staff)->each(function ($s) use ($query) {
-            $query->orWhere(function ($query) use ($s) {
+        $staffDataColection = Collection::make($staff)->each(function ($s) use ($query, $department_id) {
+            $query->orWhere(function ($query) use ($s, $department_id) {
                 $query->where([
                     'first_name' => $s['first_name'],
                     'last_name' => $s['last_name'],
@@ -120,8 +120,8 @@ class ReqController extends Controller
                     'emp_number' => $s['emp_number'],
                     'email' => $s['email'],
                     'insurance_number' => $s['insurance_number'],
-                ])->whereHas('departments', function($q) use ($s) {
-                    $q->where('departments.id', $s['department_id']);
+                ])->whereHas('departments', function($q) use ($department_id) {
+                    $q->where('departments.id', $department_id);
                 });
             });
         });
@@ -157,7 +157,7 @@ class ReqController extends Controller
         /**
          * Проверка корректности введеных данных сотрудниках
          */
-        $staffCollection = $this->validateStaff($request->get('staff'));
+        $staffCollection = $this->validateStaff($request->get('staff'), $request->get('department_id'));
 
         /**
          * Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
