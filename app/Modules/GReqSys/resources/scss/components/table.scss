@@ -65,7 +65,7 @@
             }
         }
 
-        &:hover:not(.input-group) {
+        &:hover:not(&_disabled):not(.input-group) {
             background-color: $color-primary !important;
         }
 
