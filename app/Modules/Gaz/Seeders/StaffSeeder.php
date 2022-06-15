@@ -37,6 +37,38 @@ class StaffSeeder extends Seeder
             'email'             => 'bekkerveronica@yandex.ru',
             'insurance_number'  => '222-222-222 22',
         ],
+        [
+            'last_name'         => 'Болдин',
+            'first_name'        => 'Андрей',
+            'second_name'       => 'Русланович',
+            'emp_number'        => '333333',
+            'email'             => 'boldin.2002@mail.ru',
+            'insurance_number'  => '333-333-333 33',
+        ],
+        [
+            'last_name'         => 'Шилина',
+            'first_name'        => 'Полина',
+            'second_name'       => 'Сергеевна',
+            'emp_number'        => '444444',
+            'email'             => 'shilinapolina@yandex.ru',
+            'insurance_number'  => '444-444-444 44',
+        ],
+        [
+            'last_name'         => 'Трифонов',
+            'first_name'        => 'Никита',
+            'second_name'       => 'Олегович',
+            'emp_number'        => '555555',
+            'email'             => 'trifka.nik@yandex.ru',
+            'insurance_number'  => '555-555-555 55',
+        ],
+        [
+            'last_name'         => 'Сорогин',
+            'first_name'        => 'Вячеслав',
+            'second_name'       => 'Олегович',
+            'emp_number'        => '666666',
+            'email'             => 'sorogin.slava@mail.ru',
+            'insurance_number'  => '666-666-666 66',
+        ],
     ];
 
     /**

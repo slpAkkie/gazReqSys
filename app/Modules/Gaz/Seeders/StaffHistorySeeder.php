@@ -15,7 +15,6 @@ class StaffHistorySeeder extends Seeder
     protected $rows = [
         [
             'staff_id' => 1,
-            'hired_at' => '2022.04.11',
             'post_id' => 1,
             'department_id' => 4,
         ],
@@ -27,6 +26,26 @@ class StaffHistorySeeder extends Seeder
         [
             'staff_id' => 3,
             'post_id' => 1,
+            'department_id' => 4,
+        ],
+        [
+            'staff_id' => 4,
+            'post_id' => 2,
+            'department_id' => 4,
+        ],
+        [
+            'staff_id' => 5,
+            'post_id' => 2,
+            'department_id' => 4,
+        ],
+        [
+            'staff_id' => 6,
+            'post_id' => 3,
+            'department_id' => 4,
+        ],
+        [
+            'staff_id' => 7,
+            'post_id' => 2,
             'department_id' => 4,
         ],
     ];
