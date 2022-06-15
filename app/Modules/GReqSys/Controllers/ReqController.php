@@ -119,6 +119,22 @@ class ReqController extends Controller
     }
 
     /**
+     * Создать заявку на увольнение сотрудников
+     *
+     * @param Collection<Staff> $staffCollection
+     * @param Req $req
+     * @return JsonResponse
+     */
+    private function storeReqFireStaff(Collection $staffCollection, Req $req)
+    {
+        $staffCollection->each(function ($staff) {
+            $staff->fire();
+        });
+
+        return response()->json($req->id);
+    }
+
+    /**
      * Проверить корректность данных о сотрудниках, отправленных с клиента
      *
      * @param array $staff
@@ -188,6 +204,7 @@ class ReqController extends Controller
         return match($req_type) {
             1 => $this->storeReqCreateWTAccounts($staffCollection, $req),
             2 => $this->storeReqDisableWTAccounts($staffCollection, $req),
+            3 => $this->storeReqFireStaff($staffCollection, $req),
 
             /**
              * Если тип заявки еще не был написан, вызываем ошибку
