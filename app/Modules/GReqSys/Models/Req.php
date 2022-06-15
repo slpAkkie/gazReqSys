@@ -100,7 +100,7 @@ class Req extends Model
      */
     public function getInvolvedStaff()
     {
-        return Staff::whereIn(
+        return Staff::withFired()->whereIn(
             'id',
             $this->involved_staff_records->pluck('gaz_staff_id')
         )->get();

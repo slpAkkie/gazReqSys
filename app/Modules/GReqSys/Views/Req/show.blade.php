@@ -23,7 +23,7 @@
             </div>
             <div class="mb-2 row gap-2">
                 <label for="department" class="form-label col-4">Автор заявки</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->author_staff->getFullName() }}">
+                <input type="text" class="col form-control" disabled="disabled" value="{{ "{$req->author_staff->getFullName()} ({$req->author_staff->emp_number})" }}">
             </div>
         </div>
     </section>

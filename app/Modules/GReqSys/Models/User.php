@@ -102,6 +102,6 @@ class User extends AuthUser
      */
     public function staff()
     {
-        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id');
+        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id')->withoutGlobalScopes();
     }
 }
