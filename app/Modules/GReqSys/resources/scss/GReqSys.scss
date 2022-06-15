@@ -59,6 +59,8 @@ body {
     height: 100%;
     //
     background: $color-primary;
+    border-right: 0.0625rem solid $color-primary-contrast;
+    box-shadow: 1px 0px 4px 0 lighten($color: desaturate($color: $color-primary-contrast, $amount: 70%), $amount: 20%);
 
     &__title {
         color: $color-dark;
