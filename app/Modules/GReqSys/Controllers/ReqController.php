@@ -83,7 +83,7 @@ class ReqController extends Controller
     }
 
     /**
-     * Создать заявку на создание аккаунта сотруднику в системе WT
+     * Создать заявку на создание аккаунта сотрудникам в системе WT
      *
      * @param Collection<Staff> $staffCollection
      * @param Req $req
@@ -98,6 +98,22 @@ class ReqController extends Controller
          * но что-то не пошло, да будет так
          */
         app(BackController::class)->createAccounts($staffCollection);
+
+        return response()->json($req->id);
+    }
+
+    /**
+     * Создать заявку на отключение аккаунта сотрудникам в системе WT
+     *
+     * @param Collection<Staff> $staffCollection
+     * @param Req $req
+     * @return JsonResponse
+     */
+    private function storeReqDisableWTAccounts(Collection $staffCollection, Req $req)
+    {
+        $staffCollection->each(function ($staff) {
+            $staff->wt_account->disable();
+        });
 
         return response()->json($req->id);
     }
@@ -167,13 +183,18 @@ class ReqController extends Controller
         /**
          * Проверяем тип заявки и вызываем соответствующтий метод
          */
-        if ($request->get('type_id') == 1) return $this->storeReqCreateWTAccounts($staffCollection, $req);
+        $req_type = $request->get('type_id');
 
-        /**
-         * Если тип заявки еще не был написан, вызываем ошибку
-         */
-        throw ValidationException::withMessages([
-            'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
-        ]);
+        return match($req_type) {
+            1 => $this->storeReqCreateWTAccounts($staffCollection, $req),
+            2 => $this->storeReqDisableWTAccounts($staffCollection, $req),
+
+            /**
+             * Если тип заявки еще не был написан, вызываем ошибку
+             */
+            default => throw ValidationException::withMessages([
+                'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
+            ])
+        };
     }
 }
