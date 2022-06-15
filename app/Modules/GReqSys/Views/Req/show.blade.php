@@ -1,6 +1,6 @@
 @extends('GReqSys::templates.main')
 
-@section('title', 'Заявка №' . $req->id)
+@section('title', 'Заявка №' . $req->id . ' от ' . $req->created_at)
 
 @section('content')
     <section>
