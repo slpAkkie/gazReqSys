@@ -54,9 +54,9 @@
             </div>
 
             <div v-if="formData.department_id" class="mt-4">
-                <div class="row mb-3">
+                <div class="row">
                     <div class="col-6">
-                        <h3>Сотрудники</h3>
+                        <h3 class="mb-3">Сотрудники</h3>
                         <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
                             <button class="btn" @click.prevent="addStaff">Добавить</button>
                             <button class="btn" @click.prevent="loadStaff">Подстановка</button>
