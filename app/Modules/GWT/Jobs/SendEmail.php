@@ -8,8 +8,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use Modules\GWT\Mail\RegistrationMail;
-use Modules\GWT\Models\User;
 
 class SendEmail implements ShouldQueue
 {
@@ -23,29 +21,29 @@ class SendEmail implements ShouldQueue
     protected string $email;
 
     /**
-     * Логин пользователя
+     * Класс письма на отправку
      *
      * @var string
      */
-    protected string $login;
+    protected string $mail;
 
     /**
-     * Пароль пользователя
+     * Параметры для письма
      *
-     * @var string
+     * @var array
      */
-    protected string $password;
+    protected array $params;
 
     /**
      * Инстанциировать задачу
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(string $email, string $mail, array $params = [])
     {
-        $this->email = $user->email;
-        $this->login = $user->login;
-        $this->password = $user->unhashed_password;
+        $this->email = $email;
+        $this->mail = $mail;
+        $this->params = $params;
 
         $this->afterCommit();
     }
@@ -57,6 +55,6 @@ class SendEmail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->email)->send(new RegistrationMail($this->login, $this->password));
+        Mail::to($this->email)->send(new $this->mail($this->params));
     }
 }

@@ -5,7 +5,6 @@ namespace Modules\GWT\Controllers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Modules\Gaz\Models\Staff;
-use Modules\GWT\Jobs\SendEmail;
 use Modules\GWT\Models\User;
 
 class BackController extends \App\Http\Controllers\Controller
@@ -21,9 +20,6 @@ class BackController extends \App\Http\Controllers\Controller
         $user = User::new($staff);
 
         $user->save();
-
-        // Добавить в очередь отправку письма пользователю
-        dispatch(new SendEmail($user));
     }
 
     /**

@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Modules\Gaz\Models\Staff;
+use Modules\GWT\Jobs\SendEmail;
+use Modules\GWT\Mail\ReactivateMail;
+use Modules\GWT\Mail\RegistrationMail;
 
 /**
  * @property integer|string|null $id
@@ -60,7 +63,7 @@ class User extends AuthUser
      *
      * @var string
      */
-    public string $unhashed_password;
+    private string $unhashed_password;
 
     /**
      * Создание новой записи
@@ -73,20 +76,49 @@ class User extends AuthUser
     {
         $model = new self($attributes->toArray());
 
-        $model->password_hash = $model->hashPassword($model->unhashed_password = Str::random(8));
+        $model->generatePassword();
         $model->generateLogin();
+
+        $model->sendRegistrationEmail();
 
         return $model;
     }
 
     /**
-     * Поулчить ФИО пользователя
+     * Отправить пользователю письмо с данными для входа
      *
-     * @return string
+     * @return void
      */
-    public function getFullName()
+    private function sendRegistrationEmail()
     {
-        return $this->last_name.' '.$this->first_name.' '.$this->second_name;
+        dispatch(new SendEmail($this->email, RegistrationMail::class, [
+            'login' => $this->login,
+            'password' => $this->unhashed_password,
+        ]));
+    }
+
+    /**
+     * Отправить письмо пользователю о том, что его аккаунт восстановлен
+     * с новыми данными для входа
+     *
+     * @return void
+     */
+    private function sendReactivateEmail()
+    {
+        dispatch(new SendEmail($this->email, ReactivateMail::class, [
+            'login' => $this->login,
+            'password' => $this->unhashed_password,
+        ]));
+    }
+
+    /**
+     * Сгенерировать пароль для пользователя
+     *
+     * @return void
+     */
+    private function generatePassword()
+    {
+        $this->password_hash = $this->hashPassword($this->unhashed_password = Str::random(8));
     }
 
     /**
@@ -206,9 +238,22 @@ class User extends AuthUser
     public function enable()
     {
         $this->disabled = false;
+        $this->generatePassword();
         $this->save();
 
+        $this->sendReactivateEmail();
+
         return $this;
+    }
+
+    /**
+     * Поулчить ФИО пользователя
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return $this->last_name.' '.$this->first_name.' '.$this->second_name;
     }
 
     /**

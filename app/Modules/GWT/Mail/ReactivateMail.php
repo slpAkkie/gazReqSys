@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RegistrationMail extends Mailable implements ShouldQueue
+class ReactivateMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -37,6 +37,6 @@ class RegistrationMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('GWT::mail.registration', [ 'params' => $this->params ]);
+        return $this->markdown('GWT::mail.reactivate', [ 'params' => $this->params ]);
     }
 }
