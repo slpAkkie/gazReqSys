@@ -30,10 +30,10 @@ class DatabaseInit extends Command
     {
         $this->info('Создание и заполнение таблиц баз данных');
 
-        Artisan::call('migrate');
         Artisan::call('gaz:db');
         Artisan::call('greqsys:db');
         Artisan::call('gwt:db');
+        Artisan::call('migrate');
 
         $this->info('Создание и заполнение баз данных завершено');
 
