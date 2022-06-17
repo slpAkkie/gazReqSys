@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('login', 64)->unique();
             $table->string('password_hash', 255);
             $table->string('email', 64)->unique();
-            $table->foreignIdFor(Staff::class, 'insurance_number')->unique()->references('insurance_number')->on(Config::get('database.connections.gaz.database' . '.staff'))->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('insurance_number', 14);
+            $table->foreign('insurance_number')->unique()->references('insurance_number')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('disabled')->default(false);
             $table->timestamps();
         });

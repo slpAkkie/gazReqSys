@@ -33,11 +33,6 @@ use Modules\WT\Models\User as WTUser;
  * @property Collection<Req> $involved_in
  * @property WTUser $wt_account
  *
- * @method bool isFired()
- * @method StaffHistory getLastHired()
- * @method Organization getCurrentOrganization()
- * @method Post getCurrentPost()
- *
  * @mixin Builder
  */
 class Staff extends Model

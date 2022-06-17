@@ -3,6 +3,7 @@
 namespace Modules\ReqSys\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Modules\ReqSys\Models\User;
 
 class UserSeeder extends Seeder
@@ -13,7 +14,11 @@ class UserSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [ 'login' => 'root', 'gaz_staff_id' => 1, 'password' => 'root' ],
+        [
+            'login' => 'root',
+            'gaz_staff_id' => 1,
+            'password' => 'root'
+        ],
     ];
 
     /**
@@ -23,7 +28,10 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
-            (User::new($r))->save();
+        foreach ($this->rows as $r) {
+            $user = User::new($r);
+            $user->password_salt = Str::random(255);
+            $user->save();
+        }
     }
 }

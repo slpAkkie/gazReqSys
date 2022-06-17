@@ -14,7 +14,7 @@ use Modules\ReqSys\Models\Model;
  * @property string|null $accepted
  * @property string|null $refusal_reason
  * @property integer $updated_at
- * @property integer $updated_at
+ * @property integer $created_at
  *
  * @property Req $req
  * @property Staff $staff

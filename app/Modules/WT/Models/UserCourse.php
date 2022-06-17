@@ -16,9 +16,6 @@ use Illuminate\Database\Query\Builder;
  * @property Course $course
  * @property User $user
  *
- * @method string hashPassword()
- * @method bool checkPassword()
- *
  * @mixin Builder
  */
 class UserCourse extends Pivot
