@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('organizations', function (Blueprint $table) {
             $table->id();
             $table->string('title', 64);
             $table->foreignIdFor(City::class)->references('id')->on('cities')->cascadeOnUpdate()->cascadeOnDelete();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('organizations');
     }
 };

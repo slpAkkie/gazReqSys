@@ -3,9 +3,9 @@
 namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Gaz\Models\Department;
+use Modules\Gaz\Models\Organization;
 
-class DepartmentSeeder extends Seeder
+class OrganizationSeeder extends Seeder
 {
     /**
      * Строки для вставки
@@ -33,6 +33,6 @@ class DepartmentSeeder extends Seeder
     public function run()
     {
         foreach ($this->rows as $r)
-            (new Department($r))->save();
+            (new Organization($r))->save();
     }
 }

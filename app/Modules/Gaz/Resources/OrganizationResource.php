@@ -4,7 +4,7 @@ namespace Modules\Gaz\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DepartmentResource extends JsonResource
+class OrganizationResource extends JsonResource
 {
     /**
      * Преобразование модели в API ресурс

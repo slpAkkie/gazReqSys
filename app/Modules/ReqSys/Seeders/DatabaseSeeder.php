@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ReqTypeSeeder::class,
             ReqSeeder::class,
             ReqSeeder::class,
-            InvolvedStaffSeeder::class,
+            ReqStaffSeeder::class,
         ]);
     }
 }

@@ -16,10 +16,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('involved_staff', function (Blueprint $table) {
+        Schema::create('req_staff', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Req::class)->references('id')->on('reqs')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Staff::class, 'gaz_staff_id')->references('id')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->boolean('accepted')->nullable();
+            $table->string('refusal_reason', 255)->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('involved_staff');
+        Schema::dropIfExists('req_staff');
     }
 };

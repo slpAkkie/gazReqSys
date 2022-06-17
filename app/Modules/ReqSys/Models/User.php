@@ -14,8 +14,11 @@ use Modules\Gaz\Models\Staff;
  * @property integer|string|null $id
  * @property string $login
  * @property string $password_hash
+ * @property string $password_salt
  * @property integer|string|null $gaz_staff_id
  * @property string $remember_token
+ * @property bool $admin
+ * @property integer $deleted_at
  * @property integer $created_at
  * @property integer $updated_at
  *

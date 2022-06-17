@@ -43,7 +43,7 @@ class Post extends Model
             'id',
         )->using(StaffHistory::class)->withPivot(
             'hired_at',
-            'department_id',
+            'organization_id',
             'fired_at',
             'created_at',
             'updated_at',

@@ -23,7 +23,7 @@ use Modules\ReqSys\Models\Req;
  *
  * @mixin Builder
  */
-class Department extends Model
+class Organization extends Model
 {
     /**
      * Поля, разрешенные для массовго заполнения
@@ -55,7 +55,7 @@ class Department extends Model
         return $this->belongsToMany(
             Staff::class,
             StaffHistory::class,
-            'department_id',
+            'organization_id',
             'staff_id',
             'id',
             'id',
@@ -75,6 +75,6 @@ class Department extends Model
      */
     public function reqs()
     {
-        return $this->setConnection('reqsys')->hasMany(Req::class, 'gaz_department_id', 'id');
+        return $this->setConnection('reqsys')->hasMany(Req::class, 'gaz_organization_id', 'id');
     }
 }

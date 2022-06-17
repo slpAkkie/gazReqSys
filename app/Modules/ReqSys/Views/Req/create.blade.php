@@ -29,12 +29,12 @@
                         </select>
                     </div>
                     <div v-if="formData.city_id && formData.type_id" class="mb-2 row gap-2">
-                        <label for="department" class="form-label col-4">Организация @{{ departmentsLoading ? '(Загрузка)' : '' }}</label>
-                        <select name="department_id" id="department" class="form-select col" v-model.number="formData.department_id" :disabled="departmentsLoading">
-                            <option v-for="d in departments" :key="d.id" :value="d.id">@{{ d.title }}</option>
+                        <label for="organization" class="form-label col-4">Организация @{{ organizationsLoading ? '(Загрузка)' : '' }}</label>
+                        <select name="organization_id" id="organization" class="form-select col" v-model.number="formData.organization_id" :disabled="organizationsLoading">
+                            <option v-for="d in organizations" :key="d.id" :value="d.id">@{{ d.title }}</option>
                         </select>
                     </div>
-                    <div v-if="formData.city_id && formData.department_id">
+                    <div v-if="formData.city_id && formData.organization_id">
                         <button type="submit" class="btn btn-primary">Отправить заявку</button>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <div v-if="!!alerts.departments.error" class="w-100 alert alert-danger h6" role="alert">@{{ alerts.departments.error }}</div>
+                        <div v-if="!!alerts.organizations.error" class="w-100 alert alert-danger h6" role="alert">@{{ alerts.organizations.error }}</div>
                         <div v-if="!!alerts.staff.error" class="w-100 alert alert-danger h6" role="alert">@{{ alerts.staff.error }}</div>
                         <div v-if="!!alerts.staff.warn" class="w-100 alert alert-warning h6" role="alert">@{{ alerts.staff.warn }}</div>
                         <div v-if="!!alerts.staff.info" class="w-100 alert alert-info h6" role="alert">@{{ alerts.staff.info }}</div>
@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div v-if="formData.department_id" class="mt-4">
+            <div v-if="formData.organization_id" class="mt-4">
                 <div class="row">
                     <div class="col-6">
                         <h3 class="mb-3">Сотрудники</h3>
@@ -196,7 +196,7 @@
                 formData: {
                     type_id: null,
                     city_id: null,
-                    department_id: null,
+                    organization_id: null,
                     staff: [],
                 },
 
@@ -213,8 +213,8 @@
                 },
                 staffTableBlocked: false,
 
-                departments: [],
-                departmentsLoading: false,
+                organizations: [],
+                organizationsLoading: false,
 
                 formSubmiting: false,
 
@@ -225,7 +225,7 @@
                         warn: null,
                         error: null,
                     },
-                    departments: {
+                    organizations: {
                         info: null,
                         warn: null,
                         error: null,
@@ -256,9 +256,9 @@
                     this.checkInfoForStaff()
                 },
                 'formData.city_id': function (newVal) {
-                    this.loadDepartments(newVal)
+                    this.loadOrganizations(newVal)
                 },
-                'formData.department_id': function () {
+                'formData.organization_id': function () {
                     this.clearStaff()
                 },
             },
@@ -341,7 +341,7 @@
 
                     this.removeEmptyStaff()
                     this.removeDublicatedStaff()
-                    if (!this.formData.department_id) return this.alerts.staff.warn = 'Для подстановки необходимо указать организацию'
+                    if (!this.formData.organization_id) return this.alerts.staff.warn = 'Для подстановки необходимо указать организацию'
 
                     let emp_numbers_query = this.formData.staff.map(i => i.emp_number).filter(i => !!i).join(',')
                     if (!this.formData.staff.length || !emp_numbers_query) return this.alerts.staff.warn = 'Для подстановки необходимо указать Табельные номера сотрудников'
@@ -351,7 +351,7 @@
                     try {
                         this.staffTableBlocked = true
 
-                        let response = (await axios.get(`{{ route('api.gaz.staff.index') }}?emp_numbers=${emp_numbers_query}&department_id=${this.formData.department_id}&is_wt`)).data.data
+                        let response = (await axios.get(`{{ route('api.gaz.staff.index') }}?emp_numbers=${emp_numbers_query}&organization_id=${this.formData.organization_id}&is_wt`)).data.data
 
                         if (this.formData.staff.length !== response.length)
                             this.alerts.staff.warn = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'
@@ -384,7 +384,7 @@
                     if (!this.formData.staff.length) errors.push({ title: 'Список сотрудников должен содержать хотя бы одну запись' })
                     if (!this.formData.type_id) errors.push({ title: 'Тип заявки не указан' })
                     if (!this.formData.city_id) errors.push({ title: 'Область не указана' })
-                    if (!this.formData.department_id) errors.push({ title: 'Организация не указана' })
+                    if (!this.formData.organization_id) errors.push({ title: 'Организация не указана' })
 
                     if (this.checkErrorsForStaff().length) return true
 
@@ -432,37 +432,37 @@
                         errors: sE,
                     }))
                 },
-                clearDepartmentsInfoAlerts() { this.alerts.departments.info = '' },
-                clearDepartmentsWarnAlerts() { this.alerts.departments.warn = '' },
-                clearDepartmentsErrorAlert() { this.alerts.departments.error = '' },
-                clearDepartmentsAlerts() {
-                    this.clearDepartmentsInfoAlerts()
-                    this.clearDepartmentsWarnAlerts()
-                    this.clearDepartmentsErrorAlert()
+                clearOrganizationsInfoAlerts() { this.alerts.organizations.info = '' },
+                clearOrganizationsWarnAlerts() { this.alerts.organizations.warn = '' },
+                clearOrganizationsErrorAlert() { this.alerts.organizations.error = '' },
+                clearOrganizationsAlerts() {
+                    this.clearOrganizationsInfoAlerts()
+                    this.clearOrganizationsWarnAlerts()
+                    this.clearOrganizationsErrorAlert()
                 },
-                async loadDepartments(city_id) {
-                    this.clearDepartmentsAlerts()
-                    this.formData.department_id = null
-                    this.departmentsLoading = true
+                async loadOrganizations(city_id) {
+                    this.clearOrganizationsAlerts()
+                    this.formData.organization_id = null
+                    this.organizationsLoading = true
 
                     try {
-                        let response = (await axios.get(`{{ route('api.gaz.department.index') }}?city_id=${city_id}`)).data.data
+                        let response = (await axios.get(`{{ route('api.gaz.organization.index') }}?city_id=${city_id}`)).data.data
 
-                        this.departments = response
+                        this.organizations = response
                     } catch (e) {
-                        this.alerts.departments.error = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
+                        this.alerts.organizations.error = e?.response?.data?.message || 'Произошла ошибка во время запроса к серверу'
                         console.log(e)
                     } finally {
-                        this.departmentsLoading = false
+                        this.organizationsLoading = false
                     }
                 },
                 clearAllErrors() {
-                    this.clearDepartmentsErrorAlert()
+                    this.clearOrganizationsErrorAlert()
                     this.clearStaffErrorAlert()
                     this.clearFormErrorAlert()
                 },
                 clearAllAlerts() {
-                    this.clearDepartmentsAlerts()
+                    this.clearOrganizationsAlerts()
                     this.clearStaffAlerts()
                     this.clearFormAlerts()
                 },

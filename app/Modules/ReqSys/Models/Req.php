@@ -7,24 +7,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
-use Modules\Gaz\Models\Department;
+use Modules\Gaz\Models\Organization;
 use Modules\Gaz\Models\Staff;
 use Modules\ReqSys\Models\Model;
 
 /**
  * @property integer|string|null $id
  * @property integer|string|null $type_id
- * @property integer|string|null $gaz_department_id
+ * @property integer|string|null $gaz_organization_id
+ * @property string $status_slug
+ * @property integer $author_id
  * @property integer $created_at
  * @property integer $updated_at
  *
  * @property ReqType $type
  * @property User $author
  * @property Staff $author_staff
- * @property Collection<InvolvedStaff> $involved_staff_records
- * @property Department $department
+ * @property Collection<ReqStaff> $req_staff_records
+ * @property Organization $organization
  *
- * @method Collection<Staff> getInvolvedStaff()
+ * @method Collection<Staff> getReqStaff()
  *
  * @mixin Builder
  */
@@ -38,14 +40,14 @@ class Req extends Model
     protected $fillable = [
         'type_id',
         'user_id',
-        'gaz_department_id',
+        'gaz_organization_id',
     ];
 
     public function __construct(array $attributes = [])
     {
-        if (key_exists('department_id', $attributes)) {
-            $attributes['gaz_department_id'] = $attributes['department_id'];
-            unset($attributes['department_id']);
+        if (key_exists('organization_id', $attributes)) {
+            $attributes['gaz_organization_id'] = $attributes['organization_id'];
+            unset($attributes['organization_id']);
         }
 
         $attributes['user_id'] = Auth::id();
@@ -70,7 +72,7 @@ class Req extends Model
      */
     public function author()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'author_id', 'id');
     }
 
     /**
@@ -88,9 +90,9 @@ class Req extends Model
      *
      * @return HasMany
      */
-    public function involved_staff_records()
+    public function req_staff_records()
     {
-        return $this->hasMany(InvolvedStaff::class, 'req_id', 'id');
+        return $this->hasMany(ReqStaff::class, 'req_id', 'id');
     }
 
     /**
@@ -98,11 +100,11 @@ class Req extends Model
      *
      * @return HasMany
      */
-    public function getInvolvedStaff()
+    public function getReqStaff()
     {
         return Staff::withFired()->whereIn(
             'id',
-            $this->involved_staff_records->pluck('gaz_staff_id')
+            $this->req_staff_records->pluck('gaz_staff_id')
         )->get();
     }
 
@@ -111,8 +113,8 @@ class Req extends Model
      *
      * @return BelongsTo
      */
-    public function department()
+    public function organization()
     {
-        return $this->setConnection('gaz')->belongsTo(Department::class, 'gaz_department_id', 'id');
+        return $this->setConnection('gaz')->belongsTo(Organization::class, 'gaz_organization_id', 'id');
     }
 }

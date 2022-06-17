@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
 use Modules\Gaz\Models\Scopes\StaffScope;
-use Modules\ReqSys\Models\InvolvedStaff;
+use Modules\ReqSys\Models\ReqStaff;
 use Modules\ReqSys\Models\Req;
 use Modules\WT\Models\User as WTUser;
 
@@ -27,7 +27,7 @@ use Modules\WT\Models\User as WTUser;
  *
  * @property bool $showWTInfo
  *
- * @property Collection<Department> $departments
+ * @property Collection<Organization> $organizations
  * @property Collection<Post> $posts
  * @property Collection<StaffHistory> $history
  * @property Collection<Req> $involved_in
@@ -35,7 +35,7 @@ use Modules\WT\Models\User as WTUser;
  *
  * @method bool isFired()
  * @method StaffHistory getLastHired()
- * @method Department getCurrentDepartment()
+ * @method Organization getCurrentOrganization()
  * @method Post getCurrentPost()
  *
  * @mixin Builder
@@ -149,11 +149,11 @@ class Staff extends Model
     /**
      * Получить текущую организацию в которой работает сотрудник
      *
-     * @return Department|null
+     * @return Organization|null
      */
-    public function getCurrentDepartment()
+    public function getCurrentOrganization()
     {
-        return $this->departments()->first();
+        return $this->organizations()->first();
     }
 
     /**
@@ -161,13 +161,13 @@ class Staff extends Model
      *
      * @return BelongsToMany
      */
-    public function departments()
+    public function organizations()
     {
         return $this->belongsToMany(
-            Department::class,
+            Organization::class,
             StaffHistory::class,
             'staff_id',
-            'department_id',
+            'organization_id',
             'id',
             'id'
         )->using(StaffHistory::class)->withPivot([
@@ -205,7 +205,7 @@ class Staff extends Model
             'id'
         )->using(StaffHistory::class)->withPivot([
             'hired_at',
-            'department_id',
+            'organization_id',
             'fired_at',
             'created_at',
             'updated_at',
@@ -225,7 +225,7 @@ class Staff extends Model
 
     private function involved_in_records()
     {
-        return $this->setConnection('reqsys')->belongsTo(InvolvedStaff::class, 'gaz_staff_id', 'id');
+        return $this->setConnection('reqsys')->belongsTo(ReqStaff::class, 'gaz_staff_id', 'id');
     }
 
     /**
