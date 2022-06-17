@@ -7,13 +7,26 @@
         &-icon {
             position: absolute;
             top: .25rem;
+            //
+            line-height: 1;
+        }
+
+        &-icon_prefix {
             left: .125rem;
             transform: translate(50%, 50%);
-            line-height: 1;
+        }
+
+        &-icon_suffix {
+            right: .125rem;
+            transform: translate(-50%, 50%);
         }
 
         &_prefix-icon {
             padding-left: 2rem;
+        }
+
+        &_suffix-icon {
+            padding-right: 2rem;
         }
     }
 }
