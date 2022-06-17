@@ -30,7 +30,7 @@
                     </div>
                     <div v-if="formData.city_id && formData.type_id" class="mb-2 row gap-2">
                         <label for="department" class="form-label col-4">Организация @{{ departmentsLoading ? '(Загрузка)' : '' }}</label>
-                        <select name="department_id" id="department" class="form-select col" v-model="formData.department_id" :disabled="departmentsLoading">
+                        <select name="department_id" id="department" class="form-select col" v-model.number="formData.department_id" :disabled="departmentsLoading">
                             <option v-for="d in departments" :key="d.id" :value="d.id">@{{ d.title }}</option>
                         </select>
                     </div>
@@ -211,7 +211,7 @@
                     email: /^[^@]+@[^@]+\.[^@]{2,3}$/,
                     insurance_number: /^\d{3}-\d{3}-\d{3}\s\d{2}$/,
                 },
-                staffTableBlocked: false,
+                staffTableBlocked: false, // REVIEW
 
                 departments: [],
                 departmentsLoading: false,
@@ -277,7 +277,7 @@
 
                     this.removeDublicatedStaff()
                 },
-                removeStaff(uid) {
+                removeStaff(uid) { // REVIEW
                     this.formData.staff.splice(this.formData.staff.findIndex(el => el.uid === uid), 1)
                 },
                 checkInfoForStaff() {
@@ -417,7 +417,7 @@
 
                     for (let e in errors) {
                         if (errors.hasOwnProperty(e)) {
-                            if (!e.startsWith('staff') || e === 'staff') this.alerts.form.error.push({ title: errors[e].join(',') })
+                            if (!e.startsWith('staff') || e === 'staff') this.alerts.form.error.push({ title: errors[e].join(', ') })
                             else {
                                 let staffIndex = e.split('.')[1]
 
