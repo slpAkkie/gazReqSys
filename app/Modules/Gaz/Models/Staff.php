@@ -121,30 +121,29 @@ class Staff extends Model
      */
     public function isFired()
     {
-        return !$this->job_meta()->count();
+        return !$this->job_meta();
     }
 
     /**
-     * Получить последнюю запись о найме
+     * Уволить сотрудника
      *
-     * @return StaffHistory|null
+     * @return void
      */
-    public function getLastHired()
-    {
-        return $this->job_meta()->orderBy('hired_at', 'DESC')->first();
-    }
-
     public function fire()
     {
-        $lastHired = $this->getLastHired();
+        $lastHired = $this->job_meta;
+        if (!$lastHired) return;
+
         $lastHired->fired_at = $this->freshTimestamp();
 
         $lastHired->save();
 
         // TODO: Сделать что-то с соответствующим пользователем в системе заявок
         // Удалять нельзя, тогда будут уничтожены все заявки, которые он создавал
-        // Как вариант, стереть ему логин (Чтобы не занимать в пустую) и токен (Чтобы он не проходил авторизацию)
-        // Так же добавить в middleware auth проверку, что сотрудник, соответствующий пользователю, не уволен
+        // Как вариант, стереть ему логин (Чтобы не занимать в пустую) и токен
+        // (Чтобы он не проходил авторизацию)
+        // Так же добавить в middleware auth проверку, что сотрудник,
+        // соответствующий пользователю, не уволен
     }
 
     /**
