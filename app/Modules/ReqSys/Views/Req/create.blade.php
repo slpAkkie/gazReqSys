@@ -59,7 +59,7 @@
                         <h3 class="mb-3">Сотрудники</h3>
                         <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
                             <button class="btn" @click.prevent="addStaff">Добавить</button>
-                            <button class="btn" @click.prevent="loadStaff">Подставить по табельному номеру</button>
+                            <button class="btn" @click.prevent="loadStaff">Подстановка по табельному номеру</button>
                             <button class="btn btn-danger" @click.prevent="clearStaff">Очистить</button>
                         </div>
                     </div>
