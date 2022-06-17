@@ -89,7 +89,7 @@ class ReqController extends Controller
      * @param Req $req
      * @return JsonResponse
      */
-    private function storeReqCreateWTAccounts(Collection $staffCollection, Req $req)
+    private function createWTAccounts(Collection $staffCollection, Req $req)
     {
         /**
          * Не самый лучший вариант, из-за связности
@@ -109,7 +109,7 @@ class ReqController extends Controller
      * @param Req $req
      * @return JsonResponse
      */
-    private function storeReqDisableWTAccounts(Collection $staffCollection, Req $req)
+    private function disableWTAccounts(Collection $staffCollection, Req $req)
     {
         $staffCollection->each(function ($staff) {
             $staff->wt_account->disable();
@@ -125,7 +125,7 @@ class ReqController extends Controller
      * @param Req $req
      * @return JsonResponse
      */
-    private function storeReqFireStaff(Collection $staffCollection, Req $req)
+    private function fireStaff(Collection $staffCollection, Req $req)
     {
         $staffCollection->each(function ($staff) {
             $staff->fire();
@@ -186,29 +186,21 @@ class ReqController extends Controller
      * @return JsonResponse
      */
     public function store(StoreReqRequest $request) {
-        /**
-         * Проверка корректности введеных данных сотрудниках
-         */
+        // Проверка корректности введеных данных сотрудниках
         $staffCollection = $this->validateStaff($request->get('staff'), $request->get('department_id'));
 
-        /**
-         * Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
-         */
+        // Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
         $req = $this->storeReqAndInvolvedStaff($request, $staffCollection);
 
-        /**
-         * Проверяем тип заявки и вызываем соответствующтий метод
-         */
+        // Проверяем тип заявки и вызываем соответствующтий метод
         $req_type = $request->get('type_id');
 
         return match($req_type) {
-            1 => $this->storeReqCreateWTAccounts($staffCollection, $req),
-            2 => $this->storeReqDisableWTAccounts($staffCollection, $req),
-            3 => $this->storeReqFireStaff($staffCollection, $req),
+            1 => $this->createWTAccounts($staffCollection, $req),
+            2 => $this->disableWTAccounts($staffCollection, $req),
+            3 => $this->fireStaff($staffCollection, $req),
 
-            /**
-             * Если тип заявки еще не был написан, вызываем ошибку
-             */
+            // Если тип заявки еще не был написан, вызываем ошибку
             default => throw ValidationException::withMessages([
                 'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
             ])
