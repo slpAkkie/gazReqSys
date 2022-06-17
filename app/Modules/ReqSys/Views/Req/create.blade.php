@@ -58,10 +58,13 @@
                     <div class="col-6">
                         <h3 class="mb-3">Сотрудники</h3>
                         <div class="d-flex gap-2 align-items-center flex-wrap mb-2">
-                            <button class="btn" @click.prevent="addStaff">Добавить</button>
+                            <button class="btn" :disabled="limitUsers" @click.prevent="addStaff">Добавить</button>
                             <button class="btn" @click.prevent="loadStaff">Подстановка по табельному номеру</button>
                             <button class="btn btn-danger" @click.prevent="clearStaff">Очистить</button>
                         </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-end">
+                        <p class="mb-1 fw-bold">@{{ formData.staff.length }} / 50</p>
                     </div>
                 </div>
 
@@ -218,7 +221,6 @@
 
                 formSubmiting: false,
 
-
                 alerts: {
                     staff: {
                         info: null,
@@ -249,6 +251,9 @@
                         insurance_number: '',
                     }
                 },
+                limitUsers() {
+                    return this.formData.staff.length >= 50;
+                }
             },
             watch: {
                 'formData.type_id': function () {
@@ -465,7 +470,7 @@
                     this.clearOrganizationsAlerts()
                     this.clearStaffAlerts()
                     this.clearFormAlerts()
-                },
+                }
             },
         }).mount('#req-form')
     </script>
