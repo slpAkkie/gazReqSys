@@ -13,9 +13,9 @@ class ReqStatusSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [ 'title' => 'На рассмотрении' ],
-        [ 'title' => 'Подтверждена' ],
-        [ 'title' => 'Отклонена' ],
+        [ 'slug' => 'waiting', 'title' => 'На рассмотрении' ],
+        [ 'slug' => 'confirmed', 'title' => 'Подтверждена' ],
+        [ 'slug' => 'denied', 'title' => 'Отклонена' ],
     ];
 
     /**
