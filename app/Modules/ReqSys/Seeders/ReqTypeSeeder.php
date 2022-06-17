@@ -13,9 +13,9 @@ class ReqTypeSeeder extends Seeder
      * @var array
      */
     protected $rows = [
-        [ 'title' => 'ИС WebTutor: создать аккаунт для сотрудника' ],
-        [ 'title' => 'ИС WebTutor: деактивировать аккаунты' ],
-        [ 'title' => 'Сотрудники: увольнение' ],
+        [ 'title' => 'ИС WebTutor: Создать аккаунт для сотрудника' ],
+        [ 'title' => 'ИС WebTutor: Деактивировать аккаунты' ],
+        [ 'title' => 'Сотрудники: Деактивация учетной записи' ],
     ];
 
     /**
