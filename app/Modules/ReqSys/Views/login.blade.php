@@ -11,14 +11,14 @@
             <div class="mb-2">
                 <label class="form-label form-label_prefix-icon d-flex align-items-center [@error('login') is-invalid @enderror]" for="login">
                     <i class="bi bi-person-fill me-2 form-control-icon"></i>
-                    <input type="text" id="login" name="login" class="form-control form-control_prefix-icon w-100 border-c-light prefix-icon" placeholder="Логин" value="{{ old('login') }}">
+                    <input type="text" id="login" name="login" class="form-control form-control_prefix-icon w-100 border-c-light prefix-icon" placeholder="Логин" v-model="formData.login">
                 </label>
                 <p class="invalid-feedback">@error('login') {{ $message }} @enderror</p>
             </div>
             <div class="mb-2">
                 <label class="form-label form-label_prefix-icon d-flex align-items-center [@error('password') is-invalid @enderror]" for="password">
                     <i class="bi bi-key-fill me-2 form-control-icon"></i>
-                    <input type="password" id="password" name="password" class="form-control form-control_prefix-icon w-100 border-c-light" placeholder="Пароль">
+                    <input type="password" id="password" name="password" class="form-control form-control_prefix-icon w-100 border-c-light" placeholder="Пароль" v-model="formData.password">
                 </label>
                 <p class="invalid-feedback">@error('password') {{ $message }} @enderror</p>
             </div>
@@ -37,8 +37,24 @@
         const loginForm = Vue.createApp({
             name: 'LoginForm',
             data: () => ({
+                formData: {
+                    login: '{{ old('login') }}',
+                    password: '',
+                },
+                maxLength: {
+                    login: 32,
+                    password: 16,
+                },
                 formBlocked: false,
             }),
+            watch: {
+                'formData.login': function (newVal, oldVal) {
+                    (newVal.length > this.maxLength.login) && (this.formData.login = oldVal)
+                },
+                'formData.password': function (newVal, oldVal) {
+                    (newVal.length > this.maxLength.password) && (this.formData.password = oldVal)
+                },
+            },
             methods: {
                 formSubmit() {
                     this.formBlocked = true
