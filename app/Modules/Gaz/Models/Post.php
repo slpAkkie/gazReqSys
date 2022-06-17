@@ -4,6 +4,7 @@ namespace Modules\Gaz\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Gaz\Models\Model;
 
 /**

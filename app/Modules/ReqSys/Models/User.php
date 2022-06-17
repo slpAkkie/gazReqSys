@@ -25,9 +25,6 @@ use Modules\Gaz\Models\Staff;
  * @property Collection<Req> $reqs
  * @property Staff $staff
  *
- * @method string hashPassword()
- * @method bool checkPassword()
- *
  * @mixin Builder
  */
 class User extends AuthUser

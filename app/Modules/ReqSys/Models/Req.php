@@ -26,8 +26,6 @@ use Modules\ReqSys\Models\Model;
  * @property Collection<ReqStaff> $req_staff_records
  * @property Organization $organization
  *
- * @method Collection<Staff> getReqStaff()
- *
  * @mixin Builder
  */
 class Req extends Model
@@ -98,7 +96,7 @@ class Req extends Model
     /**
      * Сотрудники, вовлеченные в эту заявку
      *
-     * @return HasMany
+     * @return Collection|\Illuminate\Database\Eloquent\Builder[]
      */
     public function getReqStaff()
     {

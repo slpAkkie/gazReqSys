@@ -3,6 +3,7 @@
 namespace Modules\WT\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 use Modules\WT\Models\Model;
 
@@ -13,7 +14,7 @@ use Modules\WT\Models\Model;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Collection<Course> $courses
+ * @property Collection<User> $users
  *
  * @mixin Builder
  */
