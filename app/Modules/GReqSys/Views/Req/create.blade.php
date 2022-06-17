@@ -211,7 +211,7 @@
                     email: /^[^@]+@[^@]+\.[^@]{2,3}$/,
                     insurance_number: /^\d{3}-\d{3}-\d{3}\s\d{2}$/,
                 },
-                staffTableBlocked: false, // REVIEW
+                staffTableBlocked: false,
 
                 departments: [],
                 departmentsLoading: false,
@@ -277,7 +277,7 @@
 
                     this.removeDublicatedStaff()
                 },
-                removeStaff(uid) { // REVIEW
+                removeStaff(uid) {
                     this.formData.staff.splice(this.formData.staff.findIndex(el => el.uid === uid), 1)
                 },
                 checkInfoForStaff() {
