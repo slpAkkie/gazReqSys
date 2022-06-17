@@ -23,6 +23,7 @@ class StoreReqRequest extends FormRequest
             'staff.required'            => 'Список Сотрудников должен быть заполнен',
             'staff.array'               => 'Список сотрудников должен быть массивом',
             'staff.min'                 => 'Список сотрудников должен содержать хотя бы одну запись',
+            'staff.max'                 => 'Список сотрудников не должен содержать больше :max записей',
 
             'staff.*.first_name.required'       => 'Поле Имя сотрудника должно быть заполнено',
             'staff.*.last_name.required'        => 'Поле Фамилия сотрудника должно быть заполнено',
@@ -47,7 +48,7 @@ class StoreReqRequest extends FormRequest
             'type_id'       => 'required|exists:Modules\ReqSys\Models\ReqType,id',
             'city_id'       => 'required|exists:Modules\Gaz\Models\City,id',
             'organization_id' => 'required|exists:Modules\Gaz\Models\Organization,id',
-            'staff'         => 'required|array|min:1',
+            'staff'         => 'required|array|min:1|max:50',
 
             'staff.*.first_name'        => 'required',
             'staff.*.last_name'         => 'required',
