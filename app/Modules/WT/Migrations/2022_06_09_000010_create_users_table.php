@@ -2,7 +2,9 @@
 
 use Modules\WT\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
+use Modules\Gaz\Models\Staff;
 
 return new class extends Migration
 {
@@ -21,7 +23,7 @@ return new class extends Migration
             $table->string('login', 64)->unique();
             $table->string('password_hash', 255);
             $table->string('email', 64)->unique();
-            $table->string('insurance_number', 14)->unique();
+            $table->foreignIdFor(Staff::class, 'insurance_number')->unique()->references('insurance_number')->on(Config::get('database.connections.gaz.database' . '.staff'))->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('disabled')->default(false);
             $table->timestamps();
         });
