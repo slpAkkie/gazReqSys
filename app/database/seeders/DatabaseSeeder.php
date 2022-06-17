@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Gaz\Seeders\DatabaseSeeder as GazSeedersDatabaseSeeder;
-use Modules\GReqSys\Seeders\DatabaseSeeder as GReqSysDatabaseSeeder;
-use Modules\GWT\Seeders\DatabaseSeeder as GWTSeedersDatabaseSeeder;
+use Modules\ReqSys\Seeders\DatabaseSeeder as GReqSysDatabaseSeeder;
+use Modules\WT\Seeders\DatabaseSeeder as GWTSeedersDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {

@@ -6,8 +6,8 @@ use App\Console\Commands\DatabaseInit;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Modules\Gaz\Commands\GazDatabaseInit;
-use Modules\GReqSys\Commands\GReqSysDatabaseInit;
-use Modules\GWT\Commands\GWTDatabaseInit;
+use Modules\ReqSys\Commands\GReqSysDatabaseInit;
+use Modules\WT\Commands\GWTDatabaseInit;
 
 class Kernel extends ConsoleKernel
 {

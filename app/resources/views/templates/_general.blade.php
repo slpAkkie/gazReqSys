@@ -10,7 +10,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/GReqSys.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/ReqSys.css') }}">
 
         @yield('css')
 

@@ -62,7 +62,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => Modules\GReqSys\Models\User::class,
+            'model' => Modules\ReqSys\Models\User::class,
         ],
 
         // 'users' => [

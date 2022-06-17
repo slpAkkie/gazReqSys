@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
-use Modules\GReqSys\Models\Req;
+use Modules\ReqSys\Models\Req;
 
 /**
  * @property integer|string|null $id

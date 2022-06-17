@@ -12,8 +12,8 @@ return [
     */
 
     'modules' => [
-        'GWT',
-        'GReqSys',
+        'WT',
+        'ReqSys',
         'Gaz',
     ],
 
