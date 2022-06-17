@@ -18,8 +18,8 @@ class StoreReqRequest extends FormRequest
             'type_id.exists'            => 'Некорректное значение для Тип заявки',
             'city_id.required'          => 'Поле Область должно быть заполнено',
             'city_id.exists'            => 'Некорректное значение для Область',
-            'department_id.required'    => 'Поле Организация должно быть заполнено',
-            'department_id.exists'      => 'Некорректное значение для Организация',
+            'organization_id.required'    => 'Поле Организация должно быть заполнено',
+            'organization_id.exists'      => 'Некорректное значение для Организация',
             'staff.required'            => 'Список Сотрудников должен быть заполнен',
             'staff.array'               => 'Список сотрудников должен быть массивом',
             'staff.min'                 => 'Список сотрудников должен содержать хотя бы одну запись',
@@ -46,7 +46,7 @@ class StoreReqRequest extends FormRequest
         return [
             'type_id'       => 'required|exists:Modules\ReqSys\Models\ReqType,id',
             'city_id'       => 'required|exists:Modules\Gaz\Models\City,id',
-            'department_id' => 'required|exists:Modules\Gaz\Models\Department,id',
+            'organization_id' => 'required|exists:Modules\Gaz\Models\Organization,id',
             'staff'         => 'required|array|min:1',
 
             'staff.*.first_name'        => 'required',

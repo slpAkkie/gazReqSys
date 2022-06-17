@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Gaz\Controllers\DepartmentController;
+use Modules\Gaz\Controllers\OrganizationController;
 use Modules\Gaz\Controllers\StaffController;
 
 /*
@@ -15,7 +15,7 @@ use Modules\Gaz\Controllers\StaffController;
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::prefix('/web-api/gaz')->name('api.gaz.')->group(function () {
-        Route::get('/departments', [DepartmentController::class, 'index'])->name('department.index');
+        Route::get('/organizations', [OrganizationController::class, 'index'])->name('organization.index');
         Route::get('/staff', [StaffController::class, 'index'])->name('staff.index');
     });
 });

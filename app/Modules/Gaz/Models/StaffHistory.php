@@ -13,14 +13,14 @@ use Modules\Gaz\Models\Scopes\StaffHistoryScope;
  * @property integer|string|null $staff_id
  * @property integer $hired_at
  * @property integer|string|null $post_id
- * @property integer|string|null $department_id
+ * @property integer|string|null $organization_id
  * @property integer $fired_at
  * @property integer $created_at
  * @property integer $updated_at
  *
  * @property Staff $staff
  * @property Post $post
- * @property Department $department
+ * @property Organization $organization
  *
  * @mixin Builder
  */
@@ -52,7 +52,7 @@ class StaffHistory extends Pivot
         'staff_id',
         'hired_at',
         'post_id',
-        'department_id',
+        'organization_id',
     ];
 
     /**
@@ -107,8 +107,8 @@ class StaffHistory extends Pivot
      *
      * @return BelongsTo
      */
-    public function department()
+    public function organization()
     {
-        return $this->belongsTo(Department::class, 'department_id', 'id');
+        return $this->belongsTo(Organization::class, 'organization_id', 'id');
     }
 }

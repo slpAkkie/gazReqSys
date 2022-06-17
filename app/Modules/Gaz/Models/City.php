@@ -13,7 +13,7 @@ use Modules\Gaz\Models\Model;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Collection<Department> $departments
+ * @property Collection<Organization> $organizations
  *
  * @mixin Builder
  */
@@ -33,8 +33,8 @@ class City extends Model
      *
      * @return HasMany
      */
-    public function departments()
+    public function organizations()
     {
-        return $this->hasMany(Department::class, 'city_id', 'id');
+        return $this->hasMany(Organization::class, 'city_id', 'id');
     }
 }

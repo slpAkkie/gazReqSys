@@ -3,9 +3,9 @@
 namespace Modules\ReqSys\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\ReqSys\Models\InvolvedStaff;
+use Modules\ReqSys\Models\ReqStaff;
 
-class InvolvedStaffSeeder extends Seeder
+class ReqStaffSeeder extends Seeder
 {
     /**
      * Строки для вставки

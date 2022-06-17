@@ -38,7 +38,7 @@ class ReqController extends Controller
     {
         return view('ReqSys::Req.show', [
             'req' => $req,
-            'involved_staff' => $req->getInvolvedStaff(),
+            'req_staff' => $req->getReqStaff(),
         ]);
     }
 
@@ -62,16 +62,16 @@ class ReqController extends Controller
      * @param Collection $staffCollection
      * @return Req
      */
-    private function storeReqAndInvolvedStaff(Request $request, Collection $staffCollection)
+    private function storeReqAndReqStaff(Request $request, Collection $staffCollection)
     {
         // Создаем заявку
         ($req = new Req($request->only([
             'type_id',
-            'department_id',
+            'organization_id',
         ])))->save();
 
         // Создаем записи о вовлеченных сотрудниках
-        $req->involved_staff_records()->createMany(
+        $req->req_staff_records()->createMany(
             $staffCollection->map(function ($v) {
                 return [ 'gaz_staff_id' => $v['id'] ];
             })
@@ -140,11 +140,11 @@ class ReqController extends Controller
      * @param array $staff
      * @return Collection<Staff>
      */
-    private function validateStaff(array $staff, $department_id) {
+    private function validateStaff(array $staff, $organization_id) {
         $query = Staff::select();
 
-        $staffDataColection = Collection::make($staff)->each(function ($s) use ($query, $department_id) {
-            $query->orWhere(function ($query) use ($s, $department_id) {
+        $staffDataColection = Collection::make($staff)->each(function ($s) use ($query, $organization_id) {
+            $query->orWhere(function ($query) use ($s, $organization_id) {
                 $query->where([
                     'first_name' => $s['first_name'],
                     'last_name' => $s['last_name'],
@@ -152,8 +152,8 @@ class ReqController extends Controller
                     'emp_number' => $s['emp_number'],
                     'email' => $s['email'],
                     'insurance_number' => $s['insurance_number'],
-                ])->whereHas('departments', function($q) use ($department_id) {
-                    $q->where('departments.id', $department_id);
+                ])->whereHas('organizations', function($q) use ($organization_id) {
+                    $q->where('organizations.id', $organization_id);
                 });
             });
         });
@@ -187,10 +187,10 @@ class ReqController extends Controller
      */
     public function store(StoreReqRequest $request) {
         // Проверка корректности введеных данных сотрудниках
-        $staffCollection = $this->validateStaff($request->get('staff'), $request->get('department_id'));
+        $staffCollection = $this->validateStaff($request->get('staff'), $request->get('organization_id'));
 
         // Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
-        $req = $this->storeReqAndInvolvedStaff($request, $staffCollection);
+        $req = $this->storeReqAndReqStaff($request, $staffCollection);
 
         // Проверяем тип заявки и вызываем соответствующтий метод
         $req_type = $request->get('type_id');

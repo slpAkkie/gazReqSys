@@ -11,7 +11,9 @@ use Modules\ReqSys\Models\Model;
  * @property integer|string|null $id
  * @property integer|string|null $req_id
  * @property integer|string|null $gaz_staff_id
- * @property integer $created_at
+ * @property string|null $accepted
+ * @property string|null $refusal_reason
+ * @property integer $updated_at
  * @property integer $updated_at
  *
  * @property Req $req
@@ -19,16 +21,16 @@ use Modules\ReqSys\Models\Model;
  *
  * @mixin Builder
  */
-class InvolvedStaff extends Model
+class ReqStaff extends Model
 {
     /**
      * Таблица, используемая моделью.
      * Необходимо указать явно, так как иначе,
-     * будет преобразовано во множественное число involved_staffs
+     * будет преобразовано во множественное число req_staffs
      *
      * @var string
      */
-    protected $table = 'involved_staff';
+    protected $table = 'req_staff';
 
     /**
      * Поля, разрешенные для массовго заполнения

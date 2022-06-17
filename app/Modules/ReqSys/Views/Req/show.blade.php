@@ -15,14 +15,14 @@
             </div>
             <div class="mb-2 row gap-2">
                 <label for="city" class="form-label col-4">Область</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->department->city->title }}">
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->organization->city->title }}">
             </div>
             <div class="mb-2 row gap-2">
-                <label for="department" class="form-label col-4">Организация</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->department->title }}">
+                <label for="organization" class="form-label col-4">Организация</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->organization->title }}">
             </div>
             <div class="mb-2 row gap-2">
-                <label for="department" class="form-label col-4">Автор заявки</label>
+                <label for="organization" class="form-label col-4">Автор заявки</label>
                 <input type="text" class="col form-control" disabled="disabled" value="{{ "{$req->author_staff->getFullName()} ({$req->author_staff->emp_number})" }}">
             </div>
         </div>
@@ -39,7 +39,7 @@
                 <div class="col table__head-cell">СНИЛС</div>
             </div>
             <div class="table__body">
-                @foreach ($involved_staff as $s)
+                @foreach ($req_staff as $s)
                     <div class="table__row">
                         <div class="col table__cell">{{ $s->getFullName() }}</div>
                         <div class="col table__cell">{{ $s->emp_number }}</div>
