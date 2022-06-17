@@ -51,7 +51,7 @@ class ReqController extends Controller
     {
         return view('ReqSys::Req.create', [
             'req_types' => ReqType::all(),
-            'cities' => City::all(),
+            'cities' => City::all()->sortBy('title'),
         ]);
     }
 
