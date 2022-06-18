@@ -98,8 +98,7 @@ class ReqController extends Controller
      */
     public function confirm(Req $req)
     {
-        $req_staff_meta = $req->req_staff_meta;
-        $userRSMeta = $req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+        $userRSMeta = $req->getAuthUserReqStaff();
         $userRSMeta->accepted = true;
         $userRSMeta->save();
 
@@ -115,8 +114,7 @@ class ReqController extends Controller
      */
     public function deny(Request $request, Req $req)
     {
-        $req_staff_meta = $req->req_staff_meta;
-        $userRSMeta = $req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+        $userRSMeta = $req->getAuthUserReqStaff();
         $userRSMeta->accepted = false;
         $userRSMeta->refusal_reason = $request->get('refusal_reason');
         $userRSMeta->save();

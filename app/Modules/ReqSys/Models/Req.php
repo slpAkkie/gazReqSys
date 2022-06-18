@@ -135,4 +135,13 @@ class Req extends Model
     {
         return $this->setConnection('gaz')->belongsTo(Organization::class, 'gaz_organization_id', 'id');
     }
+
+    /**
+     * Получить авторизованного пользователя в заявке
+     *
+     *
+     */
+    public function getAuthUserReqStaff() {
+        return $this->req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+    }
 }
