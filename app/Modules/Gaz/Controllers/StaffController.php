@@ -22,13 +22,14 @@ class StaffController extends \App\Http\Controllers\Controller
         if (!$organization_id) return abort(422, 'Для поиска нужно указать организацию');
         if (!$emp_numbers) return abort(422, 'Табельные номера не переданы');
 
-        $query = Staff::whereIn('emp_number', explode(',', $emp_numbers))->leftJoin(
+        $query = Staff::selectRaw('staff.*')->whereIn('staff.emp_number', explode(',', $emp_numbers))->leftJoin(
             'staff_history',
             'staff_history.staff_id', 'staff.id'
         )->whereNull('staff_history.fired_at')
         ->where('staff_history.organization_id', $organization_id)->with('job_meta');
 
-        if (!Auth::user()->admin) $query->where(fn($q) => $q->where('manager_id', Auth::id())->orWhere('staff.id', Auth::user()->staff->id));
+
+        if (!Auth::user()->admin) $query->where(fn($q) => $q->where('staff.manager_id', Auth::user()->staff->id)->orWhere('staff.id', Auth::user()->staff->id));
 
         $foundStaff = $query->get();
 

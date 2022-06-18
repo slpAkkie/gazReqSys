@@ -4,6 +4,7 @@ namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Gaz\Models\Staff;
+use Modules\ReqSys\Models\User;
 
 class StaffSeeder extends Seeder
 {
@@ -39,42 +40,6 @@ class StaffSeeder extends Seeder
             'email'             => 'bekkerveronica@yandex.ru',
             'insurance_number'  => '222-222-222 22',
         ],
-        [
-            'last_name'         => 'Болдин',
-            'first_name'        => 'Андрей',
-            'second_name'       => 'Русланович',
-            'emp_number'        => '333333',
-            'manager_id'        => 1,
-            'email'             => 'boldin.2002@mail.ru',
-            'insurance_number'  => '333-333-333 33',
-        ],
-        [
-            'last_name'         => 'Шилина',
-            'first_name'        => 'Полина',
-            'second_name'       => 'Сергеевна',
-            'emp_number'        => '444444',
-            'manager_id'        => 1,
-            'email'             => 'shilinapolina@yandex.ru',
-            'insurance_number'  => '444-444-444 44',
-        ],
-        [
-            'last_name'         => 'Трифонов',
-            'first_name'        => 'Никита',
-            'second_name'       => 'Олегович',
-            'emp_number'        => '555555',
-            'manager_id'        => 1,
-            'email'             => 'trifka.nik@yandex.ru',
-            'insurance_number'  => '555-555-555 55',
-        ],
-        [
-            'last_name'         => 'Сорогин',
-            'first_name'        => 'Вячеслав',
-            'second_name'       => 'Олегович',
-            'emp_number'        => '666666',
-            'manager_id'        => 1,
-            'email'             => 'sorogin.slava@mail.ru',
-            'insurance_number'  => '666-666-666 66',
-        ],
     ];
 
     /**
@@ -86,5 +51,20 @@ class StaffSeeder extends Seeder
     {
         foreach (self::$rows as $r)
             (new Staff($r))->save();
+
+        for ($i = 1; $i <= 47; $i++) {
+            $f = Staff::factory();
+            if (!rand(0, 8)) $f = $f->trashed();
+
+            ($s = $f->make([
+                'manager_id' => ($user = Staff::inRandomOrder()->first()) ? $user->id : 1,
+            ]))->save();
+
+            (new User([
+                'login' => 'root'.$i + 3,
+                'staff_id' => $i + 3,
+                'password' => 'root'
+            ]))->save();
+        }
     }
 }

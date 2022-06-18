@@ -153,7 +153,7 @@ class ReqController extends Controller
     private function validateStaff(Request $request) {
         $staff = $request->get('staff');
         $organization_id = $request->get('organization_id');
-        $query = Staff::select();
+        $query = Staff::selectRaw('staff.*');
 
         // Запрос на получение всех сотрудников, которые полностью совпадают данным из запроса
         // TODO: Делать проверку на разрешение пользователю создавать заявки на этого сотрудника
@@ -175,7 +175,7 @@ class ReqController extends Controller
             'staff_history.staff_id', 'staff.id'
         )->where('staff_history.organization_id', $organization_id);
 
-        if (!Auth::user()->admin) $query->where(fn($q) => $q->where('manager_id', Auth::id())->orWhere('staff.id', Auth::user()->staff->id));
+        if (!Auth::user()->admin) $query->where(fn($q) => $q->where('staff.manager_id', Auth::user()->staff->id)->orWhere('staff.id', Auth::user()->staff->id));
 
         $staffModels = $query->get();
         $wrongStaffIndexes = Collection::make();

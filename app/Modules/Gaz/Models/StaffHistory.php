@@ -2,10 +2,12 @@
 
 namespace Modules\Gaz\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
+use Modules\Gaz\Factories\StaffHistoryFactory;
 
 /**
  * @property integer|string|null $id
@@ -26,9 +28,19 @@ use Illuminate\Database\Query\Builder;
 class StaffHistory extends Pivot
 {
     /**
-     * Используем трейт SoftDeltes
+     * Используем трейт SoftDeltes, HasFactory
      */
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
+
+    /**
+     * Создать новый инстанс фабрики
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return StaffHistoryFactory::new();
+    }
 
     /**
      * Изменить имя столбца, используемого SoftDeletes

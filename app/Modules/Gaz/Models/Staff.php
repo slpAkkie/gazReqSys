@@ -2,12 +2,13 @@
 
 namespace Modules\Gaz\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
+use Modules\Gaz\Factories\StaffFactory;
 use Modules\Gaz\Models\Model;
 use Modules\ReqSys\Models\ReqStaff;
 use Modules\ReqSys\Models\Req;
@@ -34,9 +35,19 @@ use Modules\WT\Models\User as WTUser;
 class Staff extends Model
 {
     /**
-     * Используем трейт SoftDeltes
+     * Используем трейт SoftDeltes, HasFactory
      */
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
+
+    /**
+     * Создать новый инстанс фабрики
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory<static>
+     */
+    protected static function newFactory()
+    {
+        return StaffFactory::new();
+    }
 
     /**
      * Таблица, используемая моделью.
