@@ -96,8 +96,6 @@ class ReqController extends Controller
         if ($req_staff_meta->every(fn($rsMeta) => (boolean) $rsMeta->accepted === true)) $req->status_slug = 'confirmed';
         else if ($req_staff_meta->some(fn($rsMeta) => $rsMeta->accepted !== null && (boolean) $rsMeta->accepted === false)) $req->status_slug = 'denied';
 
-        $req->touch();
-
         $req->save();
     }
 

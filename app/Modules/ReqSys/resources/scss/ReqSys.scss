@@ -70,6 +70,22 @@ body {
 
 
 /** ==================================================
+ * Template */
+
+.page {
+    &-title,
+    &-subtitle {
+        margin-bottom: 1.5rem;
+    }
+
+    &-title + &-subtitle {
+        margin-top: -1.5rem;
+    }
+}
+
+
+
+/** ==================================================
  * Forms */
 
 form.disabled {

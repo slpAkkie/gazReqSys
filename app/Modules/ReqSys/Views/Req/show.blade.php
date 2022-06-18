@@ -1,8 +1,14 @@
 @extends('ReqSys::templates.main')
 
-@section('title', 'Заявка №' . $req->id . ' от ' . $req->created_at . (($req->created_at==$req->updated_at)?'':' (Обновлено '.$req->updated_at.' )'))
+@section('title', 'Заявка №' . $req->id . ' от ' . $req->created_at)
 
 @section('content')
+    @if ($req->created_at !== $req->updated_at)
+    <h6 class="page-subtitle">
+        (Обновлено {{ $req->updated_at }})
+    </h6>
+    @endif
+
     <section>
         <a href="{{ route('req.index') }}" class="btn">Все заявки</a>
     </section>
