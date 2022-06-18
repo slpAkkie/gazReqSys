@@ -18,8 +18,8 @@ class StaffController extends \App\Http\Controllers\Controller
         $organization_id = $request->get('organization_id');
         $emp_numbers = $request->get('emp_numbers');
 
-        if (!$organization_id) return abort(404, 'Для поиска нужно указать организацию');
-        if (!$emp_numbers) return abort(404, 'Табельные номера не переданы');
+        if (!$organization_id) return abort(422, 'Для поиска нужно указать организацию');
+        if (!$emp_numbers) return abort(422, 'Табельные номера не переданы');
 
         $foundStaff = Staff::whereIn('emp_number', explode(',', $emp_numbers))->leftJoin(
             'staff_history',
