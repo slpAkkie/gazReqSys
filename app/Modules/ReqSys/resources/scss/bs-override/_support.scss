@@ -1,0 +1,7 @@
+.bg-primary {
+    background-color: $color-primary-dark !important;
+}
+
+.border-primary {
+    border-color: darken($color: $color-primary-dark, $amount: 15%) !important;
+}
