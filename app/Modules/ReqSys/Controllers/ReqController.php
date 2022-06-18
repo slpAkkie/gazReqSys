@@ -32,7 +32,7 @@ class ReqController extends Controller
                 Auth::user()->admin
                     ? Req::select()
                     : Req::where('author_id', Auth::id())
-                )->paginate(18),
+                )->orderBy('updated_at', 'DESC')->paginate(18),
         ]);
     }
 
@@ -44,7 +44,7 @@ class ReqController extends Controller
     public function indexForMe()
     {
         return view('ReqSys::index', [
-            'reqs' => Req::whereHas('req_staff_meta', fn($q) => $q->where('gaz_staff_id', Auth::user()->staff->id))->paginate(18),
+            'reqs' => Req::whereHas('req_staff_meta', fn($q) => $q->where('gaz_staff_id', Auth::user()->staff->id))->orderBy('updated_at', 'DESC')->paginate(18),
         ]);
     }
 
@@ -56,7 +56,8 @@ class ReqController extends Controller
      */
     public function show(ShowReqRequest $request, Req $req)
     {
-        $maySeeAllStaff = Auth::user()->admin || $req->author_id === Auth::id();
+        $isReqAuthor = $req->author_id === Auth::id();
+        $maySeeAllStaff = Auth::user()->admin || $isReqAuthor;
         $req_staff = $req->reqStaff();
 
         if (!$maySeeAllStaff) $req_staff->where('id', Auth::user()->staff->id);
@@ -64,7 +65,8 @@ class ReqController extends Controller
         return view('ReqSys::Req.show', [
             'req' => $req,
             'req_staff' => $req_staff->get(),
-            'already_voted' => $req->req_staff_meta->some(fn($rs) => $rs->gaz_staff_id === Auth::user()->staff->id && $rs->accepted !== null),
+            'may_vote' => ($req->status->slug !== 'denied') && !$req->req_staff_meta->some(fn($rs) => $rs->gaz_staff_id === Auth::user()->staff->id && $rs->accepted !== null) && $req->getAuthUserReqStaff(),
+            'may_be_resolved' => $isReqAuthor && $req->status->slug === 'confirmed',
         ]);
     }
 
@@ -81,6 +83,12 @@ class ReqController extends Controller
         ]);
     }
 
+    /**
+     * Проверить и обновить статус заявки
+     *
+     * @param Req $req
+     * @return void
+     */
     private function updateReqStatus(Req $req)
     {
         $req_staff_meta = $req->req_staff_meta;
@@ -89,6 +97,43 @@ class ReqController extends Controller
         else if ($req_staff_meta->some(fn($rsMeta) => $rsMeta->accepted !== null && (boolean) $rsMeta->accepted === false)) $req->status_slug = 'denied';
 
         $req->save();
+    }
+
+    /**
+     * Получить список сотрудников участвующих в заявке
+     *
+     * @param Req $req
+     * @return Collection<Staff>
+     */
+    private function getStaffForReq(Req $req)
+    {
+        return Staff::whereIn('id', $req->req_staff_meta->pluck('gaz_staff_id'))->get();
+    }
+
+    /**
+     * Провести заявку
+     *
+     * @return void
+     */
+    public function resolve(Req $req)
+    {
+        $staff = $this->getStaffForReq($req);
+
+        // Не факт, что отмечать заявку проведенной здесь хорошая идея
+        // Во время проведения, может быть ошибка
+        $req->status_slug = 'resolved';
+        $req->save();
+
+        return match($req->type_id) {
+            1 => $this->createWTAccounts($staff, $req),
+            2 => $this->disableWTAccounts($staff, $req),
+            3 => $this->fireStaff($staff, $req),
+
+            // Если тип заявки еще не был написан, вызываем ошибку
+            default => throw ValidationException::withMessages([
+                'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
+            ])
+        };
     }
 
     /**
@@ -158,7 +203,7 @@ class ReqController extends Controller
         // Если есть вариант лучше, надо переделать
         app(BackController::class)->createAccounts($staffCollection);
 
-        return response()->json($req->id);
+        return response()->redirectToRoute('req.show', $req->id);
     }
 
     /**
@@ -172,7 +217,7 @@ class ReqController extends Controller
     {
         $staffCollection->each(fn($staff) => $staff->wt_account()->exists() && $staff->wt_account->delete());
 
-        return response()->json($req->id);
+        return response()->redirectToRoute('req.show', $req->id);
     }
 
     /**
@@ -186,7 +231,7 @@ class ReqController extends Controller
     {
         $staffCollection->each(fn($staff) => $staff->delete());
 
-        return response()->json($req->id);
+        return response()->redirectToRoute('req.show', $req->id);
     }
 
     /**

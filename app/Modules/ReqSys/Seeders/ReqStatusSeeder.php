@@ -16,6 +16,7 @@ class ReqStatusSeeder extends Seeder
         [ 'slug' => 'waiting', 'title' => 'На рассмотрении' ],
         [ 'slug' => 'confirmed', 'title' => 'Подтверждена' ],
         [ 'slug' => 'denied', 'title' => 'Отклонена' ],
+        [ 'slug' => 'resolved', 'title' => 'Проведена' ],
     ];
 
     /**

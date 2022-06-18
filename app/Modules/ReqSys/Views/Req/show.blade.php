@@ -30,17 +30,25 @@
                 <input type="text" class="col form-control" disabled="disabled" value="{{ $req->status->title }}">
             </div>
 
-            @if(!$already_voted && $req->getAuthUserReqStaff())
+            @if($may_vote)
                 <form action="{{ route('req.confirm', $req->id) }}" method="POST">
                     @csrf
                     @method('put')
                     <input type="submit" class="btn btn-primary" value="Подтвердить">
                 </form>
             @endif
+
+            @if($may_be_resolved)
+                <form action="{{ route('req.resolve', $req->id) }}" method="POST">
+                    @csrf
+                    @method('put')
+                    <input type="submit" class="btn btn-primary" value="Провести">
+                </form>
+            @endif
         </div>
 
 
-        @if(!$already_voted && $req->getAuthUserReqStaff())
+        @if($may_vote)
             <div class="col-6">
                 <form class="d-flex flex-column align-items-end h-100 gap-2" action="{{ route('req.deny', $req->id) }}" method="post">
                     @csrf

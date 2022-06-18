@@ -33,6 +33,7 @@ Route::middleware('web')->group(function () {
             Route::get('/{req}', [ReqController::class, 'show'])->name('show');
             Route::put('/confirm/{req}', [ReqController::class, 'confirm'])->name('confirm');
             Route::put('/deny/{req}', [ReqController::class, 'deny'])->name('deny');
+            Route::put('/resolve/{req}', [ReqController::class, 'resolve'])->name('resolve');
         });
 
     });
