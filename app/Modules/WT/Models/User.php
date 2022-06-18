@@ -128,7 +128,7 @@ class User extends AuthUser
             function ($v) { return Str::ucfirst($v); },
             // Преобразовать ФИО в транслит, и разбить по разделителю
             // Получим массив ФИО в транслитерации
-            explode('-', Str::slug((new \Modules\WT\Helpers\WTHelper)->transliterate($this->getFullName())))
+            explode(' ', (new WTHelper)->transliterate($this->getFullName()))
         );
     }
 
