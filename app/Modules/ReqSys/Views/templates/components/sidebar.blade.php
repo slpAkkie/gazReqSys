@@ -1,6 +1,7 @@
 <aside class="sidebar col-2 p-4" id="sidebar">
-    <div class="sidebar__header">
-        <h3 class="sidebar__title mb-3">Система заявок ГАЗ</h3>
+    <div class="sidebar__header mb-3">
+        <h3 class="sidebar__title">Система заявок ГАЗ</h3>
+        <h6 class="fw-semibold">{{ Auth::user()->staff->getFullName() }}</h6>
     </div>
 
     <nav class="sb-nav d-flex flex-column h-100">
