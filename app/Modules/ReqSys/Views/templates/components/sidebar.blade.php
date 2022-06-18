@@ -1,4 +1,4 @@
-<aside class="sidebar col-2 p-4">
+<aside class="sidebar col-2 p-4" id="sidebar">
     <div class="sidebar__header">
         <h3 class="sidebar__title mb-3">Система заявок ГАЗ</h3>
     </div>
@@ -8,6 +8,16 @@
             <li class="sb-nav__li mb-2"><a class="sb-nav__link text-decoration-none" href="{{ route('req.index') }}">Посмотреть заявки</a></li>
             <li class="sb-nav__li"><a class="sb-nav__link text-decoration-none" href="{{ route('req.create') }}">Создать заявку</a></li>
         </ul>
-        <a class="sb-nav__link text-decoration-none fw-bold" href="{{ route('auth.logout') }}">Выйти</a>
+        <form ref="loginForm" action="{{ route('auth.logout') }}" method="post">
+            @csrf
+            @method('put')
+            <a class="sb-nav__link text-decoration-none fw-bold" @click.prevent="$refs.loginForm.submit()" href="#">Выйти</a>
+        </form>
     </nav>
 </aside>
+
+<script>
+    const sidebar = Vue.createApp({
+        name: 'Sidebar',
+    }).mount('#sidebar')
+</script>

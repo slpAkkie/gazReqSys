@@ -2,10 +2,10 @@
 
 namespace Modules\Gaz\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * @property integer|string|null $id
@@ -29,7 +29,7 @@ class City extends Model
     ];
 
     /**
-     * Получить организации в этом городе
+     * Связь: организации в городе
      *
      * @return HasMany
      */

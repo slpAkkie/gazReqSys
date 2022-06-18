@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Gaz\Resources;
+namespace Modules\Gaz\APIResources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Gaz\Models\Staff;

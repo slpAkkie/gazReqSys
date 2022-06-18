@@ -2,10 +2,6 @@
 
 @section('title', 'Создать заявку')
 
-@section('header-js')
-    <script src="{{ asset('/js/ReqSys/ReqSys.js') }}"></script>
-@endsection
-
 @section('content')
     <section id="req-form">
         <form @submit.prevent="submitForm" :class="{ disabled: formSubmiting }" action="{{ route('api.reqsys.req.store') }}" method="post">

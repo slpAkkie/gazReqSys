@@ -21,7 +21,7 @@ return new class extends Migration
         Schema::create('reqs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ReqType::class, 'type_id')->references('id')->on('req_types')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('status_slug', 16);
+            $table->string('status_slug', 16)->default('waiting');
             $table->foreign('status_slug')->references('slug')->on('req_statuses')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(User::class, 'author_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Organization::class, 'gaz_organization_id')->references('id')->on(Config::get('database.connections.gaz.database') . '.organizations')->cascadeOnUpdate()->cascadeOnDelete();

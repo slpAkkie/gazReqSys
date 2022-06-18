@@ -2,16 +2,15 @@
 
 namespace Modules\WT\Models;
 
+use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Modules\Gaz\Models\Staff;
 use Modules\WT\Jobs\SendEmail;
 use Modules\WT\Mail\ReactivateMail;
 use Modules\WT\Mail\RegistrationMail;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /**
  * @property integer|string|null $id
@@ -61,27 +60,25 @@ class User extends AuthUser
      * Сохраняется при создании пользователя
      * Чтобы отправить письмо с ним
      *
-     * @var string
+     * @var string|null
      */
-    private string $unhashed_password;
+    private ?string $unhashed_password;
 
     /**
      * Создание новой записи
      *
-     * @param Staff $attributes
-     *
-     * @return User
+     * @param array $attributes
      */
-    static public function new(Staff $attributes)
+    public function __construct(array $attributes = [])
     {
-        $model = new self($attributes->toArray());
+        parent::__construct($attributes);
 
-        $model->generatePassword();
-        $model->generateLogin();
+        if (count($attributes)) {
+            $this->generatePassword();
+            $this->generateLogin();
 
-        $model->sendRegistrationEmail();
-
-        return $model;
+            $this->sendRegistrationEmail();
+        }
     }
 
     /**
@@ -112,21 +109,12 @@ class User extends AuthUser
     }
 
     /**
-     * Сгенерировать пароль для пользователя
-     *
-     * @return void
-     */
-    private function generatePassword()
-    {
-        $this->password_hash = $this->hashPassword($this->unhashed_password = Str::random(8));
-    }
-
-    /**
      * Поулчить массив транслитерованных частей ФИО
+     * TODO: Улучшить транслитерацию
      *
      * @return array
      */
-    private function getTranslitedFullNameArr()
+    private function explodeFullName()
     {
         return array_map(
             // Преобразуем ФИО так, что бы части были с большой буквы
@@ -139,17 +127,16 @@ class User extends AuthUser
 
     /**
      * Сгенерировать логин для пользователя
+     * TODO: Предусмотреть двойную фамилию
      *
      * @return void
      */
     private function generateLogin()
     {
         /**
-         * Части имени в транслитерации
-         *
-         * @var array
+         * @var array Массив ФИО
          */
-        $full_name_arr = $this->getTranslitedFullNameArr();
+        $full_name_arr = $this->explodeFullName();
 
         /**
          * @var string Возможный Логин
@@ -162,15 +149,17 @@ class User extends AuthUser
          * @var int Сколько букв брать из имени
          */
         $loginSecondPartLength = 1;
+
         /**
          * @var int Сколько букв брать из отчества
          */
         $loginThirdPartLength = 1;
+
         /**
-         * True в случае, когда все символы ФИО уже использованы,
-         * но логин все еще занят
+         * Индикатор, что в конце логина нужно дописать рандомные символы
+         * Нужен в случае, когда брать символы из имени или отчества уже нельзя
          *
-         * @var bool Индикатор, что в конце логина нужно дописать рандомные символы
+         * @var bool
          */
         $appendSlug = false;
 
@@ -196,6 +185,53 @@ class User extends AuthUser
     }
 
     /**
+     * Сгенерировать пароль для пользователя
+     *
+     * @return void
+     */
+    private function generatePassword()
+    {
+        $this->unhashed_password = Str::random(16);
+
+        $this->setPassword($this->unhashed_password);
+    }
+
+    /**
+     * Сгенерировать соль для пароля
+     *
+     * @return void
+     */
+    private function generatePasswordSalt()
+    {
+        $this->password_salt = Str::random(255);
+    }
+
+    /**
+     * Посолить пароль
+     *
+     * @param string $passwd
+     * @return string
+     */
+    private function saltPassword(string $passwd)
+    {
+        return $this->password_salt . $passwd;
+    }
+
+    /**
+     * Установить пароль для пользователя
+     *
+     * @param string $passwd
+     * @return void
+     */
+    private function setPassword(string $passwd)
+    {
+        $this->generatePasswordSalt();
+        $this->password_hash = $this->hashPassword(
+            $this->saltPassword($passwd)
+        );
+    }
+
+    /**
      * Функция хэширования пароля
      *
      * @param string $passwd
@@ -214,7 +250,7 @@ class User extends AuthUser
      */
     public function checkPassword(string $passwd)
     {
-        return Hash::check($passwd, $this->password_hash);
+        return Hash::check($this->saltPassword($passwd), $this->password_hash);
     }
 
     /**

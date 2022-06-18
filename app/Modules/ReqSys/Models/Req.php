@@ -2,21 +2,21 @@
 
 namespace Modules\ReqSys\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Modules\ReqSys\Models\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Gaz\Models\Organization;
 use Modules\Gaz\Models\Staff;
-use Modules\ReqSys\Models\Model;
 
 /**
  * @property integer|string|null $id
- * @property integer|string|null $type_id
- * @property integer|string|null $gaz_organization_id
+ * @property integer|string $type_id
  * @property string $status_slug
- * @property integer $author_id
+ * @property integer|string $author_id
+ * @property integer|string $gaz_organization_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -37,24 +37,28 @@ class Req extends Model
      */
     protected $fillable = [
         'type_id',
-        'user_id',
+        'author_id',
         'gaz_organization_id',
     ];
 
+    /**
+     * Перехватываем создание модели
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes = [])
     {
-        if (key_exists('organization_id', $attributes)) {
-            $attributes['gaz_organization_id'] = $attributes['organization_id'];
-            unset($attributes['organization_id']);
-        }
-
-        $attributes['user_id'] = Auth::id();
-
-        parent::__construct($attributes);
+        // Вызываем родительский конструктор,
+        // и передаем правильные ключи полей
+        parent::__construct(count($attributes) ? [
+            'type_id' => $attributes['type_id'],
+            'author_id' => Auth::id(),
+            'gaz_organization_id' => $attributes['organization_id'],
+        ] : []);
     }
 
     /**
-     * Получить тип заявки
+     * Связь: тип заявки
      *
      * @return BelongsTo
      */
@@ -64,7 +68,7 @@ class Req extends Model
     }
 
     /**
-     * Получить пользователя, создавшего заявку
+     * Связь: пользователь системы ReqSys
      *
      * @return BelongsTo
      */
@@ -74,7 +78,7 @@ class Req extends Model
     }
 
     /**
-     * Поулчить сотрудника, создавшего эту заявку
+     * Связь: сотрудник соответствующий автору заявки
      *
      * @return BelongsTo
      */
@@ -84,7 +88,7 @@ class Req extends Model
     }
 
     /**
-     * Записи о вовлеченных сотрудниках
+     * Связь: участники заявки
      *
      * @return HasMany
      */
@@ -94,12 +98,18 @@ class Req extends Model
     }
 
     /**
-     * Сотрудники, вовлеченные в эту заявку
+     * Получить сотрудников, участвующих в заявке
      *
-     * @return Collection|\Illuminate\Database\Eloquent\Builder[]
+     * REVIEW: Пока не понимаю как лучше сделать связь
+     * потому что она через другую БД
+     *
+     * @return Collection<Staff>
      */
     public function getReqStaff()
     {
+        // Отключаем глобальный Scope для модели сотрудника
+        // чтобы получить информацию,
+        // даже если его учетная запись отключена
         return Staff::withFired()->whereIn(
             'id',
             $this->req_staff_records->pluck('gaz_staff_id')
@@ -107,7 +117,7 @@ class Req extends Model
     }
 
     /**
-     * Получить организацию в которой создана заявка
+     * Связь: организация, в которой создана заявка
      *
      * @return BelongsTo
      */

@@ -28,7 +28,7 @@ class ReqType extends Model
     ];
 
     /**
-     * Получить все заявки этого типа
+     * Связь: заявки этого типа
      *
      * @return HasMany
      */

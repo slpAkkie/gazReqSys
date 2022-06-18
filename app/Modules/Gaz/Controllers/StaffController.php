@@ -3,7 +3,7 @@
 namespace Modules\Gaz\Controllers;
 
 use Illuminate\Http\Request;
-use Modules\Gaz\Resources\StaffResource;
+use Modules\Gaz\APIResources\StaffResource;
 use Modules\Gaz\Models\Staff;
 
 class StaffController extends \App\Http\Controllers\Controller

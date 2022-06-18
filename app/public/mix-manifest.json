@@ -1,6 +1,5 @@
 {
     "/js/app.js": "/js/app.js",
-    "/js/ReqSys/ReqSys.js": "/js/ReqSys/ReqSys.js",
-    "/css/app.css": "/css/app.css",
-    "/css/ReqSys.css": "/css/ReqSys.css"
+    "/css/ReqSys.css": "/css/ReqSys.css",
+    "/css/app.css": "/css/app.css"
 }

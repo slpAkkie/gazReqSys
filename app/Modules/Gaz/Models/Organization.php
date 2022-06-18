@@ -2,12 +2,12 @@
 
 namespace Modules\Gaz\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Modules\Gaz\Models\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
-use Modules\Gaz\Models\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\ReqSys\Models\Req;
 
 /**
@@ -36,7 +36,7 @@ class Organization extends Model
     ];
 
     /**
-     * Получить город, в котром расположена организация
+     * Связь: город, в котором находится организация
      *
      * @return BelongsTo
      */
@@ -46,7 +46,7 @@ class Organization extends Model
     }
 
     /**
-     * Получить сотрудников этой организации
+     * Связь: сотрудники организации
      *
      * @return BelongsToMany
      */
@@ -69,7 +69,7 @@ class Organization extends Model
     }
 
     /**
-     * Получить все заявки внутри организации
+     * Связь: заявки созданные в организации
      *
      * @return HasMany
      */

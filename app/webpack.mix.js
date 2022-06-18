@@ -22,7 +22,7 @@ mix.webpackConfig({
 })
 
 mix.js('resources/js/app.js', 'public/js')
-    .js('Modules/ReqSys/resources/js/ReqSys.js', 'public/js/ReqSys')
-    .postCss('resources/css/app.css', 'public/css')
+    // .js(['Modules/ReqSys/resources/js/ReqSys.js'], 'public/js')
     .sass('resources/scss/app.scss', 'public/css')
     .sass('Modules/ReqSys/resources/scss/ReqSys.scss', 'public/css')
+    .disableNotifications()

@@ -17,9 +17,7 @@ class BackController extends \App\Http\Controllers\Controller
      */
     private function createAccount(Staff $staff)
     {
-        $user = User::new($staff);
-
-        $user->save();
+        (new User($staff->toArray()))->save();
     }
 
     /**

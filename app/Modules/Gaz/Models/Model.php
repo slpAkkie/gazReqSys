@@ -18,6 +18,6 @@ abstract class Model extends EloquentModel
      *
      * @var string
      */
-    public $connection = 'gaz';
+    protected $connection = 'gaz';
 
 }

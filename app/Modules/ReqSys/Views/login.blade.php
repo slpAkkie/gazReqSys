@@ -2,6 +2,10 @@
 
 @section('title', 'Вход')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/ReqSys.css') }}">
+@endsection
+
 @section('content')
     <h2 class="text-secondary text-center fw-normal my-3">Вход в систему</h2>
 

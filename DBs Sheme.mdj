@@ -38,7 +38,7 @@
 									"font": "Arial;13;1",
 									"left": 96,
 									"top": 109,
-									"width": 258.7568359375,
+									"width": 271.02685546875,
 									"height": 13,
 									"text": "users"
 								},
@@ -64,7 +64,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 132,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -79,7 +79,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 147,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -94,7 +94,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 162,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -109,7 +109,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 177,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -124,7 +124,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 192,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -139,7 +139,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 207,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -154,7 +154,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 222,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -169,7 +169,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 237,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -184,7 +184,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 252,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -199,7 +199,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 267,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -214,7 +214,7 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 282,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										},
 										{
@@ -229,21 +229,21 @@
 											"font": "Arial;13;0",
 											"left": 101,
 											"top": 297,
-											"width": 248.7568359375,
+											"width": 261.02685546875,
 											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 96,
 									"top": 127,
-									"width": 258.7568359375,
+									"width": 271.02685546875,
 									"height": 188
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 96,
 							"top": 104,
-							"width": 258.7568359375,
+							"width": 271.02685546875,
 							"height": 211,
 							"nameLabel": {
 								"$ref": "AAAAAAGBSCvI6Rj0sng="
@@ -726,7 +726,7 @@
 								"$ref": "AAAAAAGBSCvI6Rjz2nc="
 							},
 							"lineStyle": 1,
-							"points": "224:103;224:73"
+							"points": "226:103;225:73"
 						}
 					]
 				},
@@ -4120,11 +4120,11 @@
 								"$ref": "AAAAAAGBSEyWtQwasDA="
 							},
 							"font": "Arial;13;0",
-							"left": 480,
+							"left": 456,
 							"top": 368,
-							"width": 225,
-							"height": 55,
-							"text": "- На рассмотрении\n- Подтверждена\n- Отклонена"
+							"width": 273,
+							"height": 68,
+							"text": "- На рассмотрении (waiting: DEFAULT)\n- Подтверждена (confirmed)\n- Отклонена (denied)"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -4140,7 +4140,7 @@
 								"$ref": "AAAAAAGBczo2EtdtanU="
 							},
 							"lineStyle": 1,
-							"points": "592:463;592:423"
+							"points": "592:463;592:436"
 						}
 					]
 				},

@@ -2,13 +2,14 @@
 
 namespace Modules\ReqSys\Models;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Foundation\Auth\User as AuthUser;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Collection;
 use Modules\Gaz\Models\Staff;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @property integer|string|null $id
@@ -48,19 +49,53 @@ class User extends AuthUser
     ];
 
     /**
-     * Создать нового пользователя
+     * Перехватываем создание модели
      *
      * @param array $attributes
      */
-    static public function new(array $attributes)
+    public function __construct(array $attributes = [])
     {
-        $password = $attributes['password'];
-        unset($attributes['password']);
+        parent::__construct(count($attributes) ? [
+            'login' => $attributes['login'],
+            'gaz_staff_id' => $attributes['staff_id'],
+        ] : []);
 
-        $model = new self($attributes);
-        $model->password_hash = $model->hashPassword($password);
+        if (key_exists('password', $attributes)) $this->setPassword($attributes['password']);
+    }
 
-        return $model;
+    /**
+     * Сгенерировать соль для пароля
+     *
+     * @return void
+     */
+    private function generatePasswordSalt()
+    {
+        $this->password_salt = Str::random(255);
+    }
+
+    /**
+     * Посолить пароль
+     *
+     * @param string $passwd
+     * @return string
+     */
+    private function saltPassword(string $passwd)
+    {
+        return $this->password_salt . $passwd;
+    }
+
+    /**
+     * Установить пароль для пользователя
+     *
+     * @param string $passwd
+     * @return void
+     */
+    private function setPassword(string $passwd)
+    {
+        $this->generatePasswordSalt();
+        $this->password_hash = $this->hashPassword(
+            $this->saltPassword($passwd)
+        );
     }
 
     /**
@@ -82,11 +117,11 @@ class User extends AuthUser
      */
     public function checkPassword(string $passwd)
     {
-        return Hash::check($passwd, $this->password_hash);
+        return Hash::check($this->saltPassword($passwd), $this->password_hash);
     }
 
     /**
-     * Получить все заявки, созданные этим пользователем
+     * Связь: заявки созданные пользователем
      *
      * @return HasMany
      */
@@ -96,7 +131,7 @@ class User extends AuthUser
     }
 
     /**
-     * Получить сотрудника по пользователю
+     * Связь: сотрудник
      *
      * @return BelongsTo
      */
