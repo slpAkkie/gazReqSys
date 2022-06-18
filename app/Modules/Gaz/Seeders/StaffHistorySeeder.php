@@ -3,9 +3,6 @@
 namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
-use Modules\Gaz\Models\Organization;
-use Modules\Gaz\Models\Post;
-use Modules\Gaz\Models\Staff;
 use Modules\Gaz\Models\StaffHistory;
 
 class StaffHistorySeeder extends Seeder
@@ -42,21 +39,5 @@ class StaffHistorySeeder extends Seeder
     {
         foreach (self::$rows as $r)
             (new StaffHistory($r))->save();
-
-        for ($i = 4; $i <= Staff::orderBy('id', 'DESC')->first()->id; $i++) {
-            $notTrashed = 1;
-            do {
-                $notTrashed = !rand(0, 2);
-
-                $f = StaffHistory::factory();
-                if (!$notTrashed) $f = $f->trashed();
-
-                $f->make([
-                    'staff_id' => $i,
-                    'post_id' => Post::inRandomOrder()->first()->id,
-                    'organization_id' => Organization::inRandomOrder()->first()->id,
-                ])->save();
-            } while (!$notTrashed) ;
-        }
     }
 }

@@ -18,6 +18,16 @@ class UserSeeder extends Seeder
             'staff_id' => 1,
             'password' => 'root'
         ],
+        [
+            'login' => 'root2',
+            'staff_id' => 2,
+            'password' => 'root'
+        ],
+        [
+            'login' => 'root3',
+            'staff_id' => 3,
+            'password' => 'root'
+        ],
     ];
 
     /**

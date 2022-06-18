@@ -4,7 +4,6 @@ namespace Modules\Gaz\Seeders;
 
 use Illuminate\Database\Seeder;
 use Modules\Gaz\Models\Staff;
-use Modules\ReqSys\Models\User;
 
 class StaffSeeder extends Seeder
 {
@@ -51,20 +50,5 @@ class StaffSeeder extends Seeder
     {
         foreach (self::$rows as $r)
             (new Staff($r))->save();
-
-        for ($i = 1; $i <= 47; $i++) {
-            $f = Staff::factory();
-            if (!rand(0, 8)) $f = $f->trashed();
-
-            ($s = $f->make([
-                'manager_id' => ($user = Staff::inRandomOrder()->first()) ? $user->id : 1,
-            ]))->save();
-
-            (new User([
-                'login' => 'root'.$i + 3,
-                'staff_id' => $i + 3,
-                'password' => 'root'
-            ]))->save();
-        }
     }
 }
