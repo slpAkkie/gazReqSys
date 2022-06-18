@@ -2,7 +2,6 @@
 
 namespace Modules\Gaz\Models;
 
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -10,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Modules\Gaz\Models\Model;
-use Modules\Gaz\Models\Scopes\StaffScope;
 use Modules\ReqSys\Models\ReqStaff;
 use Modules\ReqSys\Models\Req;
 use Modules\WT\Models\User as WTUser;

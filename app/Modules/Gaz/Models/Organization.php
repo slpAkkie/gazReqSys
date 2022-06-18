@@ -52,20 +52,11 @@ class Organization extends Model
      */
     public function staff()
     {
-        return $this->belongsToMany(
-            Staff::class,
-            StaffHistory::class,
-            'organization_id',
-            'staff_id',
-            'id',
-            'id',
-        )->using(StaffHistory::class)->withPivot(
-            'hired_at',
-            'post_id',
-            'fired_at',
-            'created_at',
-            'updated_at',
-        )->as('job_meta');
+        return Staff::leftJoin(
+            'staff_history',
+            'staff_history.staff_id', 'staff.id'
+        )->whereNull('staff_history.fired_at')
+        ->where('staff_history.organization_id', $this->id)->with('job_meta');
     }
 
     /**

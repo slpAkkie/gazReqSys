@@ -24,7 +24,8 @@ class StaffController extends \App\Http\Controllers\Controller
         $foundStaff = Staff::whereIn('emp_number', explode(',', $emp_numbers))->leftJoin(
             'staff_history',
             'staff_history.staff_id', 'staff.id'
-        )->where('staff_history.organization_id', $organization_id)->get();
+        )->whereNull('staff_history.fired_at')
+        ->where('staff_history.organization_id', $organization_id)->with('job_meta')->get();
 
         if ($foundStaff->count()) return StaffResource::collection($foundStaff);
 
