@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Hash;
  * @property string $password_hash
  * @property string $password_salt
  * @property integer|string|null $gaz_staff_id
- * @property string $remember_token
  * @property bool $admin
  * @property integer $deleted_at
  * @property integer $created_at
@@ -67,6 +66,11 @@ class User extends AuthUser
         ] : []);
 
         if (key_exists('password', $attributes)) $this->setPassword($attributes['password']);
+    }
+
+    public function resetConnection()
+    {
+        $this->setConnection('reqsys');
     }
 
     /**

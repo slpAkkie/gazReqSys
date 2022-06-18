@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('password_salt', 64);
             $table->foreignIdFor(Staff::class, 'gaz_staff_id')->unique()->references('id')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('admin')->default(false);
-            $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
         });

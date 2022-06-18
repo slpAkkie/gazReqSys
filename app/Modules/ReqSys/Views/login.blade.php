@@ -27,10 +27,6 @@
                 </label>
                 <p class="invalid-feedback">@error('password') {{ $message }} @enderror</p>
             </div>
-            <div class="mb-2 form-check">
-                <input type="checkbox" id="remember_me" name="remember_me" class="form-check-input border-c-light">
-                <label class="form-check-label [@error('remember_me') is-invalid @enderror]" for="remember_me">Запомнить меня</label>
-            </div>
 
             <input type="submit" value="Войти" class="btn btn-primary w-100">
         </form>

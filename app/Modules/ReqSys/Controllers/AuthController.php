@@ -49,8 +49,9 @@ class AuthController extends Controller
         if (!$foundUser->checkPassword($request->get('password'))) return $this->returnFailedLogin();
 
         if ($foundUser->staff->trashed()) return $this->returnAccountDeactivated();
+        $foundUser->resetConnection();
 
-        Auth::login($foundUser, !!$request->get('remember_me'));
+        Auth::login($foundUser);
         $request->session()->regenerate();
 
         return response()->redirectToRoute('index');
