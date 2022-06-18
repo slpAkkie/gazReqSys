@@ -35,6 +35,15 @@ class ReqStatus extends Model
     ];
 
     /**
+     * Преобразование колонок записи
+     *
+     * @var array
+     */
+    protected $casts = [
+        'slug' => 'string',
+    ];
+
+    /**
      * Получить все заявки с этим статусом
      *
      * @return HasMany
