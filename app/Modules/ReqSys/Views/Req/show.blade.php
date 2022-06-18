@@ -30,7 +30,7 @@
                 <input type="text" class="col form-control" disabled="disabled" value="{{ $req->status->title }}">
             </div>
 
-            @if(!$already_voted)
+            @if(!$already_voted && $req->getAuthUserReqStaff())
                 <form action="{{ route('req.confirm', $req->id) }}" method="POST">
                     @csrf
                     @method('put')
@@ -40,7 +40,7 @@
         </div>
 
 
-        @if(!$already_voted)
+        @if(!$already_voted && $req->getAuthUserReqStaff())
             <div class="col-6">
                 <form class="d-flex flex-column align-items-end h-100 gap-2" action="{{ route('req.deny', $req->id) }}" method="post">
                     @csrf
