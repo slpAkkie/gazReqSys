@@ -66,7 +66,7 @@ class ReqController extends Controller
             'req' => $req,
             'req_staff' => $req_staff->get(),
             'may_vote' => ($req->status->slug !== 'denied') && !$req->req_staff_meta->some(fn($rs) => $rs->gaz_staff_id === Auth::user()->staff->id && $rs->accepted !== null) && $req->getAuthUserReqStaff(),
-            'may_be_resolved' => $isReqAuthor && $req->status->slug === 'confirmed',
+            'may_be_resolved' => (Auth::user()->admin || $isReqAuthor) && $req->status->slug === 'confirmed',
         ]);
     }
 

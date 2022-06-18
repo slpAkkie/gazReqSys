@@ -1,6 +1,6 @@
 @extends('ReqSys::templates.main')
 
-@section('title', 'Профиль')
+@section('title', 'Профиль' . (Auth::user()->admin ? ' (Администратор)' : ''))
 
 @section('content')
     <section class="row my-4">
