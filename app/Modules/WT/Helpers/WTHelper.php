@@ -2,14 +2,17 @@
 
 namespace Modules\WT\Helpers;
 
+use Illuminate\Support\Str;
+use phpDocumentor\Reflection\Types\Static_;
+
 class WTHelper
 {
     /**
-     * Список замен букв.
+     * Массив замен букв.
      *
      * @var array
      */
-    protected array $alphabet = [
+    protected static array $replacementList = [
         'а' => 'a',    'б' => 'b',    'в' => 'v',    'г' => 'g',    'д' => 'd',
         'е' => 'e',    'ё' => 'e',    'ж' => 'zh',   'з' => 'z',    'и' => 'i',
         'й' => 'y',    'к' => 'k',    'л' => 'l',    'м' => 'm',    'н' => 'n',
@@ -28,13 +31,42 @@ class WTHelper
     ];
 
     /**
+     * Массив символов
+     *
+     * @var array
+     * */
+    protected static array $symbols = [
+        ',;:!?.$/*-+&@_+;./*&?$-!,',
+        'abcdefghijklmnopqrstuvwxyz',
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        '1234567890'
+    ];
+
+
+    /**
      * Заменить русские буквы на английские.
      *
      * @param string $text
      *
      * @return string
      */
-    public function transliterate(string $text) {
-        return strtr($text, $this->alphabet);
+    public static function transliterate(string $text) {
+        return strtr($text, static::$replacementList);
+    }
+
+    /**
+     * Генерация полностью случайной строки
+     * с учетом спец. символов
+     *
+     * @param int $size
+     *
+     * @return string $text
+     */
+    public static function fullyRandomString(int $size) {
+        $text = '';
+        for ($i = 1; $i <= $size; $i++) {
+            $text .= substr(str_shuffle(static::$symbols[rand(0, count(static::$symbols)-1)]), 0, 1);
+        }
+        return $text;
     }
 }
