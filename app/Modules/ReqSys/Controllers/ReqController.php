@@ -14,6 +14,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Modules\ReqSys\Requests\ShowReqRequest;
 
@@ -63,6 +64,7 @@ class ReqController extends Controller
         return view('ReqSys::Req.show', [
             'req' => $req,
             'req_staff' => $req_staff->get(),
+            'already_voted' => $req->req_staff_meta->some(fn($rs) => $rs->gaz_staff_id === Auth::user()->staff->id && $rs->accepted !== null),
         ]);
     }
 
@@ -77,6 +79,26 @@ class ReqController extends Controller
             'req_types' => ReqType::all()->sortBy('id'),
             'cities' => City::all()->sortBy('title'),
         ]);
+    }
+
+    /**
+     * Пользователь подтверждает свое участие на заявку
+     *
+     * @return RedirectResponse
+     */
+    public function confirm(Req $req)
+    {
+        $req_staff_meta = $req->req_staff_meta;
+        $userRSMeta = $req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+        $userRSMeta->accepted = true;
+        $userRSMeta->save();
+
+        if ($req_staff_meta->every(fn($rsMeta) => (boolean) $rsMeta->accepted === true)) $req->status_slug = 'confirmed';
+        else if ($req_staff_meta->some(fn($rsMeta) => $rsMeta->accepted !== null && (boolean) $rsMeta->accepted === false)) $req->status_slug = 'denied';
+
+        $req->save();
+
+        return redirect()->back();
     }
 
     /**
@@ -216,16 +238,8 @@ class ReqController extends Controller
         // Создаем саму заявку и сохраняем сотрудников, вовлеченных в нее
         $req = $this->storeReqAndStaff($request, $staffCollection);
 
-        // Проверяем тип заявки и вызываем соответствующтий метод
-        return match($request->get('type_id')) {
-            1 => $this->createWTAccounts($staffCollection, $req),
-            2 => $this->disableWTAccounts($staffCollection, $req),
-            3 => $this->deactivateStaff($staffCollection, $req),
-
-            // Если тип заявки еще не был написан, вызываем ошибку
-            default => throw ValidationException::withMessages([
-                'type_id' => [ 'Выбранный тип заявки еще не сделан' ],
-            ])
-        };
+        // Возвращаем ответ, что заявка создана
+        // Запуск действий будет запущен после проведения
+        return response()->json($req->id);
     }
 }

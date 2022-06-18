@@ -13,10 +13,14 @@
 /** ==================================================
  * Support classes */
 
- .border-c-light {
+.border-c-light {
     border-color: $color-border !important;
 }
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.no-resize {
+    resize: none;
 }

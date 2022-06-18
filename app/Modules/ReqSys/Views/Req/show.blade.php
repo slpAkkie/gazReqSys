@@ -25,6 +25,23 @@
                 <label for="organization" class="form-label col-4">Автор заявки</label>
                 <input type="text" class="col form-control" disabled="disabled" value="{{ "{$req->author_staff->getFullName()} ({$req->author_staff->emp_number})" }}">
             </div>
+            <div class="mb-2 row gap-2">
+                <label for="organization" class="form-label col-4">Статус заявки</label>
+                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->status->title }}">
+            </div>
+
+            <form action="{{ route('req.confirm', $req->id) }}" method="POST">
+                @csrf
+                @method('put')
+                <input type="submit" class="btn btn-primary" value="Подтвердить">
+            </form>
+        </div>
+
+        <div class="col-6">
+            <div class="d-flex flex-column align-items-end h-100 gap-2">
+                <textarea class="form-control w-100 flex-grow-1" name="refusal_reason" id="refusal_reason" placeholder="Причина отказа"></textarea>
+                <input type="button" class="btn btn-danger" value="Отклонить">
+            </div>
         </div>
     </section>
 
@@ -49,5 +66,5 @@
                 @endforeach
             </div>
         </div>
-    </div>
+    </section>
 @endsection

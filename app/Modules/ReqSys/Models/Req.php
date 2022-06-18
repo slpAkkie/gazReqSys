@@ -68,6 +68,16 @@ class Req extends Model
     }
 
     /**
+     * Связь: статус заявки
+     *
+     * @return BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo(ReqStatus::class, 'status_slug', 'slug');
+    }
+
+    /**
      * Связь: пользователь системы ReqSys
      *
      * @return BelongsTo
