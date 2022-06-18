@@ -1,7 +1,7 @@
 <aside class="sidebar col-2 p-4" id="sidebar">
     <div class="sidebar__header mb-3">
-        <h3 class="sidebar__title">Система заявок ГАЗ</h3>
-        <h6 class="fw-semibold">{{ Auth::user()->staff->getFullName() }}</h6>
+        <h3 class="sidebar__title mb-4">Система заявок ГАЗ</h3>
+        <a class="h6 fw-semibold text-primary text-decoration-none" href="{{ route('user.profile') }}">{{ Auth::user()->staff->getFullName() }}</a>
     </div>
 
     <nav class="sb-nav d-flex flex-column h-100">

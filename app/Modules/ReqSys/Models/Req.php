@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Modules\Gaz\Models\Organization;
 use Modules\Gaz\Models\Staff;
 
@@ -55,6 +56,28 @@ class Req extends Model
             'author_id' => Auth::id(),
             'gaz_organization_id' => $attributes['organization_id'],
         ] : []);
+    }
+
+    /**
+     * Мутатор для даты создания заявки
+     *
+     * @param integer $value
+     * @return string
+     */
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d.m.Y H:i');
+    }
+
+    /**
+     * Мутатор для даты обновления заявки
+     *
+     * @param integer $value
+     * @return string
+     */
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d.m.Y H:i');
     }
 
     /**

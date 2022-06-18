@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 use Modules\Gaz\Factories\StaffHistoryFactory;
 
 /**
@@ -90,6 +91,17 @@ class StaffHistory extends Pivot
         if (!in_array('hired_at', $options)) $options['hired_at'] = $this->freshTimestamp();
 
         parent::save($options);
+    }
+
+    /**
+     * Мутатор для даты найма сотрудника
+     *
+     * @param integer $value
+     * @return string
+     */
+    public function getHiredAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('d.m.Y');
     }
 
     /**

@@ -26,6 +26,7 @@ use Modules\WT\Models\User as WTUser;
  * @property integer $created_at
  * @property integer $updated_at
  *
+ * @property Staff $manager
  * @property Collection<Req> $in_reqs_meta
  * @property WTUser $wt_account
  * @property Collection<StaffHistory> $job_meta
@@ -83,6 +84,16 @@ class Staff extends Model
     public function getFullName()
     {
         return $this->last_name.' '.$this->first_name.' '.$this->second_name;
+    }
+
+    /**
+     * Связь: руководитель
+     *
+     * @return BelongsTo
+     */
+    public function manager()
+    {
+        return $this->belongsTo(Staff::class, 'manager_id', 'id');
     }
 
     /**

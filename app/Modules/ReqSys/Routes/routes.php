@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\ReqSys\Controllers\AuthController;
 use Modules\ReqSys\Controllers\ReqController;
+use Modules\ReqSys\Controllers\UserController;
 use Modules\ReqSys\Controllers\WebController;
 
 /*
@@ -23,6 +24,10 @@ Route::middleware('web')->group(function () {
     Route::put('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::middleware('auth')->group(function () {
+
+        Route::prefix('/user')->name('user.')->group(function () {
+            Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+        });
 
         Route::get('/', function () { return response()->redirectToRoute('req.index'); })->name('index');
 
