@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('login', 32)->unique();
             $table->string('password_hash', 255);
-            $table->string('password_salt', 255);
+            $table->string('password_salt', 64);
             $table->foreignIdFor(Staff::class, 'gaz_staff_id')->unique()->references('id')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('admin')->default(false);
             $table->rememberToken();

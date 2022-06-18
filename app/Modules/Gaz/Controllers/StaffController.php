@@ -21,13 +21,10 @@ class StaffController extends \App\Http\Controllers\Controller
         if (!$organization_id) return abort(404, 'Для поиска нужно указать организацию');
         if (!$emp_numbers) return abort(404, 'Табельные номера не переданы');
 
-        $foundStaff = Staff::whereIn('emp_number', explode(',', $emp_numbers))->whereHas('organizations', function($q) use ($organization_id) {
-            $q->where('organizations.id', $organization_id);
-        })->get();
-
-        if ($request->has('is_wt')) $foundStaff->each(function ($s) {
-            $s->showWTInfo = true;
-        });
+        $foundStaff = Staff::whereIn('emp_number', explode(',', $emp_numbers))->leftJoin(
+            'staff_history',
+            'staff_history.staff_id', 'staff.id'
+        )->where('staff_history.organization_id', $organization_id)->get();
 
         if ($foundStaff->count()) return StaffResource::collection($foundStaff);
 

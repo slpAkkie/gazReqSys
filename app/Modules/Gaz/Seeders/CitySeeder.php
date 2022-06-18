@@ -12,7 +12,7 @@ class CitySeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [ 'title' => 'Москва' ],
         [ 'title' => 'Ярославль' ],
         [ 'title' => 'Ликино-Дулево' ],
@@ -31,7 +31,7 @@ class CitySeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new City($r))->save();
     }
 }

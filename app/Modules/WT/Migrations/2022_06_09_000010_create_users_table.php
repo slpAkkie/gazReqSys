@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('second_name', 16);
             $table->string('login', 64)->unique();
             $table->string('password_hash', 255);
-            $table->string('password_salt', 255);
+            $table->string('password_salt', 64);
             $table->string('email', 64)->unique();
             $table->string('insurance_number', 14);
             $table->foreign('insurance_number')->unique()->references('insurance_number')->on(Config::get('database.connections.gaz.database') . '.staff')->cascadeOnUpdate()->cascadeOnDelete();

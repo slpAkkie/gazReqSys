@@ -12,7 +12,7 @@ class ReqStaffSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         //
     ];
 

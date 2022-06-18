@@ -110,7 +110,7 @@ class Req extends Model
         // Отключаем глобальный Scope для модели сотрудника
         // чтобы получить информацию,
         // даже если его учетная запись отключена
-        return Staff::withFired()->whereIn(
+        return Staff::withTrashed()->whereIn(
             'id',
             $this->req_staff_records->pluck('gaz_staff_id')
         )->get();

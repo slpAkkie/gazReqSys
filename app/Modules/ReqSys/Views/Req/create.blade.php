@@ -139,7 +139,7 @@
             computed: {
                 rowCSS() {
                     return {
-                        'table__row_highlighted': this.reqTypeId == 1 && this.data.is_wt,
+                        'table__row_highlighted': this.reqTypeId == 1 && this.data.wt_acc_exists,
                     }
                 },
             },
@@ -283,7 +283,7 @@
                     this.formData.staff.splice(this.formData.staff.findIndex(el => el.uid === uid), 1)
                 },
                 checkInfoForStaff() {
-                    if (this.formData.type_id == 1 && this.formData.staff.some(s => s.is_wt))
+                    if (this.formData.type_id == 1 && this.formData.staff.some(s => s.wt_acc_exists))
                             this.alerts.staff.info = 'Отмеченные сотрудники уже имеют аккаунт WT. Создание аккаунта для них будет пропущено (Если аккаунт был деактивирован, он будет восстановлен)'
                 },
                 isStaffEmpty(staffData) {
@@ -353,7 +353,7 @@
                     try {
                         this.staffTableBlocked = true
 
-                        let response = (await axios.get(`{{ route('api.gaz.staff.index') }}?emp_numbers=${emp_numbers_query}&organization_id=${this.formData.organization_id}&is_wt`)).data.data
+                        let response = (await axios.get(`{{ route('api.gaz.staff.index') }}?emp_numbers=${emp_numbers_query}&organization_id=${this.formData.organization_id}`)).data.data
 
                         if (this.formData.staff.length !== response.length)
                             this.alerts.staff.warn = 'Данные были загружены не для всех сотрудников. Некоторые табельные номера не были найдены'

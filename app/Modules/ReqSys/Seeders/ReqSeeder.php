@@ -12,7 +12,7 @@ class ReqSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         //
     ];
 
@@ -23,7 +23,7 @@ class ReqSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new Req($r))->save();
     }
 }

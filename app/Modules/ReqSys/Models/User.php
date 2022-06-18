@@ -70,7 +70,7 @@ class User extends AuthUser
      */
     private function generatePasswordSalt()
     {
-        $this->password_salt = Str::random(255);
+        $this->password_salt = Str::random(64);
     }
 
     /**

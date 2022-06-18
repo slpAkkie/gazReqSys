@@ -12,7 +12,7 @@ class PostSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [ 'title' => 'Инженер-программист' ],
         [ 'title' => 'Системный администратоа' ],
         [ 'title' => 'Начальник отдела' ],
@@ -31,7 +31,7 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new Post($r))->save();
     }
 }

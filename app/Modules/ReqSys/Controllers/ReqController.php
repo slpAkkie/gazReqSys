@@ -143,11 +143,14 @@ class ReqController extends Controller
                     'emp_number' => $s['emp_number'],
                     'email' => $s['email'],
                     'insurance_number' => $s['insurance_number'],
-                ])->whereHas('organizations', fn($q) => $q->where('organizations.id', $organization_id))
+                ])
             )
         );
 
-        $staffModels = $query->get();
+        $staffModels = $query->leftJoin(
+            'staff_history',
+            'staff_history.staff_id', 'staff.id'
+        )->where('staff_history.organization_id', $organization_id)->get();
         $wrongStaffIndexes = Collection::make();
 
         // Нашлись не все сотрудники из запроса

@@ -1,7 +1,19 @@
 /** ==================================================
+ * Site wrapper */
+
+ .site-wrapper {
+    width: 100%;
+    height: 100vh;
+    //
+    overflow: auto;
+}
+
+
+
+/** ==================================================
  * Support classes */
 
-.border-c-light {
+ .border-c-light {
     border-color: $color-border !important;
 }
 

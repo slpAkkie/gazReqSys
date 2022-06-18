@@ -12,7 +12,7 @@ class UserCourseSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         //
     ];
 

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('hired_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->foreignIdFor(Post::class)->references('id')->on('posts')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Organization::class)->references('id')->on('organizations')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->timestamp('fired_at')->nullable();
+            $table->softDeletes('fired_at');
             $table->timestamps();
         });
     }

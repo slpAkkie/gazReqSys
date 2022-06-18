@@ -12,13 +12,12 @@ class StaffSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [
             'last_name'         => 'Шаманин',
             'first_name'        => 'Александр',
             'second_name'       => 'Сергеевич',
             'emp_number'        => '000000',
-            'manager_id'        => 1,
             'email'             => 'slpgservice@gmail.com',
             'insurance_number'  => '000-000-000 00',
         ],
@@ -85,7 +84,7 @@ class StaffSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new Staff($r))->save();
     }
 }

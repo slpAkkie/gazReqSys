@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [
             'login' => 'root',
             'staff_id' => 1,
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new User($r))->save();
     }
 }

@@ -2,11 +2,12 @@
 
 namespace Modules\Gaz\Models;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
-use Modules\Gaz\Models\Scopes\StaffHistoryScope;
 
 /**
  * @property integer|string|null $id
@@ -26,6 +27,16 @@ use Modules\Gaz\Models\Scopes\StaffHistoryScope;
  */
 class StaffHistory extends Pivot
 {
+    /**
+     * Используем трейт SoftDeltes
+     */
+    use SoftDeletes;
+
+    /**
+     * Изменить имя столбца, используемого SoftDeletes
+     */
+    const DELETED_AT = 'fired_at';
+
     /**
      * Соединение к базе данных для моделей модуля Gaz
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
@@ -54,17 +65,6 @@ class StaffHistory extends Pivot
         'post_id',
         'organization_id',
     ];
-
-    /**
-     * Хук запуска модели
-     * Устанавливаем здесь глобальный Scope
-     *
-     * @return void
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new StaffHistoryScope);
-    }
 
     /**
      * Переопределение метода модели save

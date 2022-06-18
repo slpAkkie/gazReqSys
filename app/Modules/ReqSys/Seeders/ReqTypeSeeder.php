@@ -12,7 +12,7 @@ class ReqTypeSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [ 'title' => 'ИС WebTutor: Создать аккаунт для сотрудника' ],
         [ 'title' => 'ИС WebTutor: Деактивировать аккаунты' ],
         [ 'title' => 'Сотрудники: Деактивация учетной записи' ],
@@ -25,7 +25,7 @@ class ReqTypeSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new ReqType($r))->save();
     }
 }

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('emp_number', 6);
             $table->string('email', 64)->unique();
             $table->string('insurance_number', 14)->unique();
-            $table->foreignIdFor(Staff::class, 'manager_id')->references('id')->on('staff')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(Staff::class, 'manager_id')->nullable()->references('id')->on('staff')->cascadeOnUpdate()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

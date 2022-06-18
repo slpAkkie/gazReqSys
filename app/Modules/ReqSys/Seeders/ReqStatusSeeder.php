@@ -12,7 +12,7 @@ class ReqStatusSeeder extends Seeder
      *
      * @var array
      */
-    protected $rows = [
+    public static $rows = [
         [ 'slug' => 'waiting', 'title' => 'На рассмотрении' ],
         [ 'slug' => 'confirmed', 'title' => 'Подтверждена' ],
         [ 'slug' => 'denied', 'title' => 'Отклонена' ],
@@ -25,7 +25,7 @@ class ReqStatusSeeder extends Seeder
      */
     public function run()
     {
-        foreach ($this->rows as $r)
+        foreach (self::$rows as $r)
             (new ReqStatus($r))->save();
     }
 }
