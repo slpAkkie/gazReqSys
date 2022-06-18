@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\WT\Jobs\SendEmail;
 use Modules\WT\Mail\ReactivateMail;
 use Modules\WT\Mail\RegistrationMail;
@@ -33,6 +34,11 @@ use Illuminate\Support\Str;
  */
 class User extends AuthUser
 {
+    /**
+     * Используем трейт SoftDeltes
+     */
+    use SoftDeletes;
+
     /**
      * Соединение к базе данных для моделей модуля WT
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
@@ -260,7 +266,7 @@ class User extends AuthUser
      */
     public function disable()
     {
-        $this->disabled = true;
+        $this->delete();
         $this->save();
 
         return $this;
@@ -273,7 +279,7 @@ class User extends AuthUser
      */
     public function enable()
     {
-        $this->disabled = false;
+        $this->restore();
         $this->generatePassword();
         $this->save();
 

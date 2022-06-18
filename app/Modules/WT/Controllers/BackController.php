@@ -34,7 +34,7 @@ class BackController extends \App\Http\Controllers\Controller
          *
          * @var Collection<User>
          */
-        $alreadyRegistered = User::whereIn('insurance_number', $staffCollection->pluck('insurance_number'))->get();
+        $alreadyRegistered = User::withTrashed()->whereIn('insurance_number', $staffCollection->pluck('insurance_number'))->get();
 
         foreach ($staffCollection as $staff) {
             // Проверяем есть ли у этого сотрудника аккаунт
@@ -43,7 +43,7 @@ class BackController extends \App\Http\Controllers\Controller
             });
 
             // У тех, кто уже имеет аккаунт, если он отключен - активируем
-            if ($user && $user->disabled) $user->enable();
+            if ($user && $user->trashed()) $user->enable();
             // Для остальных создаем аккаунт
             else if(!$user) $this->createAccount($staff);
         }

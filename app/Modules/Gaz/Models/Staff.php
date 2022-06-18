@@ -86,7 +86,7 @@ class Staff extends Model
      */
     public function wt_account()
     {
-        return $this->setConnection('wt')->hasOne(WTUser::class, 'insurance_number', 'insurance_number');
+        return $this->setConnection('wt')->hasOne(WTUser::class, 'insurance_number', 'insurance_number')->withTrashed();
     }
 
     /**

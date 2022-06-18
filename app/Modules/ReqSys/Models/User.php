@@ -7,6 +7,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Gaz\Models\Staff;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +31,11 @@ use Illuminate\Support\Facades\Hash;
  */
 class User extends AuthUser
 {
+    /**
+     * Используем трейт SoftDeltes
+     */
+    use SoftDeletes;
+
     /**
      * Соединение к базе данных для моделей модуля ReqSys
      * Так как наследуемся не от базовой модели для этого модуля, нужно указать это явно
