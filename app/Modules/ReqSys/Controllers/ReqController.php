@@ -81,6 +81,16 @@ class ReqController extends Controller
         ]);
     }
 
+    private function updateReqStatus(Req $req)
+    {
+        $req_staff_meta = $req->req_staff_meta;
+
+        if ($req_staff_meta->every(fn($rsMeta) => (boolean) $rsMeta->accepted === true)) $req->status_slug = 'confirmed';
+        else if ($req_staff_meta->some(fn($rsMeta) => $rsMeta->accepted !== null && (boolean) $rsMeta->accepted === false)) $req->status_slug = 'denied';
+
+        $req->save();
+    }
+
     /**
      * Пользователь подтверждает свое участие на заявку
      *
@@ -93,10 +103,25 @@ class ReqController extends Controller
         $userRSMeta->accepted = true;
         $userRSMeta->save();
 
-        if ($req_staff_meta->every(fn($rsMeta) => (boolean) $rsMeta->accepted === true)) $req->status_slug = 'confirmed';
-        else if ($req_staff_meta->some(fn($rsMeta) => $rsMeta->accepted !== null && (boolean) $rsMeta->accepted === false)) $req->status_slug = 'denied';
+        $this->updateReqStatus($req);
 
-        $req->save();
+        return redirect()->back();
+    }
+
+    /**
+     * Пользователь отклоняет свое участие в заявке
+     *
+     * @return RedirectResponse
+     */
+    public function deny(Request $request, Req $req)
+    {
+        $req_staff_meta = $req->req_staff_meta;
+        $userRSMeta = $req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+        $userRSMeta->accepted = false;
+        $userRSMeta->refusal_reason = $request->get('refusal_reason');
+        $userRSMeta->save();
+
+        $this->updateReqStatus($req);
 
         return redirect()->back();
     }

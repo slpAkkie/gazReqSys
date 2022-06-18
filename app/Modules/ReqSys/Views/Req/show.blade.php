@@ -30,19 +30,26 @@
                 <input type="text" class="col form-control" disabled="disabled" value="{{ $req->status->title }}">
             </div>
 
-            <form action="{{ route('req.confirm', $req->id) }}" method="POST">
-                @csrf
-                @method('put')
-                <input type="submit" class="btn btn-primary" value="Подтвердить">
-            </form>
+            @if(!$already_voted)
+                <form action="{{ route('req.confirm', $req->id) }}" method="POST">
+                    @csrf
+                    @method('put')
+                    <input type="submit" class="btn btn-primary" value="Подтвердить">
+                </form>
+            @endif
         </div>
 
-        <div class="col-6">
-            <div class="d-flex flex-column align-items-end h-100 gap-2">
-                <textarea class="form-control w-100 flex-grow-1" name="refusal_reason" id="refusal_reason" placeholder="Причина отказа"></textarea>
-                <input type="button" class="btn btn-danger" value="Отклонить">
+
+        @if(!$already_voted)
+            <div class="col-6">
+                <form class="d-flex flex-column align-items-end h-100 gap-2" action="{{ route('req.deny', $req->id) }}" method="post">
+                    @csrf
+                    @method('put')
+                    <textarea class="form-control w-100 flex-grow-1" name="refusal_reason" id="refusal_reason" placeholder="Причина отказа"></textarea>
+                    <input type="submit" class="btn btn-danger" value="Отклонить">
+                </form>
             </div>
-        </div>
+        @endif
     </section>
 
     <section>

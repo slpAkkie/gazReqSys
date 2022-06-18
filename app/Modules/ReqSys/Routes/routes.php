@@ -32,6 +32,7 @@ Route::middleware('web')->group(function () {
             Route::get('/create', [ReqController::class, 'create'])->name('create');
             Route::get('/{req}', [ReqController::class, 'show'])->name('show');
             Route::put('/confirm/{req}', [ReqController::class, 'confirm'])->name('confirm');
+            Route::put('/deny/{req}', [ReqController::class, 'deny'])->name('deny');
         });
 
     });
