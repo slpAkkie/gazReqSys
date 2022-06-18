@@ -24,6 +24,18 @@ class AuthController extends Controller
     }
 
     /**
+     * Отправить пользователя назад с пояснением ошибки
+     *
+     * @return RedirectResponse
+     */
+    private function returnAccountDeactivated()
+    {
+        return redirect()->back()->withErrors([
+            'login' => [ 'Аккаунт сотрудника деактивирован' ],
+        ])->withInput();
+    }
+
+    /**
      * Handle POST login request
      *
      * @param LoginRequest $request
@@ -35,6 +47,8 @@ class AuthController extends Controller
         if (!$foundUser) return $this->returnFailedLogin();
 
         if (!$foundUser->checkPassword($request->get('password'))) return $this->returnFailedLogin();
+
+        if ($foundUser->staff->trashed()) return $this->returnAccountDeactivated();
 
         Auth::login($foundUser, !!$request->get('remember_me'));
         $request->session()->regenerate();

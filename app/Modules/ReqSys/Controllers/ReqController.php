@@ -14,6 +14,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
+use Modules\ReqSys\Requests\ShowReqRequest;
 
 class ReqController extends Controller
 {
@@ -25,7 +27,23 @@ class ReqController extends Controller
     public function index()
     {
         return view('ReqSys::index', [
-            'reqs' => Req::paginate(18),
+            'reqs' => (
+                Auth::user()->admin
+                    ? Req::select()
+                    : Req::where('author_id', Auth::id())
+                )->paginate(18),
+        ]);
+    }
+
+    /**
+     * Страница с выводом всех заявок
+     *
+     * @return View
+     */
+    public function indexForMe()
+    {
+        return view('ReqSys::index', [
+            'reqs' => Req::whereHas('req_staff_meta', fn($q) => $q->where('gaz_staff_id', Auth::user()->staff->id))->paginate(18),
         ]);
     }
 
@@ -35,11 +53,16 @@ class ReqController extends Controller
      *
      * @return View
      */
-    public function show(Req $req)
+    public function show(ShowReqRequest $request, Req $req)
     {
+        $maySeeAllStaff = Auth::user()->admin || $req->author_id === Auth::id();
+        $req_staff = $req->reqStaff();
+
+        if (!$maySeeAllStaff) $req_staff->where('id', Auth::user()->staff->id);
+
         return view('ReqSys::Req.show', [
             'req' => $req,
-            'req_staff' => $req->reqStaff()->get(),
+            'req_staff' => $req_staff->get(),
         ]);
     }
 
@@ -102,7 +125,7 @@ class ReqController extends Controller
      */
     private function disableWTAccounts(Collection $staffCollection, Req $req)
     {
-        $staffCollection->each(fn($staff) => $staff->wt_account->disable());
+        $staffCollection->each(fn($staff) => $staff->wt_account()->exists() && $staff->wt_account->delete());
 
         return response()->json($req->id);
     }
@@ -114,9 +137,9 @@ class ReqController extends Controller
      * @param Req $req
      * @return JsonResponse
      */
-    private function fireStaff(Collection $staffCollection, Req $req)
+    private function deactivateStaff(Collection $staffCollection, Req $req)
     {
-        $staffCollection->each(fn($staff) => $staff->fire());
+        $staffCollection->each(fn($staff) => $staff->delete());
 
         return response()->json($req->id);
     }
@@ -147,10 +170,14 @@ class ReqController extends Controller
             )
         );
 
-        $staffModels = $query->leftJoin(
+        $query = $query->leftJoin(
             'staff_history',
             'staff_history.staff_id', 'staff.id'
-        )->where('staff_history.organization_id', $organization_id)->get();
+        )->where('staff_history.organization_id', $organization_id);
+
+        if (!Auth::user()->admin) $query->where(fn($q) => $q->where('manager_id', Auth::id())->orWhere('staff.id', Auth::user()->staff->id));
+
+        $staffModels = $query->get();
         $wrongStaffIndexes = Collection::make();
 
         // Нашлись не все сотрудники из запроса
@@ -167,7 +194,7 @@ class ReqController extends Controller
 
             // Бросаем исключение об ошибке в валидации данных запроса
             throw ValidationException::withMessages((array) $wrongStaffIndexes->reduce(function ($errors, $i) {
-                $errors['staff.'.$i] = [ 'Сотрудника с такими данными не существует' ];
+                $errors['staff.'.$i] = [ 'Сотрудника с такими данными не существует или вы не являетесь его руководителем' ];
 
                 return $errors;
             }, []));
@@ -193,7 +220,7 @@ class ReqController extends Controller
         return match($request->get('type_id')) {
             1 => $this->createWTAccounts($staffCollection, $req),
             2 => $this->disableWTAccounts($staffCollection, $req),
-            3 => $this->fireStaff($staffCollection, $req),
+            3 => $this->deactivateStaff($staffCollection, $req),
 
             // Если тип заявки еще не был написан, вызываем ошибку
             default => throw ValidationException::withMessages([
