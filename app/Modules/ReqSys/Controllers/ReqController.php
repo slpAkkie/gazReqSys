@@ -39,7 +39,7 @@ class ReqController extends Controller
     {
         return view('ReqSys::Req.show', [
             'req' => $req,
-            'req_staff' => $req->getReqStaff(),
+            'req_staff' => $req->reqStaff()->get(),
         ]);
     }
 
@@ -70,7 +70,7 @@ class ReqController extends Controller
             'organization_id',
         ])))->save();
 
-        $req->req_staff_records()->createMany(
+        $req->req_staff_meta()->createMany(
             $staffCollection->map(fn($v) => [ 'gaz_staff_id' => $v['id'] ])
         )->each(fn($model) => $model->save());
 

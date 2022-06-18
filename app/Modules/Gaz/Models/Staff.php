@@ -25,11 +25,9 @@ use Modules\WT\Models\User as WTUser;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property Collection<Organization> $organization
- * @property Collection<Post> $posts
- * @property Collection<StaffHistory> $job_meta
- * @property Collection<Req> $involved_in
+ * @property Collection<Req> $in_reqs_meta
  * @property WTUser $wt_account
+ * @property Collection<StaffHistory> $job_meta
  *
  * @mixin Builder
  */
@@ -110,7 +108,7 @@ class Staff extends Model
     /**
      * Получить все организации, где работал сотрудник
      *
-     * @return BelongsToMany
+     * @return Organization
      */
     public function getOrganization()
     {
@@ -120,7 +118,7 @@ class Staff extends Model
     /**
      * Получить все должность, на которых работал сотрудник
      *
-     * @return BelongsToMany
+     * @return Post
      */
     public function getPost()
     {

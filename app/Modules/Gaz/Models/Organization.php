@@ -5,7 +5,6 @@ namespace Modules\Gaz\Models;
 use Modules\Gaz\Models\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Collection;
 use Modules\ReqSys\Models\Req;
@@ -18,7 +17,6 @@ use Modules\ReqSys\Models\Req;
  * @property integer $updated_at
  *
  * @property City $city
- * @property Collection<Staff> $staff
  * @property Collection<Req> $reqs
  *
  * @mixin Builder
@@ -48,7 +46,7 @@ class Organization extends Model
     /**
      * Связь: сотрудники организации
      *
-     * @return BelongsToMany
+     * @return Builder
      */
     public function staff()
     {

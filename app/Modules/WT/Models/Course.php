@@ -37,16 +37,10 @@ class Course extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(
-            User::class,
-            UserCourse::class,
-            'course_id',
-            'user_id',
-            'id',
-            'id',
-        )->using(UserCourse::class)->withPivot(
-            'created_at',
-            'updated_at',
-        )->as('metadata');
+        return User::leftJoin(
+            'user_courses',
+            'user_courses.user_id', 'users.id'
+        )->whereNull('users.deleted_at')
+        ->where('user_courses.course_id', $this->id);
     }
 }

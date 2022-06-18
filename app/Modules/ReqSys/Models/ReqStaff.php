@@ -49,10 +49,7 @@ class ReqStaff extends Model
      */
     public function staff()
     {
-        // Отключаем глобальный Scope для модели сотрудника
-        // чтобы получить информацию,
-        // даже если его учетная запись отключена
-        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id')->withoutGlobalScopes();
+        return $this->setConnection('gaz')->belongsTo(Staff::class, 'gaz_staff_id', 'id')->withTrashed();
     }
 
     /**

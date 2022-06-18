@@ -2,9 +2,7 @@
 
 namespace Modules\Gaz\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Modules\Gaz\Models\Model;
 
 /**
@@ -12,8 +10,6 @@ use Modules\Gaz\Models\Model;
  * @property string $title
  * @property integer $created_at
  * @property integer $updated_at
- *
- * @property Collection<Staff> $staff
  *
  * @mixin Builder
  */
@@ -31,23 +27,14 @@ class Post extends Model
     /**
      * Получить всех сотрудников, которые сейчас занимают эту должность
      *
-     * @return BelongsToMany
+     * @return Builder
      */
     public function staff()
     {
-        return $this->belongsToMany(
-            Staff::class,
-            StaffHistory::class,
-            'post_id',
-            'staff_id',
-            'id',
-            'id',
-        )->using(StaffHistory::class)->withPivot(
-            'hired_at',
-            'organization_id',
-            'fired_at',
-            'created_at',
-            'updated_at',
-        )->as('job_meta');
+        return Staff::leftJoin(
+            'staff_history',
+            'staff_history.staff_id', 'staff.id'
+        )->whereNull('staff_history.fired_at')
+        ->where('staff_history.post_id', $this->id)->with('job_meta');
     }
 }

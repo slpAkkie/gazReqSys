@@ -23,7 +23,7 @@ use Modules\Gaz\Models\Staff;
  * @property ReqType $type
  * @property User $author
  * @property Staff $author_staff
- * @property Collection<ReqStaff> $req_staff_records
+ * @property Collection<ReqStaff> $req_staff_meta
  * @property Organization $organization
  *
  * @mixin Builder
@@ -92,7 +92,7 @@ class Req extends Model
      *
      * @return HasMany
      */
-    public function req_staff_records()
+    public function req_staff_meta()
     {
         return $this->hasMany(ReqStaff::class, 'req_id', 'id');
     }
@@ -103,17 +103,17 @@ class Req extends Model
      * REVIEW: Пока не понимаю как лучше сделать связь
      * потому что она через другую БД
      *
-     * @return Collection<Staff>
+     * @return Builder
      */
-    public function getReqStaff()
+    public function reqStaff()
     {
         // Отключаем глобальный Scope для модели сотрудника
         // чтобы получить информацию,
         // даже если его учетная запись отключена
         return Staff::withTrashed()->whereIn(
             'id',
-            $this->req_staff_records->pluck('gaz_staff_id')
-        )->get();
+            $this->req_staff_meta->pluck('gaz_staff_id')
+        );
     }
 
     /**

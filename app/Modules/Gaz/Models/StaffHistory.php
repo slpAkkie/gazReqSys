@@ -2,12 +2,10 @@
 
 namespace Modules\Gaz\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Carbon;
 
 /**
  * @property integer|string|null $id
@@ -77,7 +75,7 @@ class StaffHistory extends Pivot
      */
     public function save(array $options = [])
     {
-        if (!in_array('hired_at', $options)) $options['hired_at'] = Carbon::now();
+        if (!in_array('hired_at', $options)) $options['hired_at'] = $this->freshTimestamp();
 
         parent::save($options);
     }
