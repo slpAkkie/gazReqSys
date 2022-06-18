@@ -7,7 +7,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\WT\Helpers\WTHelper;
+use Helpers\Str as HelperStr;
 use Modules\WT\Jobs\SendEmail;
 use Modules\WT\Mail\ReactivateMail;
 use Modules\WT\Mail\RegistrationMail;
@@ -128,7 +128,7 @@ class User extends AuthUser
             function ($v) { return Str::ucfirst($v); },
             // Преобразовать ФИО в транслит, и разбить по разделителю
             // Получим массив ФИО в транслитерации
-            explode(' ', WTHelper::transliterate($this->getFullName()))
+            explode(' ', HelperStr::transliterate($this->getFullName()))
         );
     }
 
@@ -198,7 +198,7 @@ class User extends AuthUser
      */
     private function generatePassword()
     {
-        $this->unhashed_password = WTHelper::fullyRandomString(16);
+        $this->unhashed_password = HelperStr::fullyRandomString(16);
 
         $this->setPassword($this->unhashed_password);
     }

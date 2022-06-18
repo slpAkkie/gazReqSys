@@ -1,11 +1,8 @@
 <?php
 
-namespace Modules\WT\Helpers;
+namespace Helpers;
 
-use Illuminate\Support\Str;
-use phpDocumentor\Reflection\Types\Static_;
-
-class WTHelper
+class Str
 {
     /**
      * Массив замен букв.
