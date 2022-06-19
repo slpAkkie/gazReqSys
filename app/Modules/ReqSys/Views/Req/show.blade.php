@@ -10,7 +10,7 @@
     @endif
 
     <section>
-        <a href="{{ route('req.index') }}" class="btn">Все заявки</a>
+        <a href="{{ url()->previous() }}" class="btn">Назад</a>
     </section>
 
     <section class="row my-4">
