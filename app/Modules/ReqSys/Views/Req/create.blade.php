@@ -266,11 +266,13 @@
             },
             methods: {
                 addStaff() {
+                    if (this.formData.staff.length >= this.maxStaffCount) return
                     this.formData.staff.push(this.newStaffData)
                     this.nextStaffUID++
                 },
                 pasteStaff({ emp_numbers, uid, index }) {
                     for (let emp_number; emp_number = emp_numbers.shift(); this.nextStaffUID++) {
+                        if (this.formData.staff.length >= this.maxStaffCount) continue
                         let newStaff = this.newStaffData
                         newStaff.emp_number = emp_number
 
