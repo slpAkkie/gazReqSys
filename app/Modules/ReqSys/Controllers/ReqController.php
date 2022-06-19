@@ -73,8 +73,11 @@ class ReqController extends Controller
         $req_staff = $req->reqStaff();
 
         $req_staff->where(function ($q) use ($req) {
-            if (!$req->isAuthUserHasFullAccess()) $q->where('id', Auth::user()->staff->id);
-            if ($req->meOrMyStaff()) $q->orWhere('manager_id', Auth::user()->staff->id);
+            if (!$req->isAuthUserHasFullAccess()) {
+                $q->where('id', Auth::user()->staff->id);
+
+                if ($req->meOrMyStaff()) $q->orWhere('manager_id', Auth::user()->staff->id);
+            }
         });
 
         return view('ReqSys::Req.show', [
