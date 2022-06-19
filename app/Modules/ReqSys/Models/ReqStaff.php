@@ -43,6 +43,22 @@ class ReqStaff extends Model
     ];
 
     /**
+     * Мутатор для статуса соглашение пользователя с заявкой
+     *
+     * @param integer $value
+     * @return string
+     */
+    public function getAcceptedAttribute($value)
+    {
+        return match($value) {
+            0 => false,
+            1 => true,
+
+            default => null
+        };
+    }
+
+    /**
      * Связь: сотрудник
      *
      * @return BelongsTo

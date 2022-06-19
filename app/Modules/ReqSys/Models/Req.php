@@ -81,6 +81,60 @@ class Req extends Model
     }
 
     /**
+     * Получить авторизованного пользователя в заявке
+     *
+     * @return ReqStaff
+     */
+    public function getAuthUserReqStaff() {
+        return $this->req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
+    }
+
+    /**
+     * Отмечал ли пользователь уже свое участие в заявке
+     *
+     * @return ?boolean
+     */
+    public function isAuthUserAlreadyVote()
+    {
+        $user = $this->getAuthUserReqStaff();
+        if (!$user) return null;
+
+        return $user->accepted !== null;
+    }
+
+    /**
+     * Имеет ли авторизованный пользователь полный доступ к заявке
+     *
+     * @return boolean
+     */
+    public function isAuthUserHasFullAccess()
+    {
+        return ($this->author_id === Auth::id()) || Auth::user()->admin;
+    }
+
+    /**
+     * Получить того пользователя, который отклонил заявку
+     *
+     * @return ReqStaff
+     */
+    public function getUserWhoDenied()
+    {
+        return $this->req_staff_meta->filter(fn($rsMeta) => $rsMeta->accepted === false)->first();
+    }
+
+    /**
+     * Получить причину, по котрой заявка была отклонена
+     *
+     * @return string
+     */
+    public function getRefusalReason()
+    {
+        if ($this->status->slug !== 'denied') return null;
+
+        return $this->getUserWhoDenied()->refusal_reason;
+    }
+
+    /**
      * Связь: тип заявки
      *
      * @return BelongsTo
@@ -157,14 +211,5 @@ class Req extends Model
     public function organization()
     {
         return $this->setConnection('gaz')->belongsTo(Organization::class, 'gaz_organization_id', 'id');
-    }
-
-    /**
-     * Получить авторизованного пользователя в заявке
-     *
-     *
-     */
-    public function getAuthUserReqStaff() {
-        return $this->req_staff_meta->filter(fn($rsMeta) => $rsMeta->gaz_staff_id === Auth::user()->staff->id)->first();
     }
 }

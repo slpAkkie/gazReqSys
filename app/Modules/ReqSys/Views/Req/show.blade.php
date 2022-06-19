@@ -65,6 +65,13 @@
                     <input type="submit" class="btn btn-danger" value="Отклонить">
                 </form>
             </div>
+        @elseif($req->status->slug === 'denied')
+            <div class="col-6">
+                <div class="alert alert-danger" role="alert">
+                    <h5>Причина отказа</h5>
+                    <span class="fw-semibold">{{ $req->getUserWhoDenied()->staff->getFullName() }}:</span> {{ $req->getRefusalReason() }}
+                </div>
+            </div>
         @endif
     </section>
 
