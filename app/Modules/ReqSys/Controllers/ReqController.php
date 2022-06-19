@@ -296,7 +296,7 @@ class ReqController extends Controller
         $staffModels = $staffModels->unique();
 
         // Нашлись не все сотрудники из запроса
-        if ($staffDataColection->count() < $staffModels->count()) {
+        if ($staffDataColection->count() > $staffModels->count()) {
             $insurance_numbers = $staffModels->pluck('insurance_number');
 
             // Если итерируемого СНИЛС нет в списке полученных сотрудников,
