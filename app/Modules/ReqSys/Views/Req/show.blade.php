@@ -10,7 +10,7 @@
     @endif
 
     <section>
-        <a href="{{ url()->previous() }}" class="btn">Назад</a>
+        <a href="{{ route('req.index') }}" class="btn">{{ Auth::user()->admin ? 'Все заявки' : 'Мои заявки' }}</a>
     </section>
 
     <section class="row my-4">
