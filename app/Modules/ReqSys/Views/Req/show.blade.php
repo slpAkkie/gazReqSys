@@ -57,17 +57,17 @@
 
 
         @if($may_vote)
-            <div class="col-6">
+            <div class="col-6" id="refusal_reason">
                 <form class="d-flex flex-column align-items-end h-100 gap-2" action="{{ route('req.deny', $req->id) }}" method="post">
                     @csrf
                     @method('put')
-                    <textarea class="form-control w-100 flex-grow-1" name="refusal_reason" id="refusal_reason" placeholder="Причина отказа"></textarea>
+                    <textarea class="form-control w-100 flex-grow-1" name="refusal_reason" v-model="formData.refusal_reason" id="refusal_reason" placeholder="Причина отказа"></textarea>
                     <input type="submit" class="btn btn-danger" value="Отклонить">
                 </form>
             </div>
         @elseif($req->status->slug === 'denied')
             <div class="col-6">
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger text-break" role="alert">
                     <h5>Причина отказа</h5>
                     <span class="fw-semibold">{{ $req->getUserWhoDenied()->staff->getFullName() }}{{ $req->getRefusalReason() ? ':' : '' }}</span> {{ $req->getRefusalReason() }}
                 </div>
@@ -97,4 +97,25 @@
             </div>
         </div>
     </section>
+@endsection
+
+@section('footer-js')
+<script>
+    const loginForm = Vue.createApp({
+        name: 'LoginForm',
+        data: () => ({
+            formData: {
+                refusal_reason: '',
+            },
+            maxLength: {
+                refusal_reason: 255,
+            },
+        }),
+        watch: {
+            'formData.refusal_reason': function (newVal, oldVal) {
+                (newVal.length > this.maxLength.refusal_reason) && (this.formData.refusal_reason = oldVal)
+            },
+        },
+    }).mount('#refusal_reason')
+</script>
 @endsection
