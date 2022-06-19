@@ -2540,7 +2540,8 @@
 							"name": "manager_id",
 							"type": "INTEGER",
 							"length": "7",
-							"foreignKey": true
+							"foreignKey": true,
+							"nullable": true
 						},
 						{
 							"_type": "ERDColumn",
