@@ -4109,8 +4109,8 @@
 							"left": 456,
 							"top": 368,
 							"width": 273,
-							"height": 68,
-							"text": "- На рассмотрении (waiting: DEFAULT)\n- Подтверждена (confirmed)\n- Отклонена (denied)"
+							"height": 70,
+							"text": "- На рассмотрении (waiting: DEFAULT)\n- Подтверждена (confirmed)\n- Отклонена (denied)\n- Проведена (resolved)"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -4126,7 +4126,7 @@
 								"$ref": "AAAAAAGBczo2EtdtanU="
 							},
 							"lineStyle": 1,
-							"points": "592:463;592:436"
+							"points": "592:463;592:438"
 						}
 					]
 				},
