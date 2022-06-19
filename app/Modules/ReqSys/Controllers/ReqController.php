@@ -291,8 +291,12 @@ class ReqController extends Controller
         $staffModels = $query->get();
         $wrongStaffIndexes = Collection::make();
 
+        // Фиксю баг, который не понимаю как возник.
+        // Получает почему то 3 записи про одного сотрудника иногда
+        $staffModels = $staffModels->unique();
+
         // Нашлись не все сотрудники из запроса
-        if ($staffDataColection->count() !== $staffModels->count()) {
+        if ($staffDataColection->count() < $staffModels->count()) {
             $insurance_numbers = $staffModels->pluck('insurance_number');
 
             // Если итерируемого СНИЛС нет в списке полученных сотрудников,
