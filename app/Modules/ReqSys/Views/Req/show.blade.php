@@ -69,7 +69,7 @@
             <div class="col-6">
                 <div class="alert alert-danger" role="alert">
                     <h5>Причина отказа</h5>
-                    <span class="fw-semibold">{{ $req->getUserWhoDenied()->staff->getFullName() }}:</span> {{ $req->getRefusalReason() }}
+                    <span class="fw-semibold">{{ $req->getUserWhoDenied()->staff->getFullName() }}{{ $req->getRefusalReason() ? ':' : '' }}</span> {{ $req->getRefusalReason() }}
                 </div>
             </div>
         @endif

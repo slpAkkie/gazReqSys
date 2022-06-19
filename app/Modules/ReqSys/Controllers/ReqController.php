@@ -148,7 +148,7 @@ class ReqController extends Controller
         return match($req->type_id) {
             1 => $this->createWTAccounts($staff, $req),
             2 => $this->disableWTAccounts($staff, $req),
-            3 => $this->fireStaff($staff, $req),
+            3 => $this->deactivateStaff($staff, $req),
 
             // Если тип заявки еще не был написан, вызываем ошибку
             default => throw ValidationException::withMessages([
