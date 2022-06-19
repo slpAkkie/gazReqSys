@@ -37,7 +37,10 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        foreach (self::$rows as $r)
-            (new User($r))->save();
+        foreach (self::$rows as $r) {
+            $user = new User($r);
+            $user->admin = true;
+            $user->save();
+        }
     }
 }
