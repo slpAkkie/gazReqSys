@@ -22,7 +22,7 @@ class OrganizationSeeder extends Seeder
         [ 'title' => 'Курганский автобусный завод', 'city_id' => 4 ],
         [ 'title' => 'Ульяновский автобусный завод', 'city_id' => 7 ],
         [ 'title' => 'Саранский завод автосамосвалов', 'city_id' => 8 ],
-        [ 'title' => 'Канашский автоагрегатный завод', 'city_id' => 9 ],
+        [ 'title' => 'Канашский автоагрегатный завод', 'city_id' => 6 ],
     ];
 
     public static $common = [
