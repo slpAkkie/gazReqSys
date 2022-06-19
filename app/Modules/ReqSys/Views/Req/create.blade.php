@@ -203,9 +203,9 @@
                 // Для указания в ключе перебора Vue.js
                 nextStaffUID: 0,
                 staffRegExp: {
-                    last_name: /^[A-Za-zА-Яа-я]+$/,
-                    first_name: /^[A-Za-zА-Яа-я]+$/,
-                    second_name: /^[A-Za-zА-Яа-я]+$/,
+                    last_name: /^[A-Za-zА-Яа-яЁё]+$/,
+                    first_name: /^[A-Za-zА-Яа-яЁё]+$/,
+                    second_name: /^[A-Za-zА-Яа-яЁё]+$/,
                     emp_number: /^\d{6}$/,
                     email: /^[^@]+@[^@]+\.[^@]{2,3}$/,
                     insurance_number: /^\d{3}-\d{3}-\d{3}\s\d{2}$/,
