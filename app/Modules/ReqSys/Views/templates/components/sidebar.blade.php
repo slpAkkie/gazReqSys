@@ -2,6 +2,9 @@
     <div class="sidebar__header mb-3">
         <h3 class="sidebar__title mb-4">Система заявок ГАЗ</h3>
         <a class="h6 fw-semibold text-primary text-decoration-none" href="{{ route('user.profile') }}">{{ Auth::user()->staff->getFullName() }}</a>
+        @if (Auth::user()->admin)
+            <span class="fw-semibold small"> (Администратор)</span>
+        @endif
     </div>
 
     <nav class="sb-nav d-flex flex-column h-100">
