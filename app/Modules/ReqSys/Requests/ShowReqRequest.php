@@ -16,7 +16,7 @@ class ShowReqRequest extends FormRequest
     public function authorize()
     {
         $req = $this->route('req');
-        return Auth::user()->admin || $req->author_id === Auth::id() || $req->req_staff_meta()->where('gaz_staff_id', Auth::user()->staff->id)->exists();
+        return $req->canView();
     }
 
     /**

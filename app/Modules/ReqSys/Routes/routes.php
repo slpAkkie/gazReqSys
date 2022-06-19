@@ -34,6 +34,7 @@ Route::middleware('web')->group(function () {
         Route::prefix('/req')->name('req.')->group(function () {
             Route::get('/', [ReqController::class, 'index'])->name('index');
             Route::get('/for-me', [ReqController::class, 'indexForMe'])->name('index-for-me');
+            Route::get('/for-my-staff', [ReqController::class, 'indexForMyStaff'])->name('index-for-my-staff');
             Route::get('/create', [ReqController::class, 'create'])->name('create');
             Route::get('/{req}', [ReqController::class, 'show'])->name('show');
             Route::put('/confirm/{req}', [ReqController::class, 'confirm'])->name('confirm');

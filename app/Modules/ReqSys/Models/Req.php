@@ -102,6 +102,27 @@ class Req extends Model
         return $user->accepted !== null;
     }
 
+    public function meOrMyStaff()
+    {
+        return $this->req_staff_meta->some(
+            fn($rsMeta) =>
+                // Пользователь является руководителем кого-то из участников заявки
+                $rsMeta->staff->manager_id === Auth::user()->staff->id
+                // Или сам является участником
+                || $rsMeta->gaz_staff_id === Auth::user()->staff->id
+        );
+    }
+
+    /**
+     * Может ли пользователь просматривать заявку
+     *
+     * @return boolean
+     */
+    public function canView()
+    {
+        return $this->isAuthUserHasFullAccess() || $this->meOrMyStaff();
+    }
+
     /**
      * Имеет ли авторизованный пользователь полный доступ к заявке
      *

@@ -52,7 +52,9 @@ class ReqStaff extends Model
     {
         return match($value) {
             0 => false,
+            false => false,
             1 => true,
+            true => true,
 
             default => null
         };

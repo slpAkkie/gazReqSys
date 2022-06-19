@@ -49,6 +49,20 @@ class ReqController extends Controller
     }
 
     /**
+     * Страница с вывод заявок по сотрудником, чьим руководителем является пользователь
+     *
+     * @return View
+     */
+    public function indexForMyStaff()
+    {
+        return view('ReqSys::index', [
+            'reqs' => Req::selectRaw('reqs.*')->whereHas(
+                'req_staff_meta', fn($q) => $q->whereIn('gaz_staff_id', Staff::select('id')->where('manager_id', Auth::user()->staff->id))
+            )->orderBy('updated_at', 'DESC')->paginate(18),
+        ]);
+    }
+
+    /**
      * Страница с информацией по заявкe
      * TODO: Gate для проверки доступа к просмотру заявки
      *
@@ -58,7 +72,10 @@ class ReqController extends Controller
     {
         $req_staff = $req->reqStaff();
 
-        if (!$req->isAuthUserHasFullAccess()) $req_staff->where('id', Auth::user()->staff->id);
+        $req_staff->where(function ($q) use ($req) {
+            if (!$req->isAuthUserHasFullAccess()) $q->where('id', Auth::user()->staff->id);
+            if ($req->meOrMyStaff()) $q->orWhere('manager_id', Auth::user()->staff->id);
+        });
 
         return view('ReqSys::Req.show', [
             'req' => $req,

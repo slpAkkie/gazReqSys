@@ -17,23 +17,23 @@
         <div class="col-6">
             <div class="mb-2 row gap-2">
                 <label for="type" class="form-label col-4">Тип заявки</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->type->title }}">
+                <div class="col form-control form-control_disabled">{{ $req->type->title }}</div>
             </div>
             <div class="mb-2 row gap-2">
                 <label for="city" class="form-label col-4">Область</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->organization->city->title }}">
+                <div class="col form-control form-control_disabled">{{ $req->organization->city->title }}</div>
             </div>
             <div class="mb-2 row gap-2">
                 <label for="organization" class="form-label col-4">Организация</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->organization->title }}">
+                <div class="col form-control form-control_disabled">{{ $req->organization->title }}</div>
             </div>
             <div class="mb-2 row gap-2">
                 <label for="organization" class="form-label col-4">Автор заявки</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ "{$req->author_staff->getFullName()} ({$req->author_staff->emp_number})" }}">
+                <div class="col form-control form-control_disabled">{{ "{$req->author_staff->getFullName()} ({$req->author_staff->emp_number})" }}</div>
             </div>
             <div class="mb-2 row gap-2">
                 <label for="organization" class="form-label col-4">Статус заявки</label>
-                <input type="text" class="col form-control" disabled="disabled" value="{{ $req->status->title }}">
+                <div class="col form-control form-control_disabled">{{ $req->status->title }}</div>
             </div>
 
             <div class="d-flex gap-2">
