@@ -16,8 +16,8 @@ class StoreReqRequest extends FormRequest
         return [
             'type_id.required'          => 'Поле Тип заявки должно быть заполнено',
             'type_id.exists'            => 'Некорректное значение для Тип заявки',
-            'city_id.required'          => 'Поле Область должно быть заполнено',
-            'city_id.exists'            => 'Некорректное значение для Область',
+            'city_id.required'          => 'Поле Город должно быть заполнено',
+            'city_id.exists'            => 'Некорректное значение для города',
             'organization_id.required'  => 'Поле Организация должно быть заполнено',
             'organization_id.exists'    => 'Некорректное значение для Организация',
             'staff.required'            => 'Список Сотрудников должен быть заполнен',

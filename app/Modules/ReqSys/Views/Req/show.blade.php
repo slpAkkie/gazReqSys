@@ -20,7 +20,7 @@
                 <div class="col form-control form-control_disabled">{{ $req->type->title }}</div>
             </div>
             <div class="mb-2 row gap-2">
-                <label for="city" class="form-label col-4">Область</label>
+                <label for="city" class="form-label col-4">Город</label>
                 <div class="col form-control form-control_disabled">{{ $req->organization->city->title }}</div>
             </div>
             <div class="mb-2 row gap-2">

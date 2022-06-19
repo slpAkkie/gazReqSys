@@ -17,7 +17,7 @@
                         </select>
                     </div>
                     <div class="mb-2 row gap-2">
-                        <label for="city" class="form-label col-4">Область</label>
+                        <label for="city" class="form-label col-4">Город</label>
                         <select name="city_id" id="city" class="form-select col" v-model.number="formData.city_id">
                             @foreach ($cities as $c)
                                 <option value="{{ $c->id }}">{{ $c->title }}</option>
@@ -385,7 +385,7 @@
 
                     if (!this.formData.staff.length) errors.push({ title: 'Список сотрудников должен содержать хотя бы одну запись' })
                     if (!this.formData.type_id) errors.push({ title: 'Тип заявки не указан' })
-                    if (!this.formData.city_id) errors.push({ title: 'Область не указана' })
+                    if (!this.formData.city_id) errors.push({ title: 'Город не указана' })
                     if (!this.formData.organization_id) errors.push({ title: 'Организация не указана' })
 
                     if (this.checkErrorsForStaff().length) return true
