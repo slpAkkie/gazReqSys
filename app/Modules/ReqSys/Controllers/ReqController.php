@@ -250,7 +250,10 @@ class ReqController extends Controller
      */
     private function deactivateStaff(Collection $staffCollection, Req $req)
     {
-        $staffCollection->each(fn($staff) => $staff->delete());
+        $staffCollection->each(function ($staff) {
+            $staff->delete();
+            $staff->wt_account()->exists() && $staff->wt_account->delete();
+        });
 
         return response()->redirectToRoute('req.show', $req->id);
     }
